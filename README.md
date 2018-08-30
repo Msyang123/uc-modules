@@ -8,6 +8,6 @@ registry-service
  - 注册服务
  - 端口：8021
 
-fruitdoctor-user-service
+session-service
  - 会话服务（登录、认证神马的）
  - 端口：8031
