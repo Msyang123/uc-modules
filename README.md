@@ -4,18 +4,10 @@ basic-user-service
  - 基础的用户服务接口
  - 端口：8011
 
-foodsee-user-service
- - 视食APP用户服务接口
+registry-service
+ - 注册服务
  - 端口：8021
 
 fruitdoctor-user-service
- - 鲜果师用户服务接口
+ - 会话服务（登录、认证神马的）
  - 端口：8031
-
-mina-shop-user-service
- - 商城小程序用户服务接口
- - 端口：8051
-
-mina-team-buying-user-service
- - 拼团小程序用户服务接口
- - 端口：8061
