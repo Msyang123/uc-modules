@@ -7,5 +7,5 @@ ${AnsiColor.BRIGHT_GREEN}
  #+#        #+#    #+#           #+#          #+#    #+#      #+#
 ########## ###    ###       ###########       ########       ###
 ${AnsiColor.BRIGHT_RED}
-Application Name: registry-service
+Application Name: session-service
 Spring Boot Version: 1.0
