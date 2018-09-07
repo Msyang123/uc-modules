@@ -11,10 +11,8 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-@ApiModel
 public class ApplyUser {
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String birthday;
     private String sex;
@@ -26,7 +24,6 @@ public class ApplyUser {
     private String avatar;
     private String address;
     private String description;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Timestamp registrationAt;
     private String password;
     private String paymentPassword;

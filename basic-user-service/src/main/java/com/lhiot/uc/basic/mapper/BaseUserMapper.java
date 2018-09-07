@@ -13,6 +13,6 @@ public interface BaseUserMapper {
      * @param param
      * @return
      */
-    int save(BaseUser param);
+    Long save(BaseUser param);
 
 }

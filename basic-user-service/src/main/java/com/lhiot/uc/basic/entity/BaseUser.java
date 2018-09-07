@@ -10,7 +10,7 @@ public class BaseUser {
 
     public BaseUser copy(Long id,PhoneRegisterParam param){
         this.id=id;
-        this.phone=param.getUserMobile();
+        this.phone=param.getPhone();
 //        BeanUtils.of(this).populate(param);
         return this;
     }

@@ -11,8 +11,8 @@
 
 	<insert id="save" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex,
-		birthday)
+		birthday,register_at)
 		VALUE (#{id},#{phone},#{openId},#{unionId},#{baseUserId},#{password},#{paymentPassword},#{nickname},#{avatar},#{email},#{qq}
-		,#{address},#{description},#{apply},#{sex},#{birthday})
+		,#{address},#{description},#{apply},#{sex},#{birthday},NOW())
 	</insert>
 </mapper>
