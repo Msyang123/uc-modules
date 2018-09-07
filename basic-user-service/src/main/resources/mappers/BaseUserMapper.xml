@@ -4,4 +4,5 @@
 	<insert id="save" parameterType="com.lhiot.uc.basic.entity.BaseUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 		INSERT INTO base_user (id,phone) VALUE (#{id},#{phone})
 	</insert>
+
 </mapper>
