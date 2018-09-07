@@ -14,7 +14,7 @@ public class PhoneRegisterParam {
     @ApiModelProperty(notes = "电话号码", dataType = "String", required = true)
     @NotNull
 //    @Pattern(regexp = ValidateConstant.mobileRegex, message = "请输入正确的电话号码")
-    private String userMobile;
+    private String phone;
 
 
     @ApiModelProperty(notes = "验证码", dataType = "String", required = false)
@@ -22,7 +22,7 @@ public class PhoneRegisterParam {
     private String verifyCode;
 
     @ApiModelProperty(notes = "密码", dataType = "String", required = false)
-    private String userPassword;
+    private String password;
 
     @ApiModelProperty(notes = "应用类型",dataType = "String")
     private String apply;

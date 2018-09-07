@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.basic.mapper.BaseUserMapper">
-	<insert id="save" parameterType="com.lhiot.uc.basic.entity.BaseUser">
+	<insert id="save" parameterType="com.lhiot.uc.basic.entity.BaseUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 		INSERT INTO base_user (id,phone) VALUE (#{id},#{phone})
 	</insert>
 </mapper>
