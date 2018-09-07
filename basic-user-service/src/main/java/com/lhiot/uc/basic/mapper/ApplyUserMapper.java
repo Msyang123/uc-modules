@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplyUserMapper {
 
+    int countByPhoneNumber(String phone);
+
     int count(ApplyUser param);
 
     int save(ApplyUser param);

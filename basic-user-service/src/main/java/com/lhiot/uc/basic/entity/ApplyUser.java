@@ -1,11 +1,7 @@
 package com.lhiot.uc.basic.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.leon.microx.util.BeanUtils;
 import com.lhiot.uc.basic.model.UserDetailResult;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.sql.Timestamp;

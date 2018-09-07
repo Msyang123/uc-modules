@@ -38,18 +38,16 @@ public class RegisterApi {
     }
 
 
-    @SuppressWarnings("unchecked")
-    @ApiOperation(value = "注册", notes = "进行注册")
+    @ApiOperation(value = "手机号注册", notes = "进行注册")
     @ApiImplicitParam(paramType = "body", name = "param", value = "手机号码及密码，验证码", required = true, dataType = "PhoneRegisterParam")
     @PostMapping(value = "/phone/register")
-    @Transactional
     public ResponseEntity registerByPhone(@RequestBody PhoneRegisterParam param) {
         RMapCache<String, String> cache = redissonClient.getMapCache(param.getPhone() + ":user:register");
         String phone = cache.get(param.getPhone() + ":user:register");
         if (Objects.equals(param.getPhone(), phone)) {
             return ResponseEntity.badRequest().body("正在注册中！");
         }
-        cache.put(param.getPhone() + ":user:register",param.getPhone(), 2, TimeUnit.MINUTES);
+        cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
         try {
 //        valueOperations.set(param.getUserMobile() + ":user:register", param.getUserMobile(), 3, TimeUnit.MINUTES);
             //TODO 从redis中获取手机验证码
@@ -60,13 +58,18 @@ public class RegisterApi {
 //        if (!verify) {
 //            return ResponseEntity.badRequest().body("验证码错误");
 //        }
+            if (registerService.registered(phone)){
+                return ResponseEntity.badRequest().body("手机号码已注册!");
+            }
+            UserDetailResult result = registerService.register(param);
+
             // 判断用户是否存在
             if (registerService.count(null, param.getPhone()) > 0) {
                 return ResponseEntity.badRequest().body("手机号码已注册!");
             }
             // 保存注册用户信息
             UserDetailResult userRegister = registerService.addRegisterUser(param);
-            return ResponseEntity.ok(userRegister);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             cache.put(param.getPhone() + ":user:register", param.getPhone(), 5, TimeUnit.SECONDS);
             return ResponseEntity.badRequest().build();
