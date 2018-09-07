@@ -54,8 +54,8 @@ public class UserDetailResult {
     @ApiModelProperty(notes = "积分", dataType = "Integer")
     private Integer point = 0;
 
-    @ApiModelProperty(notes = "鲜果币", dataType = "Integer")
-    private Integer currency = 0;
+    @ApiModelProperty(notes = "鲜果币", dataType = "Long")
+    private Long currency = 0L;
 
     @ApiModelProperty(notes = "等级", dataType = "String")
     private String level = "1";
