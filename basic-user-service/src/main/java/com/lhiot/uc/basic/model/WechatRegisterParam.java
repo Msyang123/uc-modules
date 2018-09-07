@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.model;
 
+import com.lhiot.uc.basic.entity.Apply;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -13,4 +14,5 @@ public class WechatRegisterParam {
     private String address;
     private String description;
     private String avatar;
+    private Apply apply;
 }

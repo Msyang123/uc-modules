@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.uc.basic.mapper.UserBindingMapper">
+    <select id="findByPhone" resultType="Long" parameterType="String">
+        SELECT base_user_id FROM user_binding WHERE phone = #{0}
+    </select>
+
+    <insert id="save" parameterType="com.lhiot.uc.basic.entity.UserBinding">
+        INSERT INTO user_binding (base_user_id,apply_user_id,phone,create_at)
+        VALUE (#{baseUserId},#{applyUserId},#{phone},NOW())
+    </insert>
+</mapper>

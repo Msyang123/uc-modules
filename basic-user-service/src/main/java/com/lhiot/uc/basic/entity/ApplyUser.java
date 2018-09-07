@@ -1,44 +1,31 @@
 package com.lhiot.uc.basic.entity;
 
-import com.leon.microx.util.BeanUtils;
-import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Date;
 
 @Data
 public class ApplyUser {
 
     private Long id;
-    private String birthday;
-    private String sex;
-    private String phone;
-    private String realname;
-    private String nickname;
-    private String email;
-    private String qq;
-    private String avatar;
-    private String address;
-    private String description;
-    private Timestamp registrationAt;
-    private String password;
-    private String paymentPassword;
-    private String userType;
-    private String openId;
-    private String unionId;
+    private String birthday = "";
+    private String sex = "man";
+    private String phone = "";
+    private String nickname = "";
+    private String email = "";
+    private String qq = "";
+    private String avatar = "";
+    private String address = "";
+    private String description = "";
+    private Date registrationAt = Date.from(Instant.now());
+    private String password = "";
+    private String paymentPassword = "";
+    private String openId = "";
+    private String unionId = "";
     private Long baseUserId;
-    private Integer locked;
-    private String apply;
+    private LockStatus locked = LockStatus.UNLOCKED;
+    private Apply apply;
+    private SwitchStatus paymentPermissions = SwitchStatus.OPEN;
 
-
-    public ApplyUser copy(Long id, String phone){
-        this.id = id;
-        this.phone = phone;
-        return this;
-    }
-
-    public ApplyUser copy(UserDetailResult param){
-        BeanUtils.of(this).populate(param);
-        return this;
-    }
 }

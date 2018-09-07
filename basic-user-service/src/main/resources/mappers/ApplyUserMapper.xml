@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.basic.mapper.ApplyUserMapper">
 
-	<select id="countByPhoneNumber" parameterType="String" resultType="Integer">
-		select count(id) from apply_user where phone = #{0}
+	<select id="countByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Integer">
+		SELECT count(id) FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
 	</select>
 
 	<select id="count" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Integer">
@@ -14,10 +14,50 @@
 		</trim>
 	</select>
 
+	<select id="countByOpenId" parameterType="String" resultType="Integer">
+		SELECT COUNT(id) FROM apply_user WHERE open_id = #{0}
+	</select>
+
 	<insert id="save" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex,
-		birthday,register_at)
+		birthday,register_at,payment_permissions)
 		VALUE (#{id},#{phone},#{openId},#{unionId},#{baseUserId},#{password},#{paymentPassword},#{nickname},#{avatar},#{email},#{qq}
-		,#{address},#{description},#{apply},#{sex},#{birthday},NOW())
+		,#{address},#{description},#{apply},#{sex},#{birthday},NOW(),#{paymentPermissions})
 	</insert>
+
+    <select id="findById" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avater,email,qq,address,description,apply,sex
+		,birthday,payment_permissions,register_at,currency,member_points,
+		CASE b.locked
+		WHEN 'LOCK' THEN b.locked
+		ELSE a.locked
+		END locked
+		FROM apply_user a
+		LEFT JOIN base_user b ON a.base_user_id = b.id
+		WHERE a.id = #{0}
+	</select>
+
+	<select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avater,email,qq,address,description,apply,sex
+		,birthday,payment_permissions,register_at,currency,member_points,
+		CASE b.locked
+		WHEN 'LOCK' THEN b.locked
+		ELSE a.locked
+		END locked
+		FROM apply_user a
+		LEFT JOIN base_user b ON a.base_user_id = b.id
+		WHERE a.open_id = #{0}
+	</select>
+
+	<select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avater,email,qq,address,description,apply,sex
+		,birthday,payment_permissions,register_at,currency,member_points,
+		CASE b.locked
+		WHEN 'LOCK' THEN b.locked
+		ELSE a.locked
+		END locked
+		FROM apply_user a
+		LEFT JOIN base_user b ON a.base_user_id = b.id
+		WHERE a.phone = #{phone} AND a.apply = #{apply}
+	</select>
 </mapper>
