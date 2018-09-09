@@ -13,7 +13,7 @@
     <artifactId>warehouse-service</artifactId>
 
     <properties>
-        <start-class>com.lhiot.uc.session.WarehouseServiceApplication</start-class>
+        <start-class>com.lhiot.uc.warehouse.WarehouseServiceApplication</start-class>
     </properties>
 
     <dependencies>

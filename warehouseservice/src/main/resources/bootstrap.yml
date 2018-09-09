@@ -2,7 +2,7 @@ server:
   port: 8021
 spring:
   application:
-    name: session-service-v1-0
+    name: warehouse-service-v1-0
   cloud:
     config:
       name: warehouse-service-v1-0, rabbit-mq, application
@@ -21,4 +21,4 @@ eureka:
   client:
     registry-fetch-interval-seconds: 5
     serviceUrl:
-      defaultZone: ${EUREKA_REPLICAS_LIST:http://127.0.0.1:1111/eureka}
+      defaultZone: ${EUREKA_REPLICAS_LIST:http://172.16.10.203:1111/eureka}
