@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 public class PhoneRegisterParam {
     @ApiModelProperty(notes = "电话号码", dataType = "String", required = true)
     @NotNull
-    @Pattern(regexp = "((13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}),?", message = "请输入正确的电话号码")
+    @Pattern(regexp = "1\\d{10}", message = "请输入正确的电话号码")
     private String phone;
 
 

@@ -5,6 +5,8 @@ import com.lhiot.uc.basic.model.UserDetailResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface ApplyUserMapper {
@@ -12,9 +14,22 @@ public interface ApplyUserMapper {
     int countByPhoneNumber(ApplyUser user);
 
     int countByOpenId(String openId);
+
+    int countById(Long id);
+
     int save(ApplyUser param);
 
     UserDetailResult findById(Long userId);
+
     UserDetailResult findByOpenId(String openId);
+
     UserDetailResult findByPhone(ApplyUser applyUser);
+
+    List<UserDetailResult> findByIdList(List<String> ids);
+
+    List<UserDetailResult> findByPhoneList(List<String> ids);
+
+    List<ApplyUser> findByKeyword(String keyword);
+
+    int updateUserById(ApplyUser user);
 }

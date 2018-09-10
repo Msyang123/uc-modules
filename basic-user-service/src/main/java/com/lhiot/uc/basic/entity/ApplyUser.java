@@ -15,7 +15,7 @@ public class ApplyUser {
     private String nickname = "";
     private String email = "";
     private String qq = "";
-    private String avatar = "";
+    private String avatar = "http://resource.shuiguoshule.com.cn/user_image/2017-04-14/oGPg2MyfeUrO9knaDLyS.jpg";
     private String address = "";
     private String description = "";
     private Date registrationAt = Date.from(Instant.now());

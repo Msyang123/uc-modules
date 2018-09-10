@@ -16,6 +16,7 @@ import com.lhiot.uc.basic.model.WechatRegisterParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -64,26 +65,26 @@ public class RegisterService {
      * @param param
      * @return
      */
-    @Transactional
+//    @Transactional
     public UserDetailResult register(PhoneRegisterParam param) {
 
-        Long baseUserId = userBindingMapper.findByPhone(param.getPhone());
-        BaseUser baseUser = new BaseUser();
-        if (Objects.equals(baseUserId, null)) {
-            baseUserId = snowflakeId.longId();
-            baseUser.setId(baseUserId);
+        BaseUser baseUser = userBindingMapper.findBaseUserByBindingRelation(param.getPhone());
+        if (Objects.equals(baseUser, null)) {
+            baseUser = new BaseUser();
+            baseUser.setId(snowflakeId.longId());
             baseUser.setPhone(param.getPhone());
             baseUserMapper.save(baseUser);
         }
 
         ApplyUser applyUser = new ApplyUser();
         applyUser.setId(snowflakeId.longId());
+        applyUser.setNickname(param.getPhone().replace(param.getPhone().substring(3,7),"xxxx"));
         BeanUtils.of(applyUser).populate(param);
-        applyUser.setBaseUserId(baseUserId);
+        applyUser.setBaseUserId(baseUser.getId());
         applyUserMapper.save(applyUser);
 
         UserBinding userBinding = new UserBinding();
-        userBinding.setBaseUserId(baseUserId);
+        userBinding.setBaseUserId(baseUser.getId());
         userBinding.setApplyUserId(applyUser.getId());
         userBinding.setPhone(param.getPhone());
         userBindingMapper.save(userBinding);
@@ -91,6 +92,8 @@ public class RegisterService {
         UserDetailResult result = new UserDetailResult();
         BeanUtils.of(result).populate(applyUser);
         result.setCurrency(baseUser.getCurrency());
+        result.setRealName(baseUser.getRealName());
+
         return result;
     }
 
@@ -126,17 +129,23 @@ public class RegisterService {
      * @param param
      * @return
      */
+    @Transactional
     public boolean binding(UserBindingParam param) {
-        Long baseUserId = userBindingMapper.findByPhone(param.getPhone());
-        if (Objects.equals(baseUserId, null)) {
-            this.save(param.getPhone());
+        BaseUser baseUser = userBindingMapper.findBaseUserByBindingRelation(param.getPhone());
+        if (Objects.equals(baseUser, null)) {
+            baseUser =  this.save(param.getPhone());
         }
 
         UserBinding userBinding = new UserBinding();
         userBinding.setPhone(param.getPhone());
-        userBinding.setBaseUserId(baseUserId);
+        userBinding.setBaseUserId(baseUser.getId());
         userBinding.setApplyUserId(param.getApplyUserId());
-        return userBindingMapper.save(userBinding) > 0 ? true : false;
+        userBindingMapper.save(userBinding);
+
+        ApplyUser applyUser = new ApplyUser();
+        applyUser.setBaseUserId(baseUser.getId());
+        applyUser.setId(param.getApplyUserId());
+        return applyUserMapper.updateUserById(applyUser) > 0 ? true : false;
     }
 
     private BaseUser save(String phone) {
