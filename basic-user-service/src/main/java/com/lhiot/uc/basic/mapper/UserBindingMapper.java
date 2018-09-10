@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.mapper;
 
+import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.entity.UserBinding;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,6 @@ public interface UserBindingMapper {
     Long findByPhone(String phone);
 
     int save(UserBinding userBinding);
+
+    BaseUser findBaseUserByBindingRelation(String phone);
 }
