@@ -10,6 +10,7 @@
         <result column="goods_id" property="goodsId"/>
         <result column="goods_count" property="goodsCount"/>
         <result column="price" property="price"/>
+        <result column="if_split" property="ifSplit"/>
         <result column="barcode" property="barcode"/>
         <result column="product_name" property="productName"/>
         <result column="image" property="image"/>
@@ -26,6 +27,7 @@
             goods_id,
             goods_count,
             price,
+            if_split,
             barcode,
             product_name,
             image,
@@ -43,6 +45,7 @@
             goods_id,
             goods_count,
             price,
+            if_split,
             barcode,
             product_name,
             image,
@@ -57,6 +60,7 @@
                 #{item.goodsId},
                 #{item.goodsCount},
                 #{item.price},
+                #{item.ifSplit},
                 #{item.barcode},
                 #{item.productName},
                 #{item.image},
@@ -94,6 +98,9 @@
             </if>
             <if test="price != null ">
                 price = #{price},
+            </if>
+            <if test="ifSplit != null">
+                if_split = #{ifSplit},
             </if>
             <if test="barcode != null ">
                 barcode = #{barcode},
@@ -160,6 +167,9 @@
             </if>
             <if test="price != null ">
                 and price = #{price}
+            </if>
+            <if test="ifSplit != null">
+                and if_split = #{ifSplit}
             </if>
             <if test="barcode != null ">
                 and barcode = #{barcode}
