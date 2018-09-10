@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseConvertMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+               type="com.lhiot.uc.warehouse.domain.entity.WarehouseConvert">
+        <id column="id" property="id"/>
+        <result column="warehouse_id" property="warehouseId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="product_name" property="productName"/>
+        <result column="goods_count" property="goodsCount"/>
+        <result column="if_split" property="ifSplit"/>
+        <result column="price" property="price"/>
+        <result column="buy_at" property="buyAt"/>
+        <result column="convert_at" property="convertAt"/>
+        <result column="in_out" property="inOut"/>
+        <result column="remark" property="remark"/>
+        <result column="convert_type" property="convertType"/>
+        <result column="discount" property="discount"/>
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List">
+        <trim suffixOverrides=",">
+            id,
+            warehouse_id,
+            goods_id,
+            product_name,
+            goods_count,
+            if_split,
+            price,
+            buy_at,
+            convert_at,
+            in_out,
+            remark,
+            convert_type,
+            discount,
+        </trim>
+    </sql>
+
+    <!--新增仓库出入库记录明细-->
+
+    <insert id="saveWarehouseConvertBatch" parameterType="list">
+        insert into warehouse_convert
+        (
+            warehouse_id,
+            goods_id,
+            product_name,
+            goods_count,
+            price,
+            buy_at,
+            convert_at,
+            in_out,
+            remark,
+            convert_type,
+            discount
+        )
+        value
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.warehouseId},
+                #{item.goodsId},
+                #{item.productName},
+                #{item.goodsCount},
+                #{item.price},
+                #{item.buyAt},
+                #{item.convertAt},
+                #{item.inOut},
+                #{item.remark},
+                #{item.convertType},
+                #{item.discount}
+            )
+        </foreach>
+
+    </insert>
+
+    <!--根据id修改仓库出入库记录明细-->
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseConvert">
+        update warehouse_convert
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="warehouseId != null ">
+                warehouse_id = #{warehouseId},
+            </if>
+            <if test="goodsId != null ">
+                goods_id = #{goodsId},
+            </if>
+            <if test="productName != null ">
+                product_name = #{productName},
+            </if>
+            <if test="goodsCount != null ">
+                goods_count = #{goodsCount},
+            </if>
+            <if test="ifSplit != null ">
+                if_split = #{ifSplit},
+            </if>
+            <if test="price != null ">
+                price = #{price},
+            </if>
+            <if test="buyAt != null ">
+                buy_at = #{buyAt},
+            </if>
+            <if test="convertAt != null ">
+                convert_at = #{convertAt},
+            </if>
+            <if test="inOut != null ">
+                in_out = #{inOut},
+            </if>
+            <if test="remark != null ">
+                remark = #{remark},
+            </if>
+            <if test="convertType != null ">
+                convert_type = #{convertType},
+            </if>
+            <if test="discount != null ">
+                discount = #{discount},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除仓库出入库记录明细-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from warehouse_convert where id in
+        <foreach collection="list" item="item" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找仓库出入库记录明细 -->
+    <select id="selectById" resultMap="BaseResultMap"
+            parameterType="long">select
+        <include refid="Base_Column_List"/>
+        from warehouse_convert where id = #{id}
+    </select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition">
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="warehouseId != null ">
+                and warehouse_id = #{warehouseId}
+            </if>
+            <if test="goodsId != null ">
+                and goods_id = #{goodsId}
+            </if>
+            <if test="productName != null ">
+                and product_name = #{productName}
+            </if>
+            <if test="goodsCount != null ">
+                and goods_count = #{goodsCount}
+            </if>
+            <if test="ifSplit != null ">
+                and if_split = #{ifSplit}
+            </if>
+            <if test="price != null ">
+                and price = #{price}
+            </if>
+            <if test="buyAt != null ">
+                and buy_at = #{buyAt}
+            </if>
+            <if test="convertAt != null ">
+                and convert_at = #{convertAt}
+            </if>
+            <if test="inOut != null ">
+                and in_out = #{inOut}
+            </if>
+            <if test="remark != null ">
+                and remark = #{remark}
+            </if>
+            <if test="convertType != null ">
+                and convert_type = #{convertType}
+            </if>
+            <if test="discount != null ">
+                and discount = #{discount}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询仓库出入库记录明细列表-->
+    <select id="pageWarehouseConverts" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseConvert">
+        select
+        <include refid="Base_Column_List"/>
+        from warehouse_convert
+        <include refid="Base_Where_Condition"/>
+        <include refid="common.pager"/>
+    </select>
+
+    <!--查询仓库出入库记录明细总记录-->
+    <select id="pageWarehouseConvertCounts" resultType="long"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseConvert">
+        select count(1)
+        from warehouse_convert
+        <include refid="Base_Where_Condition"/>
+    </select>
+
+</mapper>

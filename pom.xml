@@ -13,7 +13,7 @@
     <modules>
         <module>basic-user-service</module>
         <module>session-service</module>
-        <module>warehouseservice</module>
+        <module>warehouse-service</module>
     </modules>
 
     <groupId>com.lhiot.uc</groupId>

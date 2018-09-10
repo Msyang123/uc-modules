@@ -219,6 +219,11 @@ public class WarehouseGoodsService {
             // 参数中的商品数量乘以商品单位 = 要提取的当前商品总数量
             double goodsPrice = 0;// 单个商品的总价
             for (WarehouseGoods whGoods : hasWarehouseGoodsList) {
+                //如果刚好REMOVE后amount数值为0，说明已经提取足够数量的仓库商品，跳出循环
+                if(Calculator.compareTo(amount,zero.doubleValue()) == 0){
+                    log.warn("刚好REMOVE后amount数值为0，说明已经提取足够数量的仓库商品，跳出循环,{},{}",amount,whGoods);
+                    break;
+                }
                 BigDecimal whGoodsAmount = whGoods.getGoodsCount();
 
                 if(whGoodsAmount.compareTo(zero) == 0){
@@ -231,23 +236,24 @@ public class WarehouseGoodsService {
                 // 仓库商品数量/重量
                 int whGoodsPrice = whGoods.getPrice(); // 仓库商品基础单位价格
                 //检测是否当前记录是否够提取，如果不够就继续提取下一条
-                if (Calculator.gtOrEq(goodsParam.getAmount().doubleValue(), whGoodsAmount.doubleValue(), 4)) {
+                if (Calculator.gtOrEq(amount, whGoodsAmount.doubleValue(), 4)) {
                     whGoods.setOperType(OperType.REMOVE);
                     int price=Calculator.toInt(Calculator.mul(whGoodsPrice, whGoodsAmount.doubleValue()));
                     goodsPrice = Calculator.add(goodsPrice,price);
                     //计算单个待提取商品均价  相同商品此属性值相同
-                    whGoods.setPrice(price);
+                    //whGoods.setPrice(price);
                     //需要减掉目标要提取的数量
                     amount = Calculator.sub(amount, whGoodsAmount.doubleValue());
                 } else {
                     whGoods.setOperType(OperType.UPDATE);
-                    //价格累加为仓库商品单价*剩余要提取的商品数量
-                    int price = Calculator.toInt(Calculator.mul(whGoodsPrice, amount));
+                    //价格为:仓库商品单价*剩余要提取的商品数量
+                    int price = Calculator.toInt(Calculator.mul(whGoodsPrice,amount));
                     goodsPrice = Calculator.add(goodsPrice,price);
                     //计算单个待提取商品均价 每次覆盖 相同商品此属性值相同 订单商品表中price
-                    whGoods.setPrice(price);
+                    //whGoods.setPrice(price);
                     //此处为要更新的仓库商品数量 更新为 goods_count=goods_count-amount
                     whGoods.setGoodsCount(new BigDecimal(amount));
+                    amount = 0;
                     break;
                 }
             }
@@ -258,6 +264,10 @@ public class WarehouseGoodsService {
             }
             //累加总价
             totalPrice = Calculator.toInt(Calculator.add(totalPrice, goodsPrice));
+        }
+        if(CollectionUtils.isEmpty(needFetchWarehouseGoods)){
+            log.error("获取仓库商品集合为空{}",needFetchWarehouseGoods);
+            return null;
         }
         return Pair.of(totalPrice, needFetchWarehouseGoods);
     }
@@ -299,7 +309,9 @@ public class WarehouseGoodsService {
                     warehouseConvertList.add(wareHouseConvert);
                 });
         //删除掉要扣除的商品
-        warehouseGoodsMapper.deleteByIds(needRemoveIds);
+        if(!CollectionUtils.isEmpty(needRemoveIds)) {
+            warehouseGoodsMapper.deleteByIds(needRemoveIds);
+        }
 
         //批量更新商品数量
         warehouseGoods.stream()
@@ -322,7 +334,7 @@ public class WarehouseGoodsService {
                     warehouseConvertList.add(wareHouseConvert);
                     //更新扣除仓库商品
                     warehouseGoodsMapper.updateGoodsCount(item);});
-        //将出库信息添加找仓库商品中间表
+        //将出库信息添加到仓库商品中间表
         warehouseGoodsExtractMapper.batchSaveExtract(warehouseGoodsExtractList);
 
         //写出库记录
