@@ -55,9 +55,9 @@ public class WarehouseConvertApi {
         return ResponseEntity.ok(warehouseConvertService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库出入库记录明细分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseConvert>> pageQuery(WarehouseConvert warehouseConvert){
+    public ResponseEntity<PagerResultObject<WarehouseConvert>> pageSelect(WarehouseConvert warehouseConvert){
         log.debug("查询仓库出入库记录明细分页列表\t param:{}",warehouseConvert);
         
         return ResponseEntity.ok(warehouseConvertService.pageList(warehouseConvert));

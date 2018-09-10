@@ -65,9 +65,9 @@ public class WarehouseOverdueApi {
         return ResponseEntity.ok(warehouseOverdueService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品过期降价值处理分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageQuery(WarehouseOverdue warehouseOverdue){
+    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageSelect(WarehouseOverdue warehouseOverdue){
         log.debug("查询仓库商品过期降价值处理分页列表\t param:{}",warehouseOverdue);
         
         return ResponseEntity.ok(warehouseOverdueService.pageList(warehouseOverdue));

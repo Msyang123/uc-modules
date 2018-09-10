@@ -65,9 +65,9 @@ public class WarehouseGoodsExtractApi {
         return ResponseEntity.ok(warehouseGoodsExtractService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品提取分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageQuery(WarehouseGoodsExtract warehouseGoodsExtract){
+    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageSelect(WarehouseGoodsExtract warehouseGoodsExtract){
         log.debug("查询仓库商品提取分页列表\t param:{}",warehouseGoodsExtract);
         
         return ResponseEntity.ok(warehouseGoodsExtractService.pageList(warehouseGoodsExtract));

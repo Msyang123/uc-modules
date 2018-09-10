@@ -57,9 +57,9 @@ public class WarehouseGoodsApi {
         return ResponseEntity.ok(warehouseGoodsService.selectById(id));
     }
     
-    @RequestMapping(value = "/page/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/page/select", method = RequestMethod.POST)
     @ApiOperation(value = "查询仓库商品分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseGoods>> pageQuery(@RequestBody WarehouseGoods warehouseGoods){
+    public ResponseEntity<PagerResultObject<WarehouseGoods>> pageSelect(@RequestBody WarehouseGoods warehouseGoods){
         log.debug("查询仓库商品分页列表\t param:{}",warehouseGoods);
         if(Objects.isNull(warehouseGoods)){
             ResponseEntity.badRequest().body("传递参数错误");
@@ -74,7 +74,7 @@ public class WarehouseGoodsApi {
 
     @ApiOperation(value = "水果仓库商品分类查询", notes = "水果仓库商品分类查询")
     @ApiImplicitParam(paramType = "param", name = "baseUserId", value = "基础用户id", required = true, dataType = "long")
-    @RequestMapping(value = "/query/{baseUserId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/select/{baseUserId}", method = RequestMethod.GET)
     public ResponseEntity getWhGoods(@RequestParam("baseUserId") Long baseUserId) {
 
         if(Objects.isNull(baseUserId)){
