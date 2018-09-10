@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseGoodsMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+               type="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        <id column="id" property="id"/>
+        <result column="warehouse_id" property="warehouseId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_count" property="goodsCount"/>
+        <result column="price" property="price"/>
+        <result column="barcode" property="barcode"/>
+        <result column="product_name" property="productName"/>
+        <result column="image" property="image"/>
+        <result column="small_image" property="smallImage"/>
+        <result column="large_image" property="largeImage"/>
+        <result column="buy_at" property="buyAt"/>
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List">
+        <trim suffixOverrides=",">
+            id,
+            warehouse_id,
+            goods_id,
+            goods_count,
+            price,
+            barcode,
+            product_name,
+            image,
+            small_image,
+            large_image,
+            buy_at,
+        </trim>
+    </sql>
+
+    <!--新增仓库商品-->
+    <insert id="batchSave" parameterType="java.util.List">
+        insert into warehouse_goods
+        (
+            warehouse_id,
+            goods_id,
+            goods_count,
+            price,
+            barcode,
+            product_name,
+            image,
+            small_image,
+            large_image,
+            buy_at
+        )
+        value
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.warehouseId},
+                #{item.goodsId},
+                #{item.goodsCount},
+                #{item.price},
+                #{item.barcode},
+                #{item.productName},
+                #{item.image},
+                #{item.smallImage},
+                #{item.largeImage},
+                #{item.buyAt}
+            )
+        </foreach>
+    </insert>
+
+
+    <!--根据ID添加数量以及修改价格-->
+    <update id="updateCountAndPrice" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        UPDATE warehouse_goods
+        SET goods_count = #{goodsCount},
+        price = #{price}
+        WHERE id = #{id}
+
+    </update>
+    <!--根据id修改仓库商品-->
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        update warehouse_goods
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="warehouseId != null ">
+                warehouse_id = #{warehouseId},
+            </if>
+            <if test="goodsId != null ">
+                goods_id = #{goodsId},
+            </if>
+            <if test="goodsCount != null ">
+                goods_count = #{goodsCount},
+            </if>
+            <if test="price != null ">
+                price = #{price},
+            </if>
+            <if test="barcode != null ">
+                barcode = #{barcode},
+            </if>
+            <if test="productName != null ">
+                product_name = #{productName},
+            </if>
+            <if test="image != null ">
+                image = #{image},
+            </if>
+            <if test="smallImage != null ">
+                small_image = #{smallImage},
+            </if>
+            <if test="largeImage != null ">
+                large_image = #{largeImage},
+            </if>
+            <if test="buyAt != null ">
+                buy_at = #{buyAt},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <update id="updateGoodsCount" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        update warehouse_goods
+        set
+        goods_count = goods_count - #{goodsCount}
+        where id = #{id}
+    </update>
+
+    <!--根据ids删除仓库商品-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from warehouse_goods where id in
+        <foreach collection="list" item="item" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找仓库商品 -->
+    <select id="selectById" resultMap="BaseResultMap"
+            parameterType="long">select
+        <include refid="Base_Column_List"/>
+        from warehouse_goods where id = #{id}
+    </select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition">
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="warehouseId != null ">
+                and warehouse_id = #{warehouseId}
+            </if>
+            <if test="goodsId != null ">
+                and goods_id = #{goodsId}
+            </if>
+            <if test="goodsCount != null ">
+                and goods_count = #{goodsCount}
+            </if>
+            <if test="price != null ">
+                and price = #{price}
+            </if>
+            <if test="barcode != null ">
+                and barcode = #{barcode}
+            </if>
+            <if test="productName != null ">
+                and product_name = #{productName}
+            </if>
+            <if test="image != null ">
+                and image = #{image}
+            </if>
+            <if test="smallImage != null ">
+                and small_image = #{smallImage}
+            </if>
+            <if test="largeImage != null ">
+                and large_image = #{largeImage}
+            </if>
+            <if test="buyAt != null ">
+                and buy_at = #{buyAt}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询仓库商品列表-->
+    <select id="pageWarehouseGoodss" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        select
+        <include refid="Base_Column_List"/>
+        from warehouse_goods
+        <include refid="Base_Where_Condition"/>
+        <include refid="common.pager"/>
+    </select>
+
+    <!--查询仓库商品总记录-->
+    <select id="pageWarehouseGoodsCounts" resultType="long"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        select count(1)
+        from warehouse_goods
+        <include refid="Base_Where_Condition"/>
+    </select>
+
+
+    <!--根据仓库ID查询当天的水果列表-->
+    <select id="findWarehouseGoodsByWareHouseIdAndToday" parameterType="long"
+            resultType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM warehouse_goods
+        WHERE DATE_FORMAT(buy_at,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND warehouse_id = #{0};
+    </select>
+
+</mapper>
