@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "仓库出入库记录明细接口")
 @Slf4j
 @RestController
-@RequestMapping("/warehouseConvert")
+@RequestMapping("/warehouse-convert")
 public class WarehouseConvertApi {
 
     private final WarehouseConvertService warehouseConvertService;

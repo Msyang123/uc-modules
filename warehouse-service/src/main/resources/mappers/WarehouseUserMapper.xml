@@ -18,7 +18,7 @@
     </sql>
 
     <!--新增用户仓库-->
-    <insert id="create" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true" keyProperty="id">
         insert into warehouse_user
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="baseUserId != null ">

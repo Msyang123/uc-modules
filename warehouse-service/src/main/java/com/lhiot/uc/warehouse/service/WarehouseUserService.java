@@ -33,8 +33,8 @@ public class WarehouseUserService {
     * @author yijun
     * @date 2018/09/07 11:36:51
     */  
-    public int create(WarehouseUser warehouseUser){
-        return this.warehouseUserMapper.create(warehouseUser);
+    public int add(WarehouseUser warehouseUser){
+        return this.warehouseUserMapper.add(warehouseUser);
     }
 
     /** 

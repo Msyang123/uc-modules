@@ -21,7 +21,7 @@ public interface WarehouseUserMapper {
     * @author yijun
     * @date 2018/09/07 11:36:51
     */
-    int create(WarehouseUser warehouseUser);
+    int add(WarehouseUser warehouseUser);
 
     /**
     * Description:根据id修改用户仓库

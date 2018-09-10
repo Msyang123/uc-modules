@@ -15,6 +15,6 @@ public class WarehouseGoodsParam {
 	@Min(1)
 	private long goodsId;
 
-	@ApiModelProperty(notes = "商品重量", dataType = "BigDecimal", required = true)
-	private BigDecimal amount;
+	@ApiModelProperty(notes = "商品重量/数量", dataType = "BigDecimal", required = true)
+	private BigDecimal goodsCount;
 }

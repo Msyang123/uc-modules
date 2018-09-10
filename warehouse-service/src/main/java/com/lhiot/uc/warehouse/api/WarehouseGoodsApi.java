@@ -1,5 +1,6 @@
 package com.lhiot.uc.warehouse.api;
 
+import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Pair;
 import com.lhiot.uc.warehouse.domain.entity.WarehouseGoods;
 import com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +34,7 @@ import java.util.Objects;
 @Api(description = "仓库商品接口")
 @Slf4j
 @RestController
-@RequestMapping("/warehouseGoods")
+@RequestMapping("/warehouse-goods")
 public class WarehouseGoodsApi {
 
     private final WarehouseUserService warehouseUserService;
@@ -94,16 +96,32 @@ public class WarehouseGoodsApi {
     @ApiOperation("存入用户仓库")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query",name="baseUserId", value="基础用户Id",required=true,dataType="Long"),
-            @ApiImplicitParam(paramType = "body", name = "warehouseGoods", value = "要存入的仓库商品", required = true, dataType ="WarehouseGoods",
-                    dataTypeClass =WarehouseGoods.class, allowMultiple=true ),
+            @ApiImplicitParam(paramType = "body", name ="warehouseGoodsParamList",dataType="WarehouseGoodsParam",dataTypeClass = WarehouseGoodsParam.class,
+                    allowMultiple = true,value="存入仓库商品列表",required=true),
             @ApiImplicitParam(paramType="query",name="remark", value="备注",dataType="String")
     })
     @PostMapping("/deposit")
     public ResponseEntity<?> deposit(
             @RequestParam @NotNull @Min(1) Long baseUserId,
-            @RequestBody List<WarehouseGoods> warehouseGoods,
+            @RequestBody List<WarehouseGoodsParam> warehouseGoodsParamList,
             @RequestParam String remark){
-        boolean result=warehouseGoodsService.addWarehouseGoods(warehouseGoods,baseUserId, remark);
+        if (Objects.isNull(warehouseGoodsParamList)||warehouseGoodsParamList.isEmpty()){
+            return ResponseEntity.badRequest().body("存入仓库商品列表为空");
+        }
+        //查找用户仓库
+        WarehouseUser warehouseUser = warehouseUserService.findByBaseUserId(baseUserId);
+        if(Objects.isNull(warehouseUser)){
+            return ResponseEntity.badRequest().body("未找到用户仓库");
+        }
+        //TODO 需要查询基础商品信息构造仓库商品信息
+        List<WarehouseGoods> warehouseGoodsList=new ArrayList<>(warehouseGoodsParamList.size());
+        warehouseGoodsParamList.forEach(item->{
+            WarehouseGoods warehouseGoods=new WarehouseGoods();
+            warehouseGoods.setWarehouseId(warehouseUser.getId());
+            BeanUtils.of(warehouseGoods).populate(item);
+        });
+
+        boolean result=warehouseGoodsService.addWarehouseGoods(warehouseGoodsList,baseUserId, remark);
         if(result){
             return ResponseEntity.ok("存入成功");
         }else{
