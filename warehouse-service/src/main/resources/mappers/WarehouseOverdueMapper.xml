@@ -28,7 +28,7 @@
     </sql>
 
     <!--新增仓库商品过期降价值处理-->
-    <insert id="create" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" useGeneratedKeys="true" keyProperty="id">
         insert into warehouse_overdue
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null ">

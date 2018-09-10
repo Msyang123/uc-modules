@@ -21,7 +21,7 @@ public interface WarehouseOverdueMapper {
     * @author yijun
     * @date 2018/09/07 11:36:51
     */
-    int create(WarehouseOverdue warehouseOverdue);
+    int add(WarehouseOverdue warehouseOverdue);
 
     /**
     * Description:根据id修改仓库商品过期降价值处理

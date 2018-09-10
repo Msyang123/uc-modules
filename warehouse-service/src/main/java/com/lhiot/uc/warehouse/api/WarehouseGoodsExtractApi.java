@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "仓库商品提取接口")
 @Slf4j
 @RestController
-@RequestMapping("/warehouseGoodsExtract")
+@RequestMapping("/warehouse-goods-extract")
 public class WarehouseGoodsExtractApi {
 
     private final WarehouseGoodsExtractService warehouseGoodsExtractService;
@@ -29,13 +29,13 @@ public class WarehouseGoodsExtractApi {
         this.warehouseGoodsExtractService = warehouseGoodsExtractService;
     }
 
-/*    @PostMapping("/create")
+/*    @PostMapping("/add")
     @ApiOperation(value = "添加仓库商品提取")
     @ApiImplicitParam(paramType = "body", name = "warehouseGoodsExtract", value = "要添加的仓库商品提取", required = true, dataType = "WarehouseGoodsExtract")
-    public ResponseEntity<Integer> create(@RequestBody WarehouseGoodsExtract warehouseGoodsExtract) {
+    public ResponseEntity<Integer> add(@RequestBody WarehouseGoodsExtract warehouseGoodsExtract) {
         log.debug("添加仓库商品提取\t param:{}",warehouseGoodsExtract);
         
-        return ResponseEntity.ok(warehouseGoodsExtractService.create(warehouseGoodsExtract));
+        return ResponseEntity.ok(warehouseGoodsExtractService.add(warehouseGoodsExtract));
     }*/
 
     @PutMapping("/update/{id}")
@@ -65,9 +65,9 @@ public class WarehouseGoodsExtractApi {
         return ResponseEntity.ok(warehouseGoodsExtractService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品提取分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageQuery(WarehouseGoodsExtract warehouseGoodsExtract){
+    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageSelect(WarehouseGoodsExtract warehouseGoodsExtract){
         log.debug("查询仓库商品提取分页列表\t param:{}",warehouseGoodsExtract);
         
         return ResponseEntity.ok(warehouseGoodsExtractService.pageList(warehouseGoodsExtract));

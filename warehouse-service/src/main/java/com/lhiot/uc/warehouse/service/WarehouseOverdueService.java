@@ -33,8 +33,8 @@ public class WarehouseOverdueService {
     * @author yijun
     * @date 2018/09/07 11:36:51
     */  
-    public int create(WarehouseOverdue warehouseOverdue){
-        return this.warehouseOverdueMapper.create(warehouseOverdue);
+    public int add(WarehouseOverdue warehouseOverdue){
+        return this.warehouseOverdueMapper.add(warehouseOverdue);
     }
 
     /** 

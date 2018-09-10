@@ -30,13 +30,13 @@ public class WarehouseApi {
         this.warehouseUserService = warehouseUserService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     @ApiOperation(value = "添加用户仓库")
     @ApiImplicitParam(paramType = "body", name = "warehouseUser", value = "要添加的用户仓库", required = true, dataType = "WarehouseUser")
-    public ResponseEntity<Integer> create(@RequestBody WarehouseUser warehouseUser) {
+    public ResponseEntity<Integer> add(@RequestBody WarehouseUser warehouseUser) {
         log.debug("添加用户仓库\t param:{}",warehouseUser);
         
-        return ResponseEntity.ok(warehouseUserService.create(warehouseUser));
+        return ResponseEntity.ok(warehouseUserService.add(warehouseUser));
     }
 
     @PutMapping("/update/{id}")
@@ -57,9 +57,9 @@ public class WarehouseApi {
         return ResponseEntity.ok(warehouseUserService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询用户仓库分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseUser>> pageQuery(WarehouseUser warehouseUser){
+    public ResponseEntity<PagerResultObject<WarehouseUser>> pageSelect(WarehouseUser warehouseUser){
         log.debug("查询用户仓库分页列表\t param:{}",warehouseUser);
         
         return ResponseEntity.ok(warehouseUserService.pageList(warehouseUser));

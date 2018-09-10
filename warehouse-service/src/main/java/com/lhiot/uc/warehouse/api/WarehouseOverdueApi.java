@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "仓库商品过期降价值处理接口")
 @Slf4j
 @RestController
-@RequestMapping("/warehouseOverdue")
+@RequestMapping("/warehouse-overdue")
 public class WarehouseOverdueApi {
 
     private final WarehouseOverdueService warehouseOverdueService;
@@ -29,13 +29,13 @@ public class WarehouseOverdueApi {
         this.warehouseOverdueService = warehouseOverdueService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     @ApiOperation(value = "添加仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要添加的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
-    public ResponseEntity<Integer> create(@RequestBody WarehouseOverdue warehouseOverdue) {
+    public ResponseEntity<Integer> add(@RequestBody WarehouseOverdue warehouseOverdue) {
         log.debug("添加仓库商品过期降价值处理\t param:{}",warehouseOverdue);
         
-        return ResponseEntity.ok(warehouseOverdueService.create(warehouseOverdue));
+        return ResponseEntity.ok(warehouseOverdueService.add(warehouseOverdue));
     }
 
     @PutMapping("/update/{id}")
@@ -65,9 +65,9 @@ public class WarehouseOverdueApi {
         return ResponseEntity.ok(warehouseOverdueService.selectById(id));
     }
     
-    @GetMapping("/page/query")
+    @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品过期降价值处理分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageQuery(WarehouseOverdue warehouseOverdue){
+    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageSelect(WarehouseOverdue warehouseOverdue){
         log.debug("查询仓库商品过期降价值处理分页列表\t param:{}",warehouseOverdue);
         
         return ResponseEntity.ok(warehouseOverdueService.pageList(warehouseOverdue));

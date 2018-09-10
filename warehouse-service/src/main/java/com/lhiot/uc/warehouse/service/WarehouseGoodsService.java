@@ -95,11 +95,11 @@ public class WarehouseGoodsService {
     /**
      * 添加到仓库
      * 只有当天的水果合并在一起
-     * @param warehouseGoods
+     * @param warehouseGoodsList
      * @param baseUserId
      * @param remark
      */
-    public boolean addWarehouseGoods(List<WarehouseGoods> warehouseGoods, Long baseUserId, String remark){
+    public boolean addWarehouseGoods(List<WarehouseGoods> warehouseGoodsList, Long baseUserId, String remark){
 
         //查找用户仓库
         WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
@@ -119,7 +119,7 @@ public class WarehouseGoodsService {
 
         final boolean isEmpty = CollectionUtils.isEmpty(todayWarehouseGoodsList);
 
-        warehouseGoods.forEach(goods -> {
+        warehouseGoodsList.forEach(goods -> {
             goods.setWarehouseId(warehouseUser.getId());//设置仓库编号
             //重置时间的时分秒（此处用作定时任务每天刷一次）
             goods.setBuyAt(current);
@@ -195,7 +195,7 @@ public class WarehouseGoodsService {
         BigDecimal zero = new BigDecimal("0.000");
         for (WarehouseGoodsParam goodsParam : warehouseGoodsParamList) {
             //待提取单个商品总数
-            double amount = goodsParam.getAmount().doubleValue();// 现在改成直接前端计算总数//Arith.mul(goods.getAmount(),
+            double amount = goodsParam.getGoodsCount().doubleValue();// 现在改成直接前端计算总数//Arith.mul(goods.getAmount(),
             //当前商品提取数量为0则跳过
             if(Calculator.compareTo(amount,zero.doubleValue()) == 0){
                 log.warn("提取仓库商品要求提取数量为0{}",goodsParam);
