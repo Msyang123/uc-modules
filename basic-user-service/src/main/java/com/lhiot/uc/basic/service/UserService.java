@@ -8,6 +8,7 @@ import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
  **/
 @Service
 @Slf4j
+@Transactional
 public class UserService {
     private ApplyUserMapper applyUserMapper;
 
@@ -109,6 +111,11 @@ public class UserService {
         return applyUserMapper.countById(id) > 0 ? true : false;
     }
 
+    /**
+     * 修改用户头像，昵称，说明，地址，QQ，email，性别
+     * @param user
+     * @return
+     */
     public boolean updateUserById(ApplyUser user){
         return applyUserMapper.updateUserById(user) > 0 ? true:false;
     }

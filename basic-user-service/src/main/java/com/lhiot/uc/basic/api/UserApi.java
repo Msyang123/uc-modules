@@ -10,12 +10,14 @@ import com.lhiot.uc.basic.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserApi {
 
     private final UserService userService;
@@ -84,20 +86,24 @@ public class UserApi {
 
     @ApiOperation(value = "根据关键字搜索用户（关键字模糊匹配手机号码和昵称）",response = ApplyUser.class, responseContainer = "Set")
     @ApiImplicitParam(paramType = "String", name = "keyword", dataType = "string", required = true, value = "关键字")
-    @GetMapping("/{keyword}/search")
+    @GetMapping("/{keyword}")
     public ResponseEntity findUserByKeyword(@PathVariable String keyword) {
         return ResponseEntity.ok(userService.findByKeyword(keyword));
     }
 
     @ApiOperation(value = "根据业务用户ID修改用户信息", notes = "根据业务用户ID修改用户信息！")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "传入参数", required = true, dataType = "ModificationUserParam")
-    @PutMapping(value = "/modification")
-    public ResponseEntity updateInfo(@RequestBody ModificationUserParam param){
-       if (!userService.countById(param.getUserId())){
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "id", value = "传入参数", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = "body", name = "param", value = "传入参数", required = true, dataType = "ModificationUserParam")
+    })
+    @PutMapping(value = "/{id}")
+    public ResponseEntity updateInfo(@NotNull @PathVariable("id") Long userId, @RequestBody ModificationUserParam param){
+       if (!userService.countById(userId)){
            return ResponseEntity.badRequest().body("用户不存在！");
        }
        ApplyUser applyUser = new ApplyUser();
         BeanUtils.of(applyUser).populate(param);
+        applyUser.setId(userId);
        if (! userService.updateUserById(applyUser)){
            return ResponseEntity.badRequest().body("更新用户信息失败！");
        }

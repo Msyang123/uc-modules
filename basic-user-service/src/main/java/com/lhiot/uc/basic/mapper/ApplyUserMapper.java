@@ -17,7 +17,7 @@ public interface ApplyUserMapper {
 
     int countById(Long id);
 
-    int save(ApplyUser param);
+    int insert(ApplyUser param);
 
     UserDetailResult findById(Long userId);
 
@@ -32,4 +32,16 @@ public interface ApplyUserMapper {
     List<ApplyUser> findByKeyword(String keyword);
 
     int updateUserById(ApplyUser user);
+
+    int updateByBindPhone(ApplyUser user);
+
+    String findOpenIdByPhone(ApplyUser user);
+
+    String findPhoneByOpenId(String openId);
+
+    int updateWeChatInfoById(ApplyUser user);
+
+    Long findIdByPhoneNumber(ApplyUser user);
+
+    int updateWeChatBinding(Long userId);
 }

@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @ApiModel
@@ -51,11 +52,11 @@ public class UserDetailResult {
     private String description ;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @ApiModelProperty(notes = "注册时间", dataType = "Timestamp")
-    private Timestamp registrationAt;
+    @ApiModelProperty(notes = "注册时间", dataType = "Date")
+    private Date registerAt;
 
     @ApiModelProperty(notes = "积分", dataType = "Integer")
-    private Integer point = 0;
+    private Long point = 0L;
 
     @ApiModelProperty(notes = "鲜果币", dataType = "Long")
     private Long currency = 0L;

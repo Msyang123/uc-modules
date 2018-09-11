@@ -14,7 +14,11 @@
         SELECT count(id) FROM apply_user WHERE id = #{0}
     </select>
 
-	<insert id="save" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+	<select id="findIdByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Long">
+		SELECT id FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
+	</select>
+
+	<insert id="insert" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex,
 		birthday,register_at,payment_permissions)
 		VALUE (#{id},#{phone},#{openId},#{unionId},#{baseUserId},#{password},#{paymentPassword},#{nickname},#{avatar},#{email},#{qq}
@@ -93,11 +97,18 @@
 		WHERE
 		phone  LIKE #{0} OR nickname LIKE #{0};
 	</select>
+
+	<select id="findOpenIdByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="String">
+		SELECT open_id AS openId FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
+	</select>
+
+	<select id="findPhoneByOpenId" parameterType="String" resultType="String">
+		SELECT phone FROM apply_user WHERE open_id = #{openId}
+	</select>
     
     <update id="updateUserById" parameterType="com.lhiot.uc.basic.entity.ApplyUser" >
         UPDATE apply_user
         <trim prefix="set" suffixOverrides=",">
-            <if test="phone != null and phone != ''">phone = #{phone},</if>
             <if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
             <if test="sex != null and sex != 'man'">sex = #{sex},</if>
             <if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
@@ -106,13 +117,28 @@
             <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
             <if test="address != null and address != ''">address = #{address},</if>
             <if test="description != null and description != ''">description = #{description},</if>
-			<if test="password != null and password != ''">password = #{password},</if>
-			<if test="paymentPassword != null and paymentPassword != ''">payment_password = #{paymentPassword},</if>
-			<if test="openId != null and openId != ''">open_id = #{openId},</if>
-			<if test="unionId != null and unionId != ''">union_id = #{unionId},</if>
-			<if test="paymentPermissions != null ">payment_permissions = #{paymentPermissions},</if>
-			<if test="baseUserId != null and baseUserId != ''">base_user_id = #{baseUserId},</if>
         </trim>
 		WHERE id = #{id}
     </update>
+
+	<!--绑定手机号码，修改应用表信息-->
+	<update id="updateByBindPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+		UPDATE apply_user
+		SET base_user_id = #{baseUserId},phone = #{phone}
+		WHERE id = #{id}
+	</update>
+
+	<!--手机号注册绑定微信-->
+	<update id="updateWeChatInfoById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+		UPDATE apply_user
+		SET open_id = #{openId},union_id = #{unionId}
+		WHERE id = #{id}
+	</update>
+
+	<!--解除微信绑定-->
+	<update id="updateWeChatBinding" parameterType="Long">
+		UPDATE apply_user
+		SET open_id = '',union_id = ''
+		WHERE id = #{0}
+	</update>
 </mapper>

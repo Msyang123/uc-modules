@@ -10,12 +10,6 @@ import lombok.Data;
 @Data
 @ApiModel
 public class ModificationUserParam {
-    private Long userId;
-    private String phone;
-    private String openId;
-    private String unionId;
-    private String password;
-    private String paymentPassword;
     private String nickname;
     private String avatar;
     private String email;
@@ -24,5 +18,4 @@ public class ModificationUserParam {
     private String description;
     private String sex;
     private String birthday;
-    private SwitchStatus paymentPermissions;
 }

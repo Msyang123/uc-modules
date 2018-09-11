@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.model;
 
+import com.lhiot.uc.basic.entity.Apply;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -8,7 +9,8 @@ import lombok.Data;
  **/
 @Data
 @ApiModel
-public class UserBindingParam {
+public class UserBindingPhoneParam {
     private String phone;
     private Long applyUserId;
+    private Apply apply;
 }

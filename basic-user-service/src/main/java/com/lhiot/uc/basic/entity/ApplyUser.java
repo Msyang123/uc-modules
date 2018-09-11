@@ -18,7 +18,7 @@ public class ApplyUser {
     private String avatar = "http://resource.shuiguoshule.com.cn/user_image/2017-04-14/oGPg2MyfeUrO9knaDLyS.jpg";
     private String address = "";
     private String description = "";
-    private Date registrationAt = Date.from(Instant.now());
+    private Date registerAt = Date.from(Instant.now());
     private String password = "";
     private String paymentPassword = "";
     private String openId = "";
