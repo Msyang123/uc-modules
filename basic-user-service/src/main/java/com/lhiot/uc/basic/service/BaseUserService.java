@@ -34,7 +34,7 @@ public abstract class BaseUserService {
             baseUser = new BaseUser();
             baseUser.setPhone(phone);
             baseUser.setId(snowflakeId.longId());
-            baseUserMapper.save(baseUser);
+            baseUserMapper.insert(baseUser);
         }
         return baseUser;
     }

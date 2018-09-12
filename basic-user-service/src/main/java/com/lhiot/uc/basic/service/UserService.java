@@ -1,7 +1,6 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.result.Tips;
 import com.lhiot.uc.basic.entity.Apply;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
@@ -108,7 +107,7 @@ public class UserService {
     }
 
     public boolean countById(Long id) {
-        return applyUserMapper.countById(id) > 0 ? true : false;
+        return applyUserMapper.countById(id) > 0;
     }
 
     /**
@@ -117,6 +116,12 @@ public class UserService {
      * @return
      */
     public boolean updateUserById(ApplyUser user){
-        return applyUserMapper.updateUserById(user) > 0 ? true:false;
+        return applyUserMapper.updateUserById(user) > 0;
     }
+
+    public boolean updatePasswordById(ApplyUser user){return applyUserMapper.updatePasswordById(user) > 0;}
+
+    public boolean updatePaymentPasswordById(ApplyUser user){return applyUserMapper.updatePaymentPasswordById(user) > 0;}
+
+    public boolean updatePaymentPermissionsById(ApplyUser user){return applyUserMapper.updatePaymentPermissionsById(user) > 0;}
 }

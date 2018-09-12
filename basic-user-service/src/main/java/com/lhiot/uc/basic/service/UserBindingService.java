@@ -66,7 +66,7 @@ public class UserBindingService extends BaseUserService {
         userBinding.setPhone(param.getPhone());
         userBinding.setBaseUserId(baseUser.getId());
         userBinding.setApplyUserId(param.getApplyUserId());
-        userBindingMapper.save(userBinding);
+        userBindingMapper.insert(userBinding);
 
         ApplyUser applyUser = new ApplyUser();
         applyUser.setBaseUserId(baseUser.getId());

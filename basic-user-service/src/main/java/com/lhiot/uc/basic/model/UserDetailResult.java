@@ -61,15 +61,6 @@ public class UserDetailResult {
     @ApiModelProperty(notes = "鲜果币", dataType = "Long")
     private Long currency = 0L;
 
-    @ApiModelProperty(notes = "等级", dataType = "String")
-    private String level ;
-
-    @ApiModelProperty(notes="密码",dataType="String")
-    private String password ;
-
-    @ApiModelProperty(notes="支付密码",dataType="String")
-    private String paymentPassword ;
-
     @ApiModelProperty(notes="微信开放平台单一应用唯一识别openId",dataType="String")
     private String openId ;
 

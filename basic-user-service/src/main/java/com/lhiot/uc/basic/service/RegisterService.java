@@ -79,7 +79,7 @@ public class RegisterService extends BaseUserService{
         userBinding.setBaseUserId(baseUser.getId());
         userBinding.setApplyUserId(applyUser.getId());
         userBinding.setPhone(param.getPhone());
-        userBindingMapper.save(userBinding);
+        userBindingMapper.insert(userBinding);
 
         UserDetailResult result = new UserDetailResult();
         BeanUtils.of(result).populate(applyUser);
@@ -114,7 +114,7 @@ public class RegisterService extends BaseUserService{
                 userBinding.setBaseUserId(baseUser.getId());
                 userBinding.setApplyUserId(applyUser.getId());
                 userBinding.setPhone(param.getPhone());
-                userBindingMapper.save(userBinding);
+                userBindingMapper.insert(userBinding);
                 applyUserMapper.insert(applyUser);
             }else{
                 //手机号已存在注册用户，则只进行修改

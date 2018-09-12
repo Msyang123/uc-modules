@@ -44,4 +44,10 @@ public interface ApplyUserMapper {
     Long findIdByPhoneNumber(ApplyUser user);
 
     int updateWeChatBinding(Long userId);
+
+    int updatePasswordById(ApplyUser user);
+
+    int updatePaymentPasswordById(ApplyUser user);
+
+    int updatePaymentPermissionsById(ApplyUser user);
 }

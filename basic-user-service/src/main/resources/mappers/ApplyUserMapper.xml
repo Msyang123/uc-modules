@@ -26,7 +26,7 @@
 	</insert>
 
     <select id="findById" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT a.id,a.phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
@@ -38,7 +38,7 @@
 	</select>
 
 	<select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
@@ -46,11 +46,11 @@
 		END locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
-		WHERE a.open_id = #{0}
+		WHERE a.open_id = #{0} ORDER BY phone DESC LIMIT 1
 	</select>
 
 	<select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
@@ -62,7 +62,7 @@
 	</select>
 
 	<select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
@@ -77,7 +77,7 @@
 	</select>
 
 	<select id="findByPhoneList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
@@ -105,7 +105,7 @@
 	<select id="findPhoneByOpenId" parameterType="String" resultType="String">
 		SELECT phone FROM apply_user WHERE open_id = #{openId}
 	</select>
-    
+
     <update id="updateUserById" parameterType="com.lhiot.uc.basic.entity.ApplyUser" >
         UPDATE apply_user
         <trim prefix="set" suffixOverrides=",">
@@ -141,4 +141,22 @@
 		SET open_id = '',union_id = ''
 		WHERE id = #{0}
 	</update>
+
+    <update id="updatePasswordById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+        UPDATE apply_user
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePaymentPasswordById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+        UPDATE apply_user
+        SET payment_password = #{paymentPassword}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePaymentPermissionsById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+        UPDATE apply_user
+        SET payment_permissions = #{paymentPermissions}
+        WHERE id = #{id}
+    </update>
 </mapper>
