@@ -9,11 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lhiot.uc</groupId>
     <artifactId>warehouse-service</artifactId>
 
     <properties>
-        <start-class>com.lhiot.uc.session.WarehouseServiceApplication</start-class>
+        <start-class>com.lhiot.uc.warehouse.WarehouseServiceApplication</start-class>
     </properties>
 
     <dependencies>

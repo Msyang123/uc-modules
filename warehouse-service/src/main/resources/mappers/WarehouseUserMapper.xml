@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseUserMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" >
+        <id column="id" property="id"/>
+        <result column="base_user_id" property="baseUserId" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            base_user_id,
+        </trim>
+    </sql>
+
+    <!--新增用户仓库-->
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true" keyProperty="id">
+        insert into warehouse_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="baseUserId != null ">
+                base_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="baseUserId != null ">
+                #{baseUserId},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改用户仓库-->
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+        update warehouse_user
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="baseUserId != null ">
+                base_user_id = #{baseUserId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除用户仓库-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from warehouse_user where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找用户仓库 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from warehouse_user where id = #{id}
+	</select>
+
+    <!--依据基础用户id查找用户仓库-->
+    <select id="findByBaseUserId" resultMap="BaseResultMap"
+            parameterType="long"> select <include refid="Base_Column_List" />
+        from warehouse_user where base_user_id = #{baseUserId}
+    </select>
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="baseUserId != null ">
+                and base_user_id = #{baseUserId}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询用户仓库列表-->
+     <select id="pageWarehouseUsers" resultMap="BaseResultMap"
+        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+	        select <include refid="Base_Column_List" />
+	        from warehouse_user
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询用户仓库总记录-->
+    <select id="pageWarehouseUserCounts" resultType="long"
+        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+            select count(1)
+            from warehouse_user
+            <include refid="Base_Where_Condition" />
+    </select>
+
+</mapper>
