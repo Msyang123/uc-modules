@@ -4,14 +4,14 @@ import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.SnowflakeId;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplyUser;
+import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.entity.UserBinding;
+import com.lhiot.uc.basic.mapper.ApplyUserMapper;
+import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.mapper.UserBindingMapper;
 import com.lhiot.uc.basic.model.PhoneRegisterParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
-import com.lhiot.uc.basic.mapper.BaseUserMapper;
-import com.lhiot.uc.basic.mapper.ApplyUserMapper;
-import com.lhiot.uc.basic.entity.ApplyUser;
-import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.model.WeChatRegisterParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.Objects;
 @Service
 @Slf4j
 @Transactional
-public class RegisterService extends BaseUserService{
+public class RegisterService extends BaseUserService {
 
     private final ApplyUserMapper applyUserMapper;
     private final SnowflakeId snowflakeId;
@@ -107,7 +107,7 @@ public class RegisterService extends BaseUserService{
             Long userId = this.findIdByPhone(param);
             //基础用户信息存在该手机号用户则只添加绑定信息，若不存在则添加基础用户信息
             baseUser = this.findBaseUserByBindingRelation(param.getPhone());
-            if (Objects.isNull(userId)){
+            if (Objects.isNull(userId)) {
                 applyUser.setBaseUserId(baseUser.getId());
 
                 UserBinding userBinding = new UserBinding();
@@ -116,14 +116,14 @@ public class RegisterService extends BaseUserService{
                 userBinding.setPhone(param.getPhone());
                 userBindingMapper.insert(userBinding);
                 applyUserMapper.insert(applyUser);
-            }else{
+            } else {
                 //手机号已存在注册用户，则只进行修改
                 applyUser.setOpenId(param.getOpenId());
                 applyUser.setUnionId(param.getUnionId());
                 applyUser.setId(userId);
                 applyUserMapper.updateWeChatInfoById(applyUser);
             }
-        }else {
+        } else {
             applyUserMapper.insert(applyUser);
             baseUser = new BaseUser();
         }
@@ -136,7 +136,7 @@ public class RegisterService extends BaseUserService{
         return result;
     }
 
-    public Long findIdByPhone(WeChatRegisterParam param){
+    public Long findIdByPhone(WeChatRegisterParam param) {
         ApplyUser user = new ApplyUser();
         user.setPhone(param.getPhone());
         user.setApply(param.getApply());

@@ -70,7 +70,7 @@ public class FruitCurrencyService {
         return currencyLogMapper.insert(currencyLog) > 0;
     }
 
-    public Long findCurrencyById(Long baseUserId){
-       return baseUserMapper.findCurrencyById(baseUserId);
+    public Long findCurrencyById(Long baseUserId) {
+        return baseUserMapper.findCurrencyById(baseUserId);
     }
 }

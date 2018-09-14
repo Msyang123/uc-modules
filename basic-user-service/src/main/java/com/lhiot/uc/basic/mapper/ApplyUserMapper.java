@@ -50,4 +50,6 @@ public interface ApplyUserMapper {
     int updatePaymentPasswordById(ApplyUser user);
 
     int updatePaymentPermissionsById(ApplyUser user);
+
+    int countByIdAndPassword(ApplyUser user);
 }

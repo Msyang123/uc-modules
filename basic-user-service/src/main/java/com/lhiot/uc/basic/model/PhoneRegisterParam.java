@@ -4,7 +4,6 @@ import com.lhiot.uc.basic.entity.Apply;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -25,7 +24,7 @@ public class PhoneRegisterParam {
     @ApiModelProperty(notes = "密码", dataType = "String", required = false)
     private String password;
 
-    @ApiModelProperty(notes = "应用类型",dataType = "String")
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
     private Apply apply;
 
 }

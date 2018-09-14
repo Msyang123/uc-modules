@@ -43,7 +43,7 @@ public class UserService {
      * @param openId
      * @return
      */
-    public UserDetailResult findByopenId(String openId) {
+    public UserDetailResult findByOpenId(String openId) {
         return applyUserMapper.findByOpenId(openId);
     }
 
@@ -124,4 +124,6 @@ public class UserService {
     public boolean updatePaymentPasswordById(ApplyUser user){return applyUserMapper.updatePaymentPasswordById(user) > 0;}
 
     public boolean updatePaymentPermissionsById(ApplyUser user){return applyUserMapper.updatePaymentPermissionsById(user) > 0;}
+
+    public boolean countByIdAndPassword(ApplyUser user) {return applyUserMapper.countByIdAndPassword(user) > 0;}
 }

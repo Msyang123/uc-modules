@@ -1,6 +1,5 @@
 package com.lhiot.uc.basic.model;
 
-import com.lhiot.uc.basic.entity.Apply;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,10 +10,10 @@ import lombok.Data;
 @Data
 @ApiModel
 public class UserBindingWeChatParam {
-    @ApiModelProperty(notes = "微信openId",dataType = "String")
+    @ApiModelProperty(notes = "微信openId", dataType = "String")
     private String openId;
-    @ApiModelProperty(notes = "微信unionId",dataType = "String")
+    @ApiModelProperty(notes = "微信unionId", dataType = "String")
     private String unionId;
-    @ApiModelProperty(notes = "业务用户Id",dataType = "Long")
+    @ApiModelProperty(notes = "业务用户Id", dataType = "Long")
     private Long applyUserId;
 }

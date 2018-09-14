@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class FruitCurrencyPaymentApi {
     }
 
     @ApiOperation("用户鲜果币加减")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作",dataType = "CurrencyOperationParam", dataTypeClass = CurrencyOperationParam.class, required = true)
+    @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "CurrencyOperationParam", dataTypeClass = CurrencyOperationParam.class, required = true)
     @PutMapping("/currency/operation")
     public ResponseEntity userCurrencyOperation(@RequestBody CurrencyOperationParam param) {
 
@@ -51,11 +50,11 @@ public class FruitCurrencyPaymentApi {
     }
 
     @ApiOperation("查询用户余额")
-    @ApiImplicitParam(paramType = "path",name = "id",value = "基础用户Id",dataType = "Long",required = true)
+    @ApiImplicitParam(paramType = "path", name = "id", value = "基础用户Id", dataType = "Long", required = true)
     @GetMapping("/{id}")
-    public ResponseEntity findFruitCurrency(@PathVariable("id") Long baseUserId){
+    public ResponseEntity findFruitCurrency(@PathVariable("id") Long baseUserId) {
         Long currency = fruitCurrencyService.findCurrencyById(baseUserId);
-        if (Objects.isNull(currency)){
+        if (Objects.isNull(currency)) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
         return ResponseEntity.ok(currency);

@@ -1,11 +1,11 @@
 package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
-import com.lhiot.uc.basic.entity.*;
-import com.lhiot.uc.basic.model.CurrencyOperationParam;
+import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplyUser;
+import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.ModificationUserParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
-import com.lhiot.uc.basic.service.FruitCurrencyService;
 import com.lhiot.uc.basic.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,14 +26,12 @@ import java.util.Objects;
 public class UserApi {
 
     private final UserService userService;
-    private FruitCurrencyService fruitCurrencyService;
 
-    public UserApi(UserService userService, FruitCurrencyService fruitCurrencyService) {
+    public UserApi(UserService userService) {
         this.userService = userService;
-        this.fruitCurrencyService = fruitCurrencyService;
     }
 
-    @ApiOperation("根据用户ID查询用户信息")
+    @ApiOperation(value = "根据用户ID查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParam(paramType = "path", name = "userId", value = "用户ID", dataType = "Long", required = true)
     @GetMapping("user-id/{userId}")
     public ResponseEntity findById(@PathVariable Long userId) {
@@ -44,18 +42,18 @@ public class UserApi {
         return ResponseEntity.ok(user);
     }
 
-    @ApiOperation("根据用户OpenID查询用户信息")
+    @ApiOperation(value = "根据用户OpenID查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParam(paramType = "path", name = "openId", value = "用户ID", dataType = "Long", required = true)
     @GetMapping("open-id/{openId}")
     public ResponseEntity findByOpenId(@PathVariable String openId) {
-        UserDetailResult user = userService.findByopenId(openId);
+        UserDetailResult user = userService.findByOpenId(openId);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
         return ResponseEntity.ok(user);
     }
 
-    @ApiOperation("根据业务手机号码查询用户信息")
+    @ApiOperation(value = "根据业务手机号码查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "phoneNumber", value = "用户ID", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "apply", value = "应用类型", dataTypeClass = Apply.class, required = true)
@@ -148,4 +146,19 @@ public class UserApi {
         return userService.updatePaymentPermissionsById(user) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改免密权限失败失败！");
     }
 
+    @ApiOperation("判断登录密码是否正确")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "id", value = "用户ID", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = "query", name = "password", value = "用户登录密码", dataType = "String", required = true)
+    })
+    @GetMapping("/password/{id}")
+    public ResponseEntity determineLoginPassword(@PathVariable("id") Long userId, @RequestParam String password) {
+        ApplyUser applyUser = new ApplyUser();
+        applyUser.setPassword(password);
+        applyUser.setId(userId);
+        if (!userService.countByIdAndPassword(applyUser)) {
+            return ResponseEntity.badRequest().body("密码不正确！");
+        }
+        return ResponseEntity.ok().build();
+    }
 }

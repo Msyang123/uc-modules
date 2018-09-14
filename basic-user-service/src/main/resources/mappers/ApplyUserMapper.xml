@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.basic.mapper.ApplyUserMapper">
 
-	<select id="countByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Integer">
+    <select id="countByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Integer">
 		SELECT count(id) FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
 	</select>
 
-	<select id="countByOpenId" parameterType="String" resultType="Integer">
+    <select id="countByOpenId" parameterType="String" resultType="Integer">
 		SELECT COUNT(id) FROM apply_user WHERE open_id = #{0}
 	</select>
 
@@ -14,11 +14,15 @@
         SELECT count(id) FROM apply_user WHERE id = #{0}
     </select>
 
-	<select id="findIdByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Long">
+    <select id="countByIdAndPassword" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Integer">
+		SELECT COUNT(id) FROM apply_user WHERE id = #{id} AND password = #{password}
+	</select>
+
+    <select id="findIdByPhoneNumber" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="Long">
 		SELECT id FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
 	</select>
 
-	<insert id="insert" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+    <insert id="insert" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,apply,sex,
 		birthday,register_at,payment_permissions)
 		VALUE (#{id},#{phone},#{openId},#{unionId},#{baseUserId},#{password},#{paymentPassword},#{nickname},#{avatar},#{email},#{qq}
@@ -37,7 +41,7 @@
 		WHERE a.id = #{0}
 	</select>
 
-	<select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+    <select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
@@ -49,7 +53,8 @@
 		WHERE a.open_id = #{0} ORDER BY phone DESC LIMIT 1
 	</select>
 
-	<select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+    <select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser"
+            resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
 		,birthday,payment_permissions,register_at,currency,member_points,
 		CASE b.locked
@@ -61,52 +66,52 @@
 		WHERE a.phone = #{phone} AND a.apply = #{apply}
 	</select>
 
-	<select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-		,birthday,payment_permissions,register_at,currency,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
-		FROM apply_user a
-		LEFT JOIN base_user b ON a.base_user_id = b.id
-		WHERE a.id IN
-		<foreach collection="list" item="item" open="(" close=")" separator=",">
-			#{item}
-		</foreach>
-	</select>
+    <select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+        SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
+        ,birthday,payment_permissions,register_at,currency,member_points,
+        CASE b.locked
+        WHEN 'LOCK' THEN b.locked
+        ELSE a.locked
+        END locked
+        FROM apply_user a
+        LEFT JOIN base_user b ON a.base_user_id = b.id
+        WHERE a.id IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 
-	<select id="findByPhoneList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
-		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-		,birthday,payment_permissions,register_at,currency,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
-		FROM apply_user a
-		LEFT JOIN base_user b ON a.base_user_id = b.id
-		WHERE a.phone IN
-		<foreach collection="list" item="item" open="(" close=")" separator=",">
-			#{item}
-		</foreach>
-	</select>
-	
-	<select id="findByKeyword" parameterType="String" resultType="com.lhiot.uc.basic.entity.ApplyUser">
+    <select id="findByPhoneList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+        SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
+        ,birthday,payment_permissions,register_at,currency,member_points,
+        CASE b.locked
+        WHEN 'LOCK' THEN b.locked
+        ELSE a.locked
+        END locked
+        FROM apply_user a
+        LEFT JOIN base_user b ON a.base_user_id = b.id
+        WHERE a.phone IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByKeyword" parameterType="String" resultType="com.lhiot.uc.basic.entity.ApplyUser">
 		SELECT id ,birthday,sex,phone,nickname,email,qq,avatar,address,description,register_at
 		FROM apply_user
 		WHERE
 		phone  LIKE #{0} OR nickname LIKE #{0};
 	</select>
 
-	<select id="findOpenIdByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="String">
+    <select id="findOpenIdByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser" resultType="String">
 		SELECT open_id AS openId FROM apply_user WHERE phone = #{phone} AND apply = #{apply}
 	</select>
 
-	<select id="findPhoneByOpenId" parameterType="String" resultType="String">
+    <select id="findPhoneByOpenId" parameterType="String" resultType="String">
 		SELECT phone FROM apply_user WHERE open_id = #{openId}
 	</select>
 
-    <update id="updateUserById" parameterType="com.lhiot.uc.basic.entity.ApplyUser" >
+    <update id="updateUserById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
         UPDATE apply_user
         <trim prefix="set" suffixOverrides=",">
             <if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
@@ -118,25 +123,25 @@
             <if test="address != null and address != ''">address = #{address},</if>
             <if test="description != null and description != ''">description = #{description},</if>
         </trim>
-		WHERE id = #{id}
+        WHERE id = #{id}
     </update>
 
-	<!--绑定手机号码，修改应用表信息-->
-	<update id="updateByBindPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+    <!--绑定手机号码，修改应用表信息-->
+    <update id="updateByBindPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		UPDATE apply_user
 		SET base_user_id = #{baseUserId},phone = #{phone}
 		WHERE id = #{id}
 	</update>
 
-	<!--手机号注册绑定微信-->
-	<update id="updateWeChatInfoById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+    <!--手机号注册绑定微信-->
+    <update id="updateWeChatInfoById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		UPDATE apply_user
 		SET open_id = #{openId},union_id = #{unionId}
 		WHERE id = #{id}
 	</update>
 
-	<!--解除微信绑定-->
-	<update id="updateWeChatBinding" parameterType="Long">
+    <!--解除微信绑定-->
+    <update id="updateWeChatBinding" parameterType="Long">
 		UPDATE apply_user
 		SET open_id = '',union_id = ''
 		WHERE id = #{0}

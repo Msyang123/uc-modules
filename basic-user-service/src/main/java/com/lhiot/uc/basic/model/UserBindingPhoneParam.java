@@ -11,10 +11,10 @@ import lombok.Data;
 @Data
 @ApiModel
 public class UserBindingPhoneParam {
-    @ApiModelProperty(notes = "手机号",dataType = "String")
+    @ApiModelProperty(notes = "手机号", dataType = "String")
     private String phone;
-    @ApiModelProperty(notes = "业务用户ID",dataType = "Long")
+    @ApiModelProperty(notes = "业务用户ID", dataType = "Long")
     private Long applyUserId;
-    @ApiModelProperty(notes = "应用类型",dataType = "Apply")
+    @ApiModelProperty(notes = "应用类型", dataType = "Apply")
     private Apply apply;
 }

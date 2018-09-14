@@ -37,10 +37,10 @@ public class UserBindingApi {
     public ResponseEntity userBindingPhone(@RequestBody UserBindingPhoneParam param) {
 
         UserDetailResult userDetailResult = applyUserMapper.findById(param.getApplyUserId());
-        if (Objects.isNull(userDetailResult)){
+        if (Objects.isNull(userDetailResult)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
-        if (StringUtils.isNotBlank(userDetailResult.getPhone())){
+        if (StringUtils.isNotBlank(userDetailResult.getPhone())) {
             return ResponseEntity.badRequest().body("该账号已绑定手机！");
         }
         ApplyUser applyUser = new ApplyUser();
@@ -56,15 +56,15 @@ public class UserBindingApi {
     }
 
     @ApiOperation("手机号绑定微信")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "微信信息", dataType = "UserBindingWeChatParam", dataTypeClass = UserBindingWeChatParam.class,required = true)
+    @ApiImplicitParam(paramType = "body", name = "param", value = "微信信息", dataType = "UserBindingWeChatParam", dataTypeClass = UserBindingWeChatParam.class, required = true)
     @PutMapping("/we-chat")
     public ResponseEntity userBindingWeChat(@RequestBody UserBindingWeChatParam param) {
 
         UserDetailResult userDetailResult = applyUserMapper.findById(param.getApplyUserId());
-        if (Objects.isNull(userDetailResult)){
+        if (Objects.isNull(userDetailResult)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
-        if (StringUtils.isNotBlank(userDetailResult.getOpenId())){
+        if (StringUtils.isNotBlank(userDetailResult.getOpenId())) {
             return ResponseEntity.badRequest().body("该账号已绑定微信！");
         }
         boolean isBinding = userBindingService.isBindingPhone(param.getOpenId());
@@ -77,9 +77,9 @@ public class UserBindingApi {
 
 
     @ApiOperation("微信解除绑定")
-    @ApiImplicitParam(paramType = "path",name = "id",value = "业务用户ID",dataType = "Long",required = true)
+    @ApiImplicitParam(paramType = "path", name = "id", value = "业务用户ID", dataType = "Long", required = true)
     @PutMapping("/{id}")
-    public ResponseEntity removingBindWeChat(@PathVariable("id") Long userId){
+    public ResponseEntity removingBindWeChat(@PathVariable("id") Long userId) {
         boolean flag = userBindingService.removingWeChatBinding(userId);
         return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("解绑失败！");
     }
