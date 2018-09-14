@@ -1,13 +1,13 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.result.Tips;
 import com.lhiot.uc.basic.entity.Apply;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import java.util.List;
  **/
 @Service
 @Slf4j
+@Transactional
 public class UserService {
     private ApplyUserMapper applyUserMapper;
 
@@ -42,7 +43,7 @@ public class UserService {
      * @param openId
      * @return
      */
-    public UserDetailResult findByopenId(String openId) {
+    public UserDetailResult findByOpenId(String openId) {
         return applyUserMapper.findByOpenId(openId);
     }
 
@@ -106,10 +107,23 @@ public class UserService {
     }
 
     public boolean countById(Long id) {
-        return applyUserMapper.countById(id) > 0 ? true : false;
+        return applyUserMapper.countById(id) > 0;
     }
 
+    /**
+     * 修改用户头像，昵称，说明，地址，QQ，email，性别
+     * @param user
+     * @return
+     */
     public boolean updateUserById(ApplyUser user){
-        return applyUserMapper.updateUserById(user) > 0 ? true:false;
+        return applyUserMapper.updateUserById(user) > 0;
     }
+
+    public boolean updatePasswordById(ApplyUser user){return applyUserMapper.updatePasswordById(user) > 0;}
+
+    public boolean updatePaymentPasswordById(ApplyUser user){return applyUserMapper.updatePaymentPasswordById(user) > 0;}
+
+    public boolean updatePaymentPermissionsById(ApplyUser user){return applyUserMapper.updatePaymentPermissionsById(user) > 0;}
+
+    public boolean countByIdAndPassword(ApplyUser user) {return applyUserMapper.countByIdAndPassword(user) > 0;}
 }

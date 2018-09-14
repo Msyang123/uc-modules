@@ -12,9 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserBindingMapper {
 
-    Long findByPhone(String phone);
-
-    int save(UserBinding userBinding);
+    int insert(UserBinding userBinding);
 
     BaseUser findBaseUserByBindingRelation(String phone);
 }

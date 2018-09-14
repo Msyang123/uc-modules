@@ -12,7 +12,7 @@
         WHERE u.phone = #{0} LIMIT 1
     </select>
 
-    <insert id="save" parameterType="com.lhiot.uc.basic.entity.UserBinding">
+    <insert id="insert" parameterType="com.lhiot.uc.basic.entity.UserBinding">
         INSERT INTO user_binding (base_user_id,apply_user_id,phone,create_at)
         VALUE (#{baseUserId},#{applyUserId},#{phone},NOW())
     </insert>

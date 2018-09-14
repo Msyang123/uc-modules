@@ -1,20 +1,20 @@
-package com.lhiot.uc.basic.model;
+package com.lhiot.uc.session.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.lhiot.uc.basic.entity.Apply;
-import com.lhiot.uc.basic.entity.LockStatus;
-import com.lhiot.uc.basic.entity.SwitchStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @Author zhangfeng created in 2018/9/13 10:00
+ **/
 @Data
 @ApiModel
-public class UserDetailResult {
+public class LoginResult {
 
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;

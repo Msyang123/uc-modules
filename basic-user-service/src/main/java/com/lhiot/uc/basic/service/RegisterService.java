@@ -2,36 +2,35 @@ package com.lhiot.uc.basic.service;
 
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.SnowflakeId;
+import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.Apply;
-import com.lhiot.uc.basic.entity.UserBinding;
-import com.lhiot.uc.basic.mapper.UserBindingMapper;
-import com.lhiot.uc.basic.model.PhoneRegisterParam;
-import com.lhiot.uc.basic.model.UserBindingParam;
-import com.lhiot.uc.basic.model.UserDetailResult;
-import com.lhiot.uc.basic.mapper.BaseUserMapper;
-import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
-import com.lhiot.uc.basic.model.WechatRegisterParam;
+import com.lhiot.uc.basic.entity.UserBinding;
+import com.lhiot.uc.basic.mapper.ApplyUserMapper;
+import com.lhiot.uc.basic.mapper.BaseUserMapper;
+import com.lhiot.uc.basic.mapper.UserBindingMapper;
+import com.lhiot.uc.basic.model.PhoneRegisterParam;
+import com.lhiot.uc.basic.model.UserDetailResult;
+import com.lhiot.uc.basic.model.WeChatRegisterParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
 @Service
 @Slf4j
-public class RegisterService {
+@Transactional
+public class RegisterService extends BaseUserService {
 
     private final ApplyUserMapper applyUserMapper;
-    private final BaseUserMapper baseUserMapper;
     private final SnowflakeId snowflakeId;
     private final UserBindingMapper userBindingMapper;
 
     public RegisterService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, SnowflakeId snowflakeId, UserBindingMapper userBindingMapper) {
+        super(userBindingMapper, snowflakeId, baseUserMapper);
         this.applyUserMapper = applyUserMapper;
-        this.baseUserMapper = baseUserMapper;
         this.snowflakeId = snowflakeId;
         this.userBindingMapper = userBindingMapper;
     }
@@ -65,29 +64,22 @@ public class RegisterService {
      * @param param
      * @return
      */
-//    @Transactional
     public UserDetailResult register(PhoneRegisterParam param) {
 
-        BaseUser baseUser = userBindingMapper.findBaseUserByBindingRelation(param.getPhone());
-        if (Objects.equals(baseUser, null)) {
-            baseUser = new BaseUser();
-            baseUser.setId(snowflakeId.longId());
-            baseUser.setPhone(param.getPhone());
-            baseUserMapper.save(baseUser);
-        }
+        BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());
 
         ApplyUser applyUser = new ApplyUser();
         applyUser.setId(snowflakeId.longId());
-        applyUser.setNickname(param.getPhone().replace(param.getPhone().substring(3,7),"xxxx"));
+        applyUser.setNickname(param.getPhone().replace(param.getPhone().substring(3, 7), "xxxx"));
         BeanUtils.of(applyUser).populate(param);
         applyUser.setBaseUserId(baseUser.getId());
-        applyUserMapper.save(applyUser);
+        applyUserMapper.insert(applyUser);
 
         UserBinding userBinding = new UserBinding();
         userBinding.setBaseUserId(baseUser.getId());
         userBinding.setApplyUserId(applyUser.getId());
         userBinding.setPhone(param.getPhone());
-        userBindingMapper.save(userBinding);
+        userBindingMapper.insert(userBinding);
 
         UserDetailResult result = new UserDetailResult();
         BeanUtils.of(result).populate(applyUser);
@@ -98,62 +90,56 @@ public class RegisterService {
     }
 
     /**
-     * 微信注册，写入用户信息
+     * 微信注册，写入用户信息,当入参phone不为空时，则添加baseUser信息
      *
      * @param param
      * @return
      */
-    public UserDetailResult registerByOpenId(WechatRegisterParam param) {
+    public UserDetailResult registerByOpenId(WeChatRegisterParam param) {
+
         ApplyUser applyUser = new ApplyUser();
         applyUser.setId(snowflakeId.longId());
         BeanUtils.of(applyUser).populate(param);
-        applyUserMapper.save(applyUser);
+
+        BaseUser baseUser = null;
+        if (StringUtils.isNotBlank(param.getPhone())) {
+            //在该应用中，手机号不存在注册用户，则添加应用用户信息
+            Long userId = this.findIdByPhone(param);
+            //基础用户信息存在该手机号用户则只添加绑定信息，若不存在则添加基础用户信息
+            baseUser = this.findBaseUserByBindingRelation(param.getPhone());
+            if (Objects.isNull(userId)) {
+                applyUser.setBaseUserId(baseUser.getId());
+
+                UserBinding userBinding = new UserBinding();
+                userBinding.setBaseUserId(baseUser.getId());
+                userBinding.setApplyUserId(applyUser.getId());
+                userBinding.setPhone(param.getPhone());
+                userBindingMapper.insert(userBinding);
+                applyUserMapper.insert(applyUser);
+            } else {
+                //手机号已存在注册用户，则只进行修改
+                applyUser.setOpenId(param.getOpenId());
+                applyUser.setUnionId(param.getUnionId());
+                applyUser.setId(userId);
+                applyUserMapper.updateWeChatInfoById(applyUser);
+            }
+        } else {
+            applyUserMapper.insert(applyUser);
+            baseUser = new BaseUser();
+        }
 
         UserDetailResult result = new UserDetailResult();
+        result.setCurrency(baseUser.getCurrency());
+        result.setPoint(baseUser.getMemberPoints());
+        result.setRealName(baseUser.getRealName());
         BeanUtils.of(result).populate(applyUser);
         return result;
     }
 
-    /**
-     * 根据手机号码查找是否存在绑定关系
-     *
-     * @param phone
-     * @return
-     */
-    public Long hasBinding(String phone) {
-        return userBindingMapper.findByPhone(phone);
+    public Long findIdByPhone(WeChatRegisterParam param) {
+        ApplyUser user = new ApplyUser();
+        user.setPhone(param.getPhone());
+        user.setApply(param.getApply());
+        return applyUserMapper.findIdByPhoneNumber(user);
     }
-
-
-    /** 绑定基础用户
-     * @param param
-     * @return
-     */
-    @Transactional
-    public boolean binding(UserBindingParam param) {
-        BaseUser baseUser = userBindingMapper.findBaseUserByBindingRelation(param.getPhone());
-        if (Objects.equals(baseUser, null)) {
-            baseUser =  this.save(param.getPhone());
-        }
-
-        UserBinding userBinding = new UserBinding();
-        userBinding.setPhone(param.getPhone());
-        userBinding.setBaseUserId(baseUser.getId());
-        userBinding.setApplyUserId(param.getApplyUserId());
-        userBindingMapper.save(userBinding);
-
-        ApplyUser applyUser = new ApplyUser();
-        applyUser.setBaseUserId(baseUser.getId());
-        applyUser.setId(param.getApplyUserId());
-        return applyUserMapper.updateUserById(applyUser) > 0 ? true : false;
-    }
-
-    private BaseUser save(String phone) {
-        BaseUser baseUser = new BaseUser();
-        baseUser.setPhone(phone);
-        baseUser.setId(snowflakeId.longId());
-        baseUserMapper.save(baseUser);
-        return baseUser;
-    }
-
 }

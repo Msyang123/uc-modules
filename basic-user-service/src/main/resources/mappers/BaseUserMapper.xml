@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.basic.mapper.BaseUserMapper">
-	<insert id="save" parameterType="com.lhiot.uc.basic.entity.BaseUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insert" parameterType="com.lhiot.uc.basic.entity.BaseUser" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
 		INSERT INTO base_user (id,phone) VALUE (#{id},#{phone})
 	</insert>
 
+    <select id="findCurrencyById" resultType="Long" parameterType="Long">
+		SELECT currency FROM base_user WHERE id = #{0}
+	</select>
+
+    <update id="updateCurrencyByIdForSub" parameterType="map">
+		UPDATE base_user
+		SET currency = currency - #{operationCurrency}
+		WHERE currency = #{currency} AND id = #{id}
+	</update>
+
+    <update id="updateCurrencyByIdForAdd" parameterType="com.lhiot.uc.basic.entity.BaseUser">
+		UPDATE base_user
+		SET currency = currency + #{currency}
+		WHERE id = #{id}
+	</update>
 </mapper>

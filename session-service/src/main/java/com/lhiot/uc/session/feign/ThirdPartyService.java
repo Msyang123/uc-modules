@@ -1,4 +1,4 @@
-package com.lhiot.uc.basic.feign;
+package com.lhiot.uc.session.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

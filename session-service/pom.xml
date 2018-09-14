@@ -27,6 +27,11 @@
             <groupId>com.leon.microx</groupId>
             <artifactId>microx-starter-restful</artifactId>
         </dependency>
+        <!-- microx-redis -->
+        <dependency>
+            <groupId>com.leon.microx.common</groupId>
+            <artifactId>microx-redis-core</artifactId>
+        </dependency>
         <!-- microx-probe (amqp / probe) -->
         <dependency>
             <groupId>com.leon.microx</groupId>
