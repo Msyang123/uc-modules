@@ -26,5 +26,4 @@ public class PhoneRegisterParam {
 
     @ApiModelProperty(notes = "应用类型", dataType = "String")
     private Apply apply;
-
 }

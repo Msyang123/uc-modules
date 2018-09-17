@@ -25,4 +25,7 @@ public interface BasicUserService {
 
     @RequestMapping(value = "/users/open-id/{openId}", method = RequestMethod.GET)
     ResponseEntity<LoginResult> getUserByOpenId(@PathVariable("openId") String openId);
+
+    @RequestMapping(value = "/users/user-id/{userId}", method = RequestMethod.GET)
+    ResponseEntity<LoginResult> getUserByUserId(@PathVariable("userId") Long userId);
 }

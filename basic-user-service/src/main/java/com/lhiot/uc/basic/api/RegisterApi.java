@@ -49,7 +49,7 @@ public class RegisterApi {
         if (Objects.equals(param.getPhone(), phone)) {
             return ResponseEntity.badRequest().body("正在注册中！");
         }
-//        cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
+        cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
 //        ResponseEntity response = thirdPartyService.validate(REGIST_SMS_TEMPLATE_NAME, param.getPhone(), ImmutableMap.of("number", param.getVerifyCode()));
 //        if (response.getStatusCode().is4xxClientError()) {
 //            return ResponseEntity.badRequest().body(response.hasBody() ? response.getBody() : "验证码错误！");
