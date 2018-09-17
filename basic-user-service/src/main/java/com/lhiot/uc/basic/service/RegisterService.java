@@ -83,7 +83,7 @@ public class RegisterService extends BaseUserService {
 
         UserDetailResult result = new UserDetailResult();
         BeanUtils.of(result).populate(applyUser);
-        result.setCurrency(baseUser.getCurrency());
+        result.setBalance(baseUser.getBalance());
         result.setRealName(baseUser.getRealName());
 
         return result;
@@ -129,7 +129,7 @@ public class RegisterService extends BaseUserService {
         }
 
         UserDetailResult result = new UserDetailResult();
-        result.setCurrency(baseUser.getCurrency());
+        result.setBalance(baseUser.getBalance());
         result.setPoint(baseUser.getMemberPoints());
         result.setRealName(baseUser.getRealName());
         BeanUtils.of(result).populate(applyUser);

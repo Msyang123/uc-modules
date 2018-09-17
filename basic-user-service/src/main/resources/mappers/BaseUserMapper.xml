@@ -7,18 +7,18 @@
 	</insert>
 
     <select id="findCurrencyById" resultType="Long" parameterType="Long">
-		SELECT currency FROM base_user WHERE id = #{0}
+		SELECT balance FROM base_user WHERE id = #{0}
 	</select>
 
     <update id="updateCurrencyByIdForSub" parameterType="map">
 		UPDATE base_user
-		SET currency = currency - #{operationCurrency}
-		WHERE currency = #{currency} AND id = #{id}
+		SET balance = balance - #{money}
+		WHERE balance = #{balance} AND id = #{id}
 	</update>
 
-    <update id="updateCurrencyByIdForAdd" parameterType="com.lhiot.uc.basic.entity.BaseUser">
+    <update id="updateCurrencyByIdForAdd" parameterType="map">
 		UPDATE base_user
-		SET currency = currency + #{currency}
+		SET balance = balance + #{moeny}
 		WHERE id = #{id}
 	</update>
 </mapper>

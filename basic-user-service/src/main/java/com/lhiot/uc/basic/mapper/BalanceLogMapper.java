@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.mapper;
 
-import com.lhiot.uc.basic.entity.CurrencyLog;
+import com.lhiot.uc.basic.entity.BalanceLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  **/
 @Mapper
 @Repository
-public interface CurrencyLogMapper {
+public interface BalanceLogMapper {
 
-    int insert(CurrencyLog currencyLog);
+    int insert(BalanceLog balanceLog);
 }

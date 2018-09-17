@@ -6,7 +6,7 @@
     </select>
 
     <select id="findBaseUserByBindingRelation" parameterType="String" resultType="com.lhiot.uc.basic.entity.BaseUser">
-        SELECT b.id,b.phone,currency,locked,member_points,real_name,id_card
+        SELECT b.id,b.phone,balance,locked,member_points,real_name,id_card
         FROM user_binding u
         LEFT JOIN base_user b ON u.base_user_id = b.id
         WHERE u.phone = #{0} LIMIT 1

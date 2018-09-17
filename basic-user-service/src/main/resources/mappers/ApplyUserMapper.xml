@@ -31,7 +31,7 @@
 
     <select id="findById" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-		,birthday,payment_permissions,register_at,currency,member_points,
+		,birthday,payment_permissions,register_at,balance,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
 		ELSE a.locked
@@ -43,7 +43,7 @@
 
     <select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-		,birthday,payment_permissions,register_at,currency,member_points,
+		,birthday,payment_permissions,register_at,balance,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
 		ELSE a.locked
@@ -56,7 +56,7 @@
     <select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser"
             resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-		,birthday,payment_permissions,register_at,currency,member_points,
+		,birthday,payment_permissions,register_at,balance,member_points,
 		CASE b.locked
 		WHEN 'LOCK' THEN b.locked
 		ELSE a.locked
@@ -68,7 +68,7 @@
 
     <select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-        ,birthday,payment_permissions,register_at,currency,member_points,
+        ,birthday,payment_permissions,register_at,balance,member_points AS point,
         CASE b.locked
         WHEN 'LOCK' THEN b.locked
         ELSE a.locked
@@ -83,7 +83,7 @@
 
     <select id="findByPhoneList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,apply,sex
-        ,birthday,payment_permissions,register_at,currency,member_points,
+        ,birthday,payment_permissions,register_at,balance,member_points,
         CASE b.locked
         WHEN 'LOCK' THEN b.locked
         ELSE a.locked

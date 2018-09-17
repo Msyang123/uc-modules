@@ -9,10 +9,10 @@ import java.util.Date;
  * @Author zhangfeng created in 2018/9/12 12:05
  **/
 @Data
-public class CurrencyLog {
+public class BalanceLog {
     private Long id;
     private Long baseUserId;
-    private Long currency;
+    private Long money;
     private OperationStatus operation;
     private Apply apply;
     private String sourceType;

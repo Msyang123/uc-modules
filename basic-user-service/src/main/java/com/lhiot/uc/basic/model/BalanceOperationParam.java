@@ -11,12 +11,12 @@ import lombok.Data;
  **/
 @Data
 @ApiModel
-public class CurrencyOperationParam {
+public class BalanceOperationParam {
 
     @ApiModelProperty(notes = "基础用户ID", dataType = "Long")
     private Long baseUserId;
-    @ApiModelProperty(notes = "加减余额", dataType = "Long")
-    private Long operationCurrency;
+    @ApiModelProperty(notes = "加减金额", dataType = "Long")
+    private Long money;
     @ApiModelProperty(notes = "加减操作标识：SUBTRACT - 减，ADD-加", dataType = "OperationStatus")
     private OperationStatus operation;
     @ApiModelProperty(notes = "来源", dataType = "String")
