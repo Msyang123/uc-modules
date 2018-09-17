@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/users")
 public class RegisterApi {
 
-    private static final String REGIST_SMS_TEMPLATE_NAME = "common-verification";
     private final RedissonClient redissonClient;
     private final RegisterService registerService;
     private final ThirdPartyService thirdPartyService;
@@ -50,10 +49,6 @@ public class RegisterApi {
             return ResponseEntity.badRequest().body("正在注册中！");
         }
         cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
-//        ResponseEntity response = thirdPartyService.validate(REGIST_SMS_TEMPLATE_NAME, param.getPhone(), ImmutableMap.of("number", param.getVerifyCode()));
-//        if (response.getStatusCode().is4xxClientError()) {
-//            return ResponseEntity.badRequest().body(response.hasBody() ? response.getBody() : "验证码错误！");
-//        }
         try {
             if (registerService.hasPhone(param.getPhone(), param.getApply())) {
                 return ResponseEntity.badRequest().body("手机号码已注册!");
@@ -70,7 +65,7 @@ public class RegisterApi {
     @ApiOperation("微信注册")
     @ApiImplicitParam(paramType = "body", name = "param", value = "微信用户信息", required = true, dataType = "WeChatRegisterParam")
     @PostMapping(value = "/we-chat/register")
-    public ResponseEntity registerByWechat(@RequestBody WeChatRegisterParam param) {
+    public ResponseEntity registerByWeChat(@RequestBody WeChatRegisterParam param) {
         if (registerService.hasOpenId(param.getOpenId())) {
             return ResponseEntity.badRequest().body("微信已注册已注册!");
         }

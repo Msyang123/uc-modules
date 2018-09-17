@@ -77,7 +77,7 @@ public class UserBindingService extends BaseUserService {
         UserDetailResult userDetailResult = new UserDetailResult();
         BeanUtils.of(userDetailResult).populate(applyUser);
         userDetailResult.setRealName(baseUser.getRealName());
-        userDetailResult.setCurrency(baseUser.getCurrency());
+        userDetailResult.setBalance(baseUser.getBalance());
         userDetailResult.setPoint(baseUser.getMemberPoints());
         return userDetailResult;
     }

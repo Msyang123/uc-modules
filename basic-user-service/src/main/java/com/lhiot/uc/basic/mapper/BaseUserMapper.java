@@ -20,7 +20,7 @@ public interface BaseUserMapper {
 
     int updateCurrencyByIdForSub(Map<String, Object> map);
 
-    int updateCurrencyByIdForAdd(BaseUser user);
+    int updateCurrencyByIdForAdd(Map<String, Object> map);
 
     Long findCurrencyById(Long id);
 }
