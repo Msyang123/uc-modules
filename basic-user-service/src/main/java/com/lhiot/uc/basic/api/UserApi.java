@@ -33,7 +33,7 @@ public class UserApi {
 
     @ApiOperation(value = "根据用户ID查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParam(paramType = "path", name = "userId", value = "用户ID", dataType = "Long", required = true)
-    @GetMapping("user-id/{userId}")
+    @GetMapping("/user-id/{userId}")
     public ResponseEntity findById(@PathVariable Long userId) {
         UserDetailResult user = userService.findById(userId);
         if (Objects.equals(user, null)) {
@@ -44,7 +44,7 @@ public class UserApi {
 
     @ApiOperation(value = "根据用户OpenID查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParam(paramType = "path", name = "openId", value = "用户ID", dataType = "Long", required = true)
-    @GetMapping("open-id/{openId}")
+    @GetMapping("/open-id/{openId}")
     public ResponseEntity findByOpenId(@PathVariable String openId) {
         UserDetailResult user = userService.findByOpenId(openId);
         if (Objects.equals(user, null)) {
@@ -58,7 +58,7 @@ public class UserApi {
             @ApiImplicitParam(paramType = "path", name = "phoneNumber", value = "用户ID", dataType = "String", required = true),
             @ApiImplicitParam(paramType = "query", name = "apply", value = "应用类型", dataTypeClass = Apply.class, required = true)
     })
-    @GetMapping("phone/{phoneNumber}")
+    @GetMapping("/phone/{phoneNumber}")
     public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("apply") Apply apply) {
         UserDetailResult user = userService.findByPhone(phoneNumber, apply);
         if (Objects.equals(user, null)) {

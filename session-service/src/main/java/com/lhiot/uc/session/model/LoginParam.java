@@ -16,7 +16,7 @@ import java.util.Date;
 public class LoginParam {
 
     @ApiModelProperty(notes = "手机号码", dataType = "String")
-    private String phoneNumber;
+    private String phone;
     @ApiModelProperty(notes = "密码", dataType = "String")
     private String password;
     @ApiModelProperty(notes = "用户编号", dataType = "Long")
