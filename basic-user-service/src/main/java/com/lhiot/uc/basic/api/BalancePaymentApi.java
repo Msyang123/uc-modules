@@ -19,7 +19,7 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@RequestMapping("/users/fruits")
+@RequestMapping("/users/balance")
 public class BalancePaymentApi {
     private BalancePaymentService balancePaymentService;
 
@@ -29,7 +29,7 @@ public class BalancePaymentApi {
 
     @ApiOperation("用户鲜果币加减")
     @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "CurrencyOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
-    @PutMapping("/balance/operation")
+    @PutMapping("/operation")
     public ResponseEntity userBalanceOperation(@RequestBody BalanceOperationParam param) {
         Long balance = balancePaymentService.findCurrencyById(param.getBaseUserId());
         if (Objects.isNull(balance)) {
