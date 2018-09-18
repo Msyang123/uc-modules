@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.uc.basic.mapper.UserAddressMapper">
+
+	<insert id="insert" parameterType="com.lhiot.uc.basic.model.UserAddress">
+		INSERT INTO user_address(base_user_id,delivery_name,delivery_mobile,delivery_detail,delivery_sex,street_detail,lat,lng,if_default)
+		VALUE (#{baseUserId},#{deliveryName},#{deliveryMobile},#{deliveryDetail},#{deliverySex},#{streetDetail},#{lat},#{lng},#{ifDefault})
+	</insert>
+
+	<update id="updateAddress" parameterType="com.lhiot.uc.basic.model.UserAddress">
+		UPDATE user_address
+		<trim prefix="set" suffixOverrides=",">
+			<if test="deliveryName != null and deliveryName != ''">delivery_name = #{deliveryName},</if>
+			<if test="deliveryMobile != null and deliveryMobile != ''">delivery_mobile = #{deliveryMobile},</if>
+			<if test="deliveryDetail != null and deliveryDetail != ''">delivery_detail = #{deliveryDetail},</if>
+			<if test="deliverySex != null and deliverySex != ''">delivery_sex = #{deliverySex},</if>
+			<if test="streetDetail != null and streetDetail != ''">street_detail = #{streetDetail},</if>
+			<if test="lat != null">lat = #{lat},</if>
+			<if test="lng != null">lng = #{lng},</if>
+			<if test="ifDefault != null and ifDefault != ''">if_default = #{ifDefault},</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByIds" parameterType="list">
+		DELETE FROM user_address
+		WHERE id IN
+		<foreach collection="list" item="item" separator="," close="(" open=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="findById" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserAddress">
+		SELECT id,base_user_id AS baseUserId,delivery_name AS deliveryName,delivery_mobile AS deliveryMobile,if_default AS ifDefault
+		,lat,lng,delivery_sex AS deliverySex,delivery_detail AS deliveryDetail,street_detail AS streetDetail
+		FROM user_address
+		WHERE id = #{0}
+	</select>
+
+	<select id="findListByUserId" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserAddress">
+		SELECT id,base_user_id AS baseUserId,delivery_name AS deliveryName,delivery_mobile AS deliveryMobile,if_default AS ifDefault
+		,lat,lng,delivery_sex AS deliverySex,delivery_detail AS deliveryDetail,street_detail AS streetDetail
+		FROM user_address
+		WHERE base_user_id = #{0}
+	</select>
+
+</mapper>

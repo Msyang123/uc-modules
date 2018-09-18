@@ -57,7 +57,7 @@ public class LoginResult {
     private Long point = 0L;
 
     @ApiModelProperty(notes = "鲜果币", dataType = "Long")
-    private Long currency = 0L;
+    private Long balance = 0L;
 
     @ApiModelProperty(notes = "微信开放平台单一应用唯一识别openId", dataType = "String")
     private String openId;
