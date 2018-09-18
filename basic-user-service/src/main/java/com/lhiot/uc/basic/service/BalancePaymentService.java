@@ -35,12 +35,8 @@ public class BalancePaymentService {
      * @param operationMoney 需要扣除的金额
      * @return
      */
-    public boolean subCurrency(Long baseUserId, Long operationMoney) {
+    public boolean subCurrency(Long balance, Long operationMoney,Long baseUserId) {
         Retry<Boolean> retry = Retry.of(() -> {
-            Long balance = baseUserMapper.findCurrencyById(baseUserId);
-            if (balance < operationMoney) {
-                return false;
-            }
             int count = baseUserMapper.updateCurrencyByIdForSub(Maps.of("id", baseUserId, "balance", balance, "money", operationMoney));
             if (count <= 0) {
                 throw new RuntimeException("减鲜果币失败！");

@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.api;
 
+import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.lhiot.uc.basic.entity.BalanceLog;
 import com.lhiot.uc.basic.entity.OperationStatus;
@@ -30,21 +31,29 @@ public class BalancePaymentApi {
     @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "CurrencyOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
     @PutMapping("/balance/operation")
     public ResponseEntity userBalanceOperation(@RequestBody BalanceOperationParam param) {
-
+        Long balance = balancePaymentService.findCurrencyById(param.getBaseUserId());
+        if (Objects.isNull(balance)) {
+            ResponseEntity.badRequest().body("用户不存在!");
+        }
+        long money = param.getMoney();
+        long baseUserId = param.getBaseUserId();
         if (Objects.equals(OperationStatus.ADD, param.getOperation())) {
-            boolean flag = balancePaymentService.addCurrency(param.getBaseUserId(), param.getMoney());
+            boolean flag = balancePaymentService.addCurrency(baseUserId, money);
             if (!flag) {
                 return ResponseEntity.badRequest().body("增加鲜果币失败！");
             }
         } else {
-            boolean flag = balancePaymentService.subCurrency(param.getBaseUserId(), param.getMoney());
+            if (balance < money) {
+                return ResponseEntity.badRequest().body("余额不足");
+            }
+            boolean flag = balancePaymentService.subCurrency(balance, money, baseUserId);
             if (!flag) {
                 return ResponseEntity.badRequest().body("扣除鲜果币失败！");
             }
         }
         BalanceLog balanceLog = new BalanceLog();
         BeanUtils.of(balanceLog).populate(param);
-        balanceLog.setMoney(param.getMoney());
+        balanceLog.setMoney(money);
         balancePaymentService.addCurrencyLog(balanceLog);
         return ResponseEntity.ok().build();
     }
