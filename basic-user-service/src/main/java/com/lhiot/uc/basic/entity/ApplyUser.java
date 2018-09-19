@@ -25,7 +25,7 @@ public class ApplyUser {
     private String unionId = "";
     private Long baseUserId;
     private LockStatus locked = LockStatus.UNLOCKED;
-    private Apply apply;
+    private ApplicationType applicationType;
     private SwitchStatus paymentPermissions = SwitchStatus.OPEN;
 
 }

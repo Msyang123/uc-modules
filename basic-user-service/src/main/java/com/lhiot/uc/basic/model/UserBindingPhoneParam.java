@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.model;
 
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,5 +16,5 @@ public class UserBindingPhoneParam {
     @ApiModelProperty(notes = "业务用户ID", dataType = "Long")
     private Long applyUserId;
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private Apply apply;
+    private ApplicationType applicationType;
 }

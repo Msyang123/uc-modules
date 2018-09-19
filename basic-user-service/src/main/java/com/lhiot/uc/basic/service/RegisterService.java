@@ -3,7 +3,7 @@ package com.lhiot.uc.basic.service;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.SnowflakeId;
 import com.leon.microx.util.StringUtils;
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.entity.UserBinding;
@@ -41,10 +41,10 @@ public class RegisterService extends BaseUserService {
      * @param phone 手机号
      * @return
      */
-    public boolean hasPhone(String phone, Apply apply) {
+    public boolean hasPhone(String phone, ApplicationType applicationType) {
         ApplyUser user = new ApplyUser();
         user.setPhone(phone);
-        user.setApply(apply);
+        user.setApplicationType(applicationType);
         return applyUserMapper.countByPhoneNumber(user) > 0;
     }
 
@@ -139,7 +139,7 @@ public class RegisterService extends BaseUserService {
     public Long findIdByPhone(WeChatRegisterParam param) {
         ApplyUser user = new ApplyUser();
         user.setPhone(param.getPhone());
-        user.setApply(param.getApply());
+        user.setApplicationType(param.getApplicationType());
         return applyUserMapper.findIdByPhoneNumber(user);
     }
 }

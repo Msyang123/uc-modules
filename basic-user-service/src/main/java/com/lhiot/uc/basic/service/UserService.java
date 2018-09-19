@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.support.result.Multiple;
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.model.UserDetailResult;
@@ -51,12 +51,12 @@ public class UserService {
      * 根据业务用户ID查询用户信息
      *
      * @param phone
-     * @param apply
+     * @param applicationType
      * @return
      */
-    public UserDetailResult findByPhone(String phone, Apply apply) {
+    public UserDetailResult findByPhone(String phone, ApplicationType applicationType) {
         ApplyUser applyUser = new ApplyUser();
-        applyUser.setApply(apply);
+        applyUser.setApplicationType(applicationType);
         applyUser.setPhone(phone);
         return applyUserMapper.findByPhone(applyUser);
     }

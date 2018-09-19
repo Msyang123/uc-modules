@@ -3,7 +3,7 @@ package com.lhiot.uc.basic.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.LockStatus;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import io.swagger.annotations.ApiModel;
@@ -72,7 +72,7 @@ public class UserDetailResult {
     private LockStatus locked;
 
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private Apply apply;
+    private ApplicationType applicationType;
 
     @ApiModelProperty(notes = "免密支付权限", dataType = "SwitchStatus")
     private SwitchStatus paymentPermissions;

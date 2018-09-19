@@ -28,7 +28,7 @@ public class BalancePaymentApi {
     }
 
     @ApiOperation("用户鲜果币加减")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "CurrencyOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
+    @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "BalanceOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
     @PutMapping("/operation")
     public ResponseEntity userBalanceOperation(@RequestBody BalanceOperationParam param) {
         Long balance = balancePaymentService.findCurrencyById(param.getBaseUserId());

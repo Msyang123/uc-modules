@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.ModificationUserParam;
@@ -56,11 +56,11 @@ public class UserApi {
     @ApiOperation(value = "根据业务手机号码查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "phoneNumber", value = "用户ID", dataType = "String", required = true),
-            @ApiImplicitParam(paramType = "query", name = "apply", value = "应用类型", dataTypeClass = Apply.class, required = true)
+            @ApiImplicitParam(paramType = "query", name = "apply", value = "应用类型", dataTypeClass = ApplicationType.class, required = true)
     })
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("apply") Apply apply) {
-        UserDetailResult user = userService.findByPhone(phoneNumber, apply);
+    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("apply") ApplicationType applicationType) {
+        UserDetailResult user = userService.findByPhone(phoneNumber, applicationType);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
