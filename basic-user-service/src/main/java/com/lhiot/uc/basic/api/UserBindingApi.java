@@ -44,7 +44,7 @@ public class UserBindingApi {
             return ResponseEntity.badRequest().body("该账号已绑定手机！");
         }
         ApplyUser applyUser = new ApplyUser();
-        applyUser.setApply(param.getApply());
+        applyUser.setApplicationType(param.getApplicationType());
         applyUser.setPhone(param.getPhone());
         boolean isBinding = userBindingService.isBindingWeChat(applyUser);
         if (isBinding) {

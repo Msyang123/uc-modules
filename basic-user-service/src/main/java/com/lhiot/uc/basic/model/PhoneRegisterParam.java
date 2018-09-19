@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.model;
 
-import com.lhiot.uc.basic.entity.Apply;
+import com.lhiot.uc.basic.entity.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,5 +25,5 @@ public class PhoneRegisterParam {
     private String password;
 
     @ApiModelProperty(notes = "应用类型", dataType = "String")
-    private Apply apply;
+    private ApplicationType applicationType;
 }

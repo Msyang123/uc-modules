@@ -44,19 +44,19 @@ public class RegisterApi {
     @PostMapping(value = "/phone/register")
     public ResponseEntity registerByPhone(@RequestBody PhoneRegisterParam param) {
         RMapCache<String, String> cache = redissonClient.getMapCache(param.getPhone() + ":user:register");
-        String phone = cache.get(param.getApply() + ":" + param.getPhone() + ":user:register");
+        String phone = cache.get(param.getApplicationType() + ":" + param.getPhone() + ":user:register");
         if (Objects.equals(param.getPhone(), phone)) {
             return ResponseEntity.badRequest().body("正在注册中！");
         }
         cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
         try {
-            if (registerService.hasPhone(param.getPhone(), param.getApply())) {
+            if (registerService.hasPhone(param.getPhone(), param.getApplicationType())) {
                 return ResponseEntity.badRequest().body("手机号码已注册!");
             }
             UserDetailResult result = registerService.register(param);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            cache.put(param.getApply() + ":" + param.getPhone() + ":user:register", param.getPhone(), 5, TimeUnit.SECONDS);
+            cache.put(param.getApplicationType() + ":" + param.getPhone() + ":user:register", param.getPhone(), 5, TimeUnit.SECONDS);
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
@@ -71,7 +71,7 @@ public class RegisterApi {
         }
         ApplyUser user = new ApplyUser();
         user.setPhone(param.getPhone());
-        user.setApply(param.getApply());
+        user.setApplicationType(param.getApplicationType());
         if (userBindingService.isBindingWeChat(user)) {
             return ResponseEntity.badRequest().body("手机号已绑定微信！");
         }
