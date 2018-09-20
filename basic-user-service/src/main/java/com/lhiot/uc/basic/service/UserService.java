@@ -106,6 +106,10 @@ public class UserService {
         return Multiple.of(applyUsers);
     }
 
+    public ApplyUser findPaymentPasswordById(Long userId){
+       return applyUserMapper.findPaymentPasswordById(userId);
+    }
+
     public boolean countById(Long id) {
         return applyUserMapper.countById(id) > 0;
     }
