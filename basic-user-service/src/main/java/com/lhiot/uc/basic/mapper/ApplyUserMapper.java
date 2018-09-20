@@ -19,6 +19,8 @@ public interface ApplyUserMapper {
 
     int insert(ApplyUser param);
 
+    ApplyUser findPaymentPasswordById(Long userId);
+
     UserDetailResult findById(Long userId);
 
     UserDetailResult findByOpenId(String openId);

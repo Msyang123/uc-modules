@@ -41,6 +41,11 @@
 		WHERE a.id = #{0}
 	</select>
 
+    <select id="findPaymentPasswordById" parameterType="Long" resultType="com.lhiot.uc.basic.entity.ApplyUser">
+        SELECT payment_permissions,payment_password FROM apply_user
+        WHERE id = #{0}
+    </select>
+
     <select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,applicaiton_type,sex
 		,birthday,payment_permissions,register_at,balance,member_points,

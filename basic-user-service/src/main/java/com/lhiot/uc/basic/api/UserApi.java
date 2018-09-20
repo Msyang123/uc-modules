@@ -5,6 +5,7 @@ import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.ModificationUserParam;
+import com.lhiot.uc.basic.model.PaymentPasswordParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import com.lhiot.uc.basic.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -160,5 +161,22 @@ public class UserApi {
             return ResponseEntity.badRequest().body("密码不正确！");
         }
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation("判断是否可使用余额支付")
+    @ApiImplicitParam(paramType = "body",name = "param",value = "用户信息",dataType = "PaymentPasswordParam",required = true)
+    @PutMapping("/payment-password")
+    public ResponseEntity determinePaymentPassword(@RequestBody PaymentPasswordParam param){
+        ApplyUser user = userService.findPaymentPasswordById(param.getUserId());
+        if (Objects.isNull(user)){
+            return ResponseEntity.badRequest().body("用户不存在！");
+        }
+        if (SwitchStatus.OPEN.equals(user.getPaymentPermissions())){
+            return ResponseEntity.ok().build();
+        }
+        if (Objects.equals(user.getPaymentPassword(),param.getPaymentPassword())){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().body("支付密码不正确！");
     }
 }
