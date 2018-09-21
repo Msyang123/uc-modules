@@ -1,6 +1,7 @@
 package com.lhiot.uc.basic.mapper;
 
 import com.lhiot.uc.basic.entity.BaseUser;
+import com.lhiot.uc.basic.model.BaseUserResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,6 @@ public interface BaseUserMapper {
     int updateCurrencyByIdForAdd(Map<String, Object> map);
 
     Long findCurrencyById(Long id);
+
+    BaseUserResult findById(Long id);
 }

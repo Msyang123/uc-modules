@@ -4,6 +4,7 @@ import com.leon.microx.util.BeanUtils;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
+import com.lhiot.uc.basic.model.BaseUserResult;
 import com.lhiot.uc.basic.model.ModificationUserParam;
 import com.lhiot.uc.basic.model.PaymentPasswordParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
@@ -179,4 +180,16 @@ public class UserApi {
         }
         return ResponseEntity.badRequest().body("支付密码不正确！");
     }
+
+    @ApiOperation("根据基础用户Id查询用户信息")
+    @ApiImplicitParam(paramType = "path",name = "baseUserId",value = "基础用户Id",dataType = "Long",required = true)
+    @GetMapping("base-user/{baseUserId}")
+    public ResponseEntity findByBaseUserId(@PathVariable("baseUserId") Long baseUserId){
+       BaseUserResult result =  userService.findByBaseUserId(baseUserId);
+       if (Objects.isNull(result)){
+           return ResponseEntity.badRequest().body("用户不存在！");
+       }
+       return ResponseEntity.ok().body(result);
+    }
+
 }

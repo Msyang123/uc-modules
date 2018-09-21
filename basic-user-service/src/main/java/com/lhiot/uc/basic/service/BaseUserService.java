@@ -4,6 +4,7 @@ import com.leon.microx.util.SnowflakeId;
 import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.mapper.UserBindingMapper;
+import com.lhiot.uc.basic.model.BaseUserResult;
 
 import java.util.Objects;
 
@@ -38,5 +39,4 @@ public abstract class BaseUserService {
         }
         return baseUser;
     }
-
 }

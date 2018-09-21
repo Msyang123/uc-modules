@@ -4,6 +4,8 @@ import com.leon.microx.support.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
+import com.lhiot.uc.basic.mapper.BaseUserMapper;
+import com.lhiot.uc.basic.model.BaseUserResult;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,13 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional
-public class UserService {
+public class UserService{
     private ApplyUserMapper applyUserMapper;
+    private BaseUserMapper baseUserMapper;
 
-    public UserService(ApplyUserMapper applyUserMapper) {
+    public UserService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper) {
         this.applyUserMapper = applyUserMapper;
+        this.baseUserMapper = baseUserMapper;
     }
 
     /**
@@ -108,6 +112,15 @@ public class UserService {
 
     public ApplyUser findPaymentPasswordById(Long userId){
        return applyUserMapper.findPaymentPasswordById(userId);
+    }
+
+    /**
+     * 根据基础用户Id查询基础信息
+     * @param baseUserId
+     * @return
+     */
+    public BaseUserResult findByBaseUserId(Long baseUserId){
+        return baseUserMapper.findById(baseUserId);
     }
 
     public boolean countById(Long id) {
