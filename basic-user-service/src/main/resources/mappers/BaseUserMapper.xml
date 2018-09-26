@@ -10,7 +10,7 @@
 		SELECT balance FROM base_user WHERE id = #{0}
 	</select>
 
-	<select id="findById" resultType="com.lhiot.uc.basic.model.BaseUserResult" parameterType="Long">
+    <select id="findById" resultType="com.lhiot.uc.basic.model.BaseUserResult" parameterType="Long">
 		SELECT id,phone,balance,locked,member_points,real_name,id_card FROM base_user WHERE id = #{0}
 	</select>
 

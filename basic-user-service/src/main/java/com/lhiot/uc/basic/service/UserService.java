@@ -17,12 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Author zhangfeng created in 2018/9/7 11:23
+ * @author zhangfeng created in 2018/9/7 11:23
  **/
 @Service
 @Slf4j
 @Transactional
-public class UserService{
+public class UserService {
     private ApplyUserMapper applyUserMapper;
     private BaseUserMapper baseUserMapper;
 
@@ -34,8 +34,8 @@ public class UserService{
     /**
      * 根据业务用户ID查询用户信息
      *
-     * @param applyUserId
-     * @return
+     * @param applyUserId Long
+     * @return UserDetailResult
      */
     public UserDetailResult findById(Long applyUserId) {
         return applyUserMapper.findById(applyUserId);
@@ -44,8 +44,8 @@ public class UserService{
     /**
      * 根据业务用户ID查询用户信息
      *
-     * @param openId
-     * @return
+     * @param openId String
+     * @return UserDetailResult
      */
     public UserDetailResult findByOpenId(String openId) {
         return applyUserMapper.findByOpenId(openId);
@@ -54,9 +54,9 @@ public class UserService{
     /**
      * 根据业务用户ID查询用户信息
      *
-     * @param phone
-     * @param applicationType
-     * @return
+     * @param phone           String
+     * @param applicationType ApplicationType
+     * @return UserDetailResult
      */
     public UserDetailResult findByPhone(String phone, ApplicationType applicationType) {
         ApplyUser applyUser = new ApplyUser();
@@ -68,8 +68,8 @@ public class UserService{
     /**
      * 根据用户ID字符串集合查询用户集合
      *
-     * @param ids
-     * @return
+     * @param ids String
+     * @return Multiple<UserDetailResult>
      */
     public Multiple<UserDetailResult> findUsersByIds(String ids) {
         List<String> idList = Arrays.asList(ids.split(","));
@@ -83,8 +83,8 @@ public class UserService{
     /**
      * 根据业务用户手机号码集合查询用户集合
      *
-     * @param phones
-     * @return
+     * @param phones String
+     * @return Multiple<UserDetailResult>
      */
     public Multiple<UserDetailResult> findUsersByPhones(String phones) {
         List<String> phoneList = Arrays.asList(phones.split(","));
@@ -98,8 +98,8 @@ public class UserService{
     /**
      * 根据关键字模糊匹配手机号，或者用户昵称查询用户集合
      *
-     * @param keyword
-     * @return
+     * @param keyword String
+     * @return Multiple
      */
     public Multiple<ApplyUser> findByKeyword(String keyword) {
         keyword = "%" + keyword + "%";
@@ -110,16 +110,17 @@ public class UserService{
         return Multiple.of(applyUsers);
     }
 
-    public ApplyUser findPaymentPasswordById(Long userId){
-       return applyUserMapper.findPaymentPasswordById(userId);
+    public ApplyUser findPaymentPasswordById(Long userId) {
+        return applyUserMapper.findPaymentPasswordById(userId);
     }
 
     /**
      * 根据基础用户Id查询基础信息
-     * @param baseUserId
-     * @return
+     *
+     * @param baseUserId Long
+     * @return BaseUserResult
      */
-    public BaseUserResult findByBaseUserId(Long baseUserId){
+    public BaseUserResult findByBaseUserId(Long baseUserId) {
         return baseUserMapper.findById(baseUserId);
     }
 
@@ -129,18 +130,27 @@ public class UserService{
 
     /**
      * 修改用户头像，昵称，说明，地址，QQ，email，性别
-     * @param user
-     * @return
+     *
+     * @param user ApplyUser
+     * @return boolean
      */
-    public boolean updateUserById(ApplyUser user){
+    public boolean updateUserById(ApplyUser user) {
         return applyUserMapper.updateUserById(user) > 0;
     }
 
-    public boolean updatePasswordById(ApplyUser user){return applyUserMapper.updatePasswordById(user) > 0;}
+    public boolean updatePasswordById(ApplyUser user) {
+        return applyUserMapper.updatePasswordById(user) > 0;
+    }
 
-    public boolean updatePaymentPasswordById(ApplyUser user){return applyUserMapper.updatePaymentPasswordById(user) > 0;}
+    public boolean updatePaymentPasswordById(ApplyUser user) {
+        return applyUserMapper.updatePaymentPasswordById(user) > 0;
+    }
 
-    public boolean updatePaymentPermissionsById(ApplyUser user){return applyUserMapper.updatePaymentPermissionsById(user) > 0;}
+    public boolean updatePaymentPermissionsById(ApplyUser user) {
+        return applyUserMapper.updatePaymentPermissionsById(user) > 0;
+    }
 
-    public boolean countByIdAndPassword(ApplyUser user) {return applyUserMapper.countByIdAndPassword(user) > 0;}
+    public boolean countByIdAndPassword(ApplyUser user) {
+        return applyUserMapper.countByIdAndPassword(user) > 0;
+    }
 }

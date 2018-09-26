@@ -38,8 +38,9 @@ public class RegisterService extends BaseUserService {
     /**
      * 手机号是否已注册
      *
-     * @param phone 手机号
-     * @return
+     * @param phone           String 手机号
+     * @param applicationType ApplicationType
+     * @return boolean
      */
     public boolean hasPhone(String phone, ApplicationType applicationType) {
         ApplyUser user = new ApplyUser();
@@ -51,8 +52,8 @@ public class RegisterService extends BaseUserService {
     /**
      * openId是否注册
      *
-     * @param openId
-     * @return
+     * @param openId String
+     * @return boolean
      */
     public boolean hasOpenId(String openId) {
         return applyUserMapper.countByOpenId(openId) > 0;
@@ -61,8 +62,8 @@ public class RegisterService extends BaseUserService {
     /**
      * 手机号码注册 添加用户信息
      *
-     * @param param
-     * @return
+     * @param param PhoneRegisterParam
+     * @return UserDetailResult
      */
     public UserDetailResult register(PhoneRegisterParam param) {
 
@@ -92,8 +93,8 @@ public class RegisterService extends BaseUserService {
     /**
      * 微信注册，写入用户信息,当入参phone不为空时，则添加baseUser信息
      *
-     * @param param
-     * @return
+     * @param param WeChatRegisterParam
+     * @return UserDetailResult
      */
     public UserDetailResult registerByOpenId(WeChatRegisterParam param) {
 
@@ -101,7 +102,7 @@ public class RegisterService extends BaseUserService {
         applyUser.setId(snowflakeId.longId());
         BeanUtils.of(applyUser).populate(param);
 
-        BaseUser baseUser = null;
+        BaseUser baseUser;
         if (StringUtils.isNotBlank(param.getPhone())) {
             //在该应用中，手机号不存在注册用户，则添加应用用户信息
             Long userId = this.findIdByPhone(param);
@@ -136,7 +137,7 @@ public class RegisterService extends BaseUserService {
         return result;
     }
 
-    public Long findIdByPhone(WeChatRegisterParam param) {
+    private Long findIdByPhone(WeChatRegisterParam param) {
         ApplyUser user = new ApplyUser();
         user.setPhone(param.getPhone());
         user.setApplicationType(param.getApplicationType());

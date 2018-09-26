@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 /**
- * @Author zhangfeng created in 2018/9/10 18:43
+ * @author zhangfeng created in 2018/9/10 18:43
  **/
 @RestController
 @Slf4j

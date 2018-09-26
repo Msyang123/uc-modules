@@ -47,36 +47,36 @@
     <insert id="batchSaveExtract" parameterType="list">
         insert into warehouse_goods_extract
         (
-            warehouse_id,
-            goods_id,
-            goods_count,
-            if_split,
-            price,
-            barcode,
-            product_name,
-            image,
-            small_image,
-            large_image,
-            buy_at,
-            create_at,
-            order_code
+        warehouse_id,
+        goods_id,
+        goods_count,
+        if_split,
+        price,
+        barcode,
+        product_name,
+        image,
+        small_image,
+        large_image,
+        buy_at,
+        create_at,
+        order_code
         )
         value
         <foreach collection="list" item="item" separator=",">
             (
-                #{item.warehouseId},
-                #{item.goodsId},
-                #{item.goodsCount},
-                #{item.ifSplit},
-                #{item.price},
-                #{item.barcode},
-                #{item.productName},
-                #{item.image},
-                #{item.smallImage},
-                #{item.largeImage},
-                #{item.buyAt},
-                #{item.createAt},
-                #{item.orderCode}
+            #{item.warehouseId},
+            #{item.goodsId},
+            #{item.goodsCount},
+            #{item.ifSplit},
+            #{item.price},
+            #{item.barcode},
+            #{item.productName},
+            #{item.image},
+            #{item.smallImage},
+            #{item.largeImage},
+            #{item.buyAt},
+            #{item.createAt},
+            #{item.orderCode}
             )
         </foreach>
     </insert>

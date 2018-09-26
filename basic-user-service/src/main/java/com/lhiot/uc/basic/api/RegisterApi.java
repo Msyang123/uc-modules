@@ -1,7 +1,6 @@
 package com.lhiot.uc.basic.api;
 
 import com.lhiot.uc.basic.entity.ApplyUser;
-import com.lhiot.uc.basic.feign.ThirdPartyService;
 import com.lhiot.uc.basic.model.PhoneRegisterParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import com.lhiot.uc.basic.model.WeChatRegisterParam;
@@ -28,13 +27,11 @@ public class RegisterApi {
 
     private final RedissonClient redissonClient;
     private final RegisterService registerService;
-    private final ThirdPartyService thirdPartyService;
     private final UserBindingService userBindingService;
 
-    public RegisterApi(RedissonClient redissonClient, RegisterService registerService, ThirdPartyService thirdPartyService, UserBindingService userBindingService) {
+    public RegisterApi(RedissonClient redissonClient, RegisterService registerService, UserBindingService userBindingService) {
         this.redissonClient = redissonClient;
         this.registerService = registerService;
-        this.thirdPartyService = thirdPartyService;
         this.userBindingService = userBindingService;
     }
 

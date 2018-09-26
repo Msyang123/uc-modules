@@ -10,7 +10,7 @@ import com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract;
 import com.lhiot.uc.warehouse.domain.entity.WarehouseUser;
 import com.lhiot.uc.warehouse.domain.enums.ConvertType;
 import com.lhiot.uc.warehouse.domain.enums.InOutType;
-import com.lhiot.uc.warehouse.domain.enums.OperType;
+import com.lhiot.uc.warehouse.domain.enums.OperationType;
 import com.lhiot.uc.warehouse.domain.model.WarehouseGoodsParam;
 import com.lhiot.uc.warehouse.mapper.WarehouseConvertMapper;
 import com.lhiot.uc.warehouse.mapper.WarehouseGoodsExtractMapper;
@@ -29,10 +29,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
-* Description:仓库商品服务类
-* @author yijun
-* @date 2018/09/07
-*/
+ * Description:仓库商品服务类
+ *
+ * @author yijun
+ * @date 2018/09/07
+ */
 @Slf4j
 @Service
 @Transactional
@@ -50,60 +51,55 @@ public class WarehouseGoodsService {
         this.warehouseGoodsExtractMapper = warehouseGoodsExtractMapper;
         this.warehouseConvertMapper = warehouseConvertMapper;
     }
-    
-    /** 
-    * Description:根据id查找仓库商品
-    *  
-    * @param id
-    * @return
-    * @author yijun
-    * @date 2018/09/07 11:36:51
-    */ 
-    public WarehouseGoods selectById(Long id){
+
+    /**
+     * Description:根据id查找仓库商品
+     *
+     * @param id Long
+     * @return WarehouseGoods
+     */
+    public WarehouseGoods selectById(Long id) {
         return this.warehouseGoodsMapper.selectById(id);
     }
 
-    /** 
-    * Description: 查询仓库商品总记录数
-    *  
-    * @param warehouseGoods
-    * @return
-    * @author yijun
-    * @date 2018/09/07 11:36:51
-    */  
-    public long count(WarehouseGoods warehouseGoods){
+    /**
+     * Description: 查询仓库商品总记录数
+     *
+     * @param warehouseGoods WarehouseGoods
+     * @return long
+     */
+    public long count(WarehouseGoods warehouseGoods) {
         return this.warehouseGoodsMapper.pageWarehouseGoodsCounts(warehouseGoods);
     }
-    
-    /** 
-    * Description: 查询仓库商品分页列表
-    *  
-    * @param warehouseGoods
-    * @return
-    * @author yijun
-    * @date 2018/09/07 11:36:51
-    */  
+
+    /**
+     * Description: 查询仓库商品分页列表
+     *
+     * @param warehouseGoods WarehouseGoods
+     * @return PagerResultObject<WarehouseGoods>
+     */
     public PagerResultObject<WarehouseGoods> pageList(WarehouseGoods warehouseGoods) {
-       long total = 0;
-       if (warehouseGoods.getRows() != null && warehouseGoods.getRows() > 0) {
-           total = this.count(warehouseGoods);
-       }
-       return PagerResultObject.of(warehouseGoods, total,
-              this.warehouseGoodsMapper.pageWarehouseGoodss(warehouseGoods));
+        long total = 0;
+        if (warehouseGoods.getRows() != null && warehouseGoods.getRows() > 0) {
+            total = this.count(warehouseGoods);
+        }
+        return PagerResultObject.of(warehouseGoods, total,
+                this.warehouseGoodsMapper.pageWarehouseGoodss(warehouseGoods));
     }
 
     /**
      * 添加到仓库
      * 只有当天的水果合并在一起
-     * @param warehouseGoodsList
-     * @param baseUserId
-     * @param remark
+     *
+     * @param warehouseGoodsList List<WarehouseGoods>
+     * @param baseUserId         Long
+     * @param remark             String
      */
-    public boolean addWarehouseGoods(List<WarehouseGoods> warehouseGoodsList, Long baseUserId, String remark){
+    public boolean addWarehouseGoods(List<WarehouseGoods> warehouseGoodsList, Long baseUserId, String remark) {
 
         //查找用户仓库
         WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
-        if(Objects.isNull(warehouseUser)){
+        if (Objects.isNull(warehouseUser)) {
             return false;
         }
         //当天的仓库水果
@@ -136,8 +132,8 @@ public class WarehouseGoodsService {
             warehouseConvert.add(wareHouseConvert);
             boolean flag = false;
             //检查是否当天依据有存入水果，如果存在就合并
-            for (WarehouseGoods userWarehouseGoods : todayWarehouseGoodsList){
-                if(Objects.equals(goods.getGoodsId(), userWarehouseGoods.getGoodsId())){
+            for (WarehouseGoods userWarehouseGoods : todayWarehouseGoodsList) {
+                if (Objects.equals(goods.getGoodsId(), userWarehouseGoods.getGoodsId())) {
                     flag = true;
                     break;
                 }
@@ -149,26 +145,26 @@ public class WarehouseGoodsService {
             } else {
                 //更新
                 todayWarehouseGoodsList.stream().filter(userWarehouseGoods -> Objects.equals(goods.getGoodsId(), userWarehouseGoods.getGoodsId()))
-                    .forEach(userWarehouseGoods -> {
-                        goods.setGoodsCount(goods.getGoodsCount().add(userWarehouseGoods.getGoodsCount()));
-                        double newValue = Calculator.mul(goods.getPrice(), goods.getGoodsCount().doubleValue());
-                        double oldValue = Calculator.mul(userWarehouseGoods.getPrice(), userWarehouseGoods.getGoodsCount().doubleValue());
-                        //计算平均价格
-                        int avgPrice = (int)Calculator.div((newValue + oldValue), (goods.getGoodsCount().doubleValue() + userWarehouseGoods.getGoodsCount().doubleValue()));
-                        goods.setPrice(avgPrice);
-                        goods.setId(userWarehouseGoods.getId());
-                        warehouseGoodsUpdate.add(goods);
-                    }
-                 );
+                        .forEach(userWarehouseGoods -> {
+                                    goods.setGoodsCount(goods.getGoodsCount().add(userWarehouseGoods.getGoodsCount()));
+                                    double newValue = Calculator.mul(goods.getPrice(), goods.getGoodsCount().doubleValue());
+                                    double oldValue = Calculator.mul(userWarehouseGoods.getPrice(), userWarehouseGoods.getGoodsCount().doubleValue());
+                                    //计算平均价格
+                                    int avgPrice = (int) Calculator.div((newValue + oldValue), (goods.getGoodsCount().doubleValue() + userWarehouseGoods.getGoodsCount().doubleValue()));
+                                    goods.setPrice(avgPrice);
+                                    goods.setId(userWarehouseGoods.getId());
+                                    warehouseGoodsUpdate.add(goods);
+                                }
+                        );
             }
         });
 
         //批量写入用户仓库商品信息
-        if(!CollectionUtils.isEmpty(warehouseGoodsCreate)){
-                warehouseGoodsMapper.batchSave(warehouseGoodsCreate);
+        if (!CollectionUtils.isEmpty(warehouseGoodsCreate)) {
+            warehouseGoodsMapper.batchSave(warehouseGoodsCreate);
         }
         //修改仓库商品信息
-        warehouseGoodsUpdate.forEach(item->warehouseGoodsMapper.updateCountAndPrice(item));
+        warehouseGoodsUpdate.forEach(warehouseGoodsMapper::updateCountAndPrice);
 
         //批量写入仓库转换记录
         warehouseConvertMapper.saveWarehouseConvertBatch(warehouseConvert);
@@ -178,14 +174,15 @@ public class WarehouseGoodsService {
     /**
      * 分析要提取的仓库商品和总价格
      * 注：此处只计算，不进行数据库真实操作
+     *
      * @param warehouseGoodsParamList 商品集合
      * @return 总价格、要提取的仓库商品
      */
     public Pair<Integer, List<WarehouseGoods>> waitExtractWarehouseGoods(Long baseUserId,
                                                                          List<WarehouseGoodsParam> warehouseGoodsParamList) {
         WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
-        if(Objects.isNull(warehouseUser)){
-            log.error("未找到用户仓库{}",baseUserId);
+        if (Objects.isNull(warehouseUser)) {
+            log.error("未找到用户仓库{}", baseUserId);
             return null;
         }
         //待提取的仓库商品列表
@@ -197,22 +194,22 @@ public class WarehouseGoodsService {
             //待提取单个商品总数
             double amount = goodsParam.getGoodsCount().doubleValue();// 现在改成直接前端计算总数//Arith.mul(goods.getAmount(),
             //当前商品提取数量为0则跳过
-            if(Calculator.compareTo(amount,zero.doubleValue()) == 0){
-                log.warn("提取仓库商品要求提取数量为0{}",goodsParam);
+            if (Calculator.compareTo(amount, zero.doubleValue()) == 0) {
+                log.warn("提取仓库商品要求提取数量为0{}", goodsParam);
                 continue;
             }
 
             //检测用户仓库的商品是否存在，如果不存在直接过滤掉此商品提货
-            WarehouseGoods searchWarehouseGoods=new WarehouseGoods();
+            WarehouseGoods searchWarehouseGoods = new WarehouseGoods();
             searchWarehouseGoods.setGoodsId(goodsParam.getGoodsId());
             searchWarehouseGoods.setWarehouseId(warehouseUser.getId());
             searchWarehouseGoods.setSidx("buy_at");
             searchWarehouseGoods.setSord("asc");
             //查找仓库中的指定商品信息
-            List<WarehouseGoods> hasWarehouseGoodsList =warehouseGoodsMapper.pageWarehouseGoodss(searchWarehouseGoods);
+            List<WarehouseGoods> hasWarehouseGoodsList = warehouseGoodsMapper.pageWarehouseGoodss(searchWarehouseGoods);
             //未找到指定的商品
             if (CollectionUtils.isEmpty(hasWarehouseGoodsList)) {
-                log.warn("提取仓库商品未找到指定的商品{}",searchWarehouseGoods);
+                log.warn("提取仓库商品未找到指定的商品{}", searchWarehouseGoods);
                 continue;
             }
 
@@ -220,14 +217,14 @@ public class WarehouseGoodsService {
             double goodsPrice = 0;// 单个商品的总价
             for (WarehouseGoods whGoods : hasWarehouseGoodsList) {
                 //如果刚好REMOVE后amount数值为0，说明已经提取足够数量的仓库商品，跳出循环
-                if(Calculator.compareTo(amount,zero.doubleValue()) == 0){
-                    log.warn("刚好REMOVE后amount数值为0，说明已经提取足够数量的仓库商品，跳出循环,{},{}",amount,whGoods);
+                if (Calculator.compareTo(amount, zero.doubleValue()) == 0) {
+                    log.warn("刚好REMOVE后amount数值为0，说明已经提取足够数量的仓库商品，跳出循环,{},{}", amount, whGoods);
                     break;
                 }
                 BigDecimal whGoodsAmount = whGoods.getGoodsCount();
 
-                if(whGoodsAmount.compareTo(zero) == 0){
-                    log.warn("数据库中存在仓库商品数量为0的记录{}",whGoods);
+                if (whGoodsAmount.compareTo(zero) == 0) {
+                    log.warn("数据库中存在仓库商品数量为0的记录{}", whGoods);
                     continue;
                 }
 
@@ -237,18 +234,18 @@ public class WarehouseGoodsService {
                 int whGoodsPrice = whGoods.getPrice(); // 仓库商品基础单位价格
                 //检测是否当前记录是否够提取，如果不够就继续提取下一条
                 if (Calculator.gtOrEq(amount, whGoodsAmount.doubleValue(), 4)) {
-                    whGoods.setOperType(OperType.REMOVE);
-                    int price=Calculator.toInt(Calculator.mul(whGoodsPrice, whGoodsAmount.doubleValue()));
-                    goodsPrice = Calculator.add(goodsPrice,price);
+                    whGoods.setOperationType(OperationType.REMOVE);
+                    int price = Calculator.toInt(Calculator.mul(whGoodsPrice, whGoodsAmount.doubleValue()));
+                    goodsPrice = Calculator.add(goodsPrice, price);
                     //计算单个待提取商品均价  相同商品此属性值相同
                     //whGoods.setPrice(price);
                     //需要减掉目标要提取的数量
                     amount = Calculator.sub(amount, whGoodsAmount.doubleValue());
                 } else {
-                    whGoods.setOperType(OperType.UPDATE);
+                    whGoods.setOperationType(OperationType.UPDATE);
                     //价格为:仓库商品单价*剩余要提取的商品数量
-                    int price = Calculator.toInt(Calculator.mul(whGoodsPrice,amount));
-                    goodsPrice = Calculator.add(goodsPrice,price);
+                    int price = Calculator.toInt(Calculator.mul(whGoodsPrice, amount));
+                    goodsPrice = Calculator.add(goodsPrice, price);
                     //计算单个待提取商品均价 每次覆盖 相同商品此属性值相同 订单商品表中price
                     //whGoods.setPrice(price);
                     //此处为要更新的仓库商品数量 更新为 goods_count=goods_count-amount
@@ -258,15 +255,15 @@ public class WarehouseGoodsService {
                 }
             }
             //当前商品检测到待提取数量大于仓库实际数量时，提示提取失败
-            if(Calculator.gt(amount,0)){
-                log.error("当前商品检测到待提取数量大于仓库实际数量，提取失败，剩余待提取数量{}",amount);
+            if (Calculator.gt(amount, 0)) {
+                log.error("当前商品检测到待提取数量大于仓库实际数量，提取失败，剩余待提取数量{}", amount);
                 return null;
             }
             //累加总价
             totalPrice = Calculator.toInt(Calculator.add(totalPrice, goodsPrice));
         }
-        if(CollectionUtils.isEmpty(needFetchWarehouseGoods)){
-            log.error("获取仓库商品集合为空{}",needFetchWarehouseGoods);
+        if (CollectionUtils.isEmpty(needFetchWarehouseGoods)) {
+            log.error("获取仓库商品集合为空{}", needFetchWarehouseGoods);
             return null;
         }
         return Pair.of(totalPrice, needFetchWarehouseGoods);
@@ -278,20 +275,20 @@ public class WarehouseGoodsService {
      *
      * @param warehouseGoods 需要删除或者修改的仓库商品记录
      */
-    public void batchDeleteOrUpdateWarehouseGoods(List<WarehouseGoods> warehouseGoods,String orderCode,String remark) {
+    public void batchDeleteOrUpdateWarehouseGoods(List<WarehouseGoods> warehouseGoods, String orderCode, String remark) {
 
         //仓库提取中间表数据列表
-        final List<WarehouseGoodsExtract> warehouseGoodsExtractList=new ArrayList<>();
+        final List<WarehouseGoodsExtract> warehouseGoodsExtractList = new ArrayList<>();
         //仓库转换记录数据列表
-        final List<WarehouseConvert> warehouseConvertList=new ArrayList<>();
-        final Date current=new Date();
+        final List<WarehouseConvert> warehouseConvertList = new ArrayList<>();
+        final Date current = new Date();
         //删除要全部删除的商品
-        final List<Long> needRemoveIds=new ArrayList<>();
+        final List<Long> needRemoveIds = new ArrayList<>();
         warehouseGoods.stream()
-                .filter(item -> Objects.equals(item.getOperType(), OperType.REMOVE))
-                .forEach(item->{
+                .filter(item -> Objects.equals(item.getOperationType(), OperationType.REMOVE))
+                .forEach(item -> {
                     needRemoveIds.add(item.getId());
-                    WarehouseGoodsExtract warehouseGoodsExtract=new WarehouseGoodsExtract();
+                    WarehouseGoodsExtract warehouseGoodsExtract = new WarehouseGoodsExtract();
                     BeanUtils.of(warehouseGoodsExtract).populate(item);
                     warehouseGoodsExtract.setOrderCode(orderCode);
                     warehouseGoodsExtractList.add(warehouseGoodsExtract);
@@ -309,15 +306,15 @@ public class WarehouseGoodsService {
                     warehouseConvertList.add(wareHouseConvert);
                 });
         //删除掉要扣除的商品
-        if(!CollectionUtils.isEmpty(needRemoveIds)) {
+        if (!CollectionUtils.isEmpty(needRemoveIds)) {
             warehouseGoodsMapper.deleteByIds(needRemoveIds);
         }
 
         //批量更新商品数量
         warehouseGoods.stream()
-                .filter(item -> Objects.equals(item.getOperType(), OperType.UPDATE))
-                .forEach(item->{
-                    WarehouseGoodsExtract warehouseGoodsExtract=new WarehouseGoodsExtract();
+                .filter(item -> Objects.equals(item.getOperationType(), OperationType.UPDATE))
+                .forEach(item -> {
+                    WarehouseGoodsExtract warehouseGoodsExtract = new WarehouseGoodsExtract();
                     BeanUtils.of(warehouseGoodsExtract).populate(item);
                     warehouseGoodsExtract.setOrderCode(orderCode);
                     warehouseGoodsExtractList.add(warehouseGoodsExtract);
@@ -333,7 +330,8 @@ public class WarehouseGoodsService {
                     wareHouseConvert.setDiscount(10);//兑换折扣
                     warehouseConvertList.add(wareHouseConvert);
                     //更新扣除仓库商品
-                    warehouseGoodsMapper.updateGoodsCount(item);});
+                    warehouseGoodsMapper.updateGoodsCount(item);
+                });
         //将出库信息添加到仓库商品中间表
         warehouseGoodsExtractMapper.batchSaveExtract(warehouseGoodsExtractList);
 
@@ -344,16 +342,16 @@ public class WarehouseGoodsService {
     /**
      * 从仓库商品中间表中恢复到仓库中
      */
-    public void caneclAppayWarehouseGoods(List<WarehouseGoodsExtract> cancelWarehouseGoodsExtractList,String orderCode,String backCause){
-        final List<Long> goodsExtractIds=new ArrayList<>(cancelWarehouseGoodsExtractList.size());
+    public void cancelApplyWarehouseGoods(List<WarehouseGoodsExtract> cancelWarehouseGoodsExtractList, String orderCode, String backCause) {
+        final List<Long> goodsExtractIds = new ArrayList<>(cancelWarehouseGoodsExtractList.size());
         final List<WarehouseGoods> warehouseGoodsList = new ArrayList<>(cancelWarehouseGoodsExtractList.size());
         //仓库转换记录数据列表
-        final List<WarehouseConvert> warehouseConvertList=new ArrayList<>();
-        final Date current=new Date();
-        cancelWarehouseGoodsExtractList.forEach(item->{
+        final List<WarehouseConvert> warehouseConvertList = new ArrayList<>();
+        final Date current = new Date();
+        cancelWarehouseGoodsExtractList.forEach(item -> {
             goodsExtractIds.add(item.getId());
 
-            WarehouseGoods warehouseGoods=new WarehouseGoods();
+            WarehouseGoods warehouseGoods = new WarehouseGoods();
             //将中间表对象拷贝到仓库商品对象里
             BeanUtils.of(warehouseGoods).populate(item);
             warehouseGoodsList.add(warehouseGoods);

@@ -14,8 +14,8 @@ public interface BaseUserMapper {
     /**
      * 添加基础用户表
      *
-     * @param param
-     * @return
+     * @param param BaseUser
+     * @return Long
      */
     Long insert(BaseUser param);
 

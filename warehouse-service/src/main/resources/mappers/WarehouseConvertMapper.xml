@@ -44,32 +44,32 @@
     <insert id="saveWarehouseConvertBatch" parameterType="list">
         insert into warehouse_convert
         (
-            warehouse_id,
-            goods_id,
-            product_name,
-            goods_count,
-            price,
-            buy_at,
-            convert_at,
-            in_out,
-            remark,
-            convert_type,
-            discount
+        warehouse_id,
+        goods_id,
+        product_name,
+        goods_count,
+        price,
+        buy_at,
+        convert_at,
+        in_out,
+        remark,
+        convert_type,
+        discount
         )
         value
         <foreach collection="list" item="item" separator=",">
             (
-                #{item.warehouseId},
-                #{item.goodsId},
-                #{item.productName},
-                #{item.goodsCount},
-                #{item.price},
-                #{item.buyAt},
-                #{item.convertAt},
-                #{item.inOut},
-                #{item.remark},
-                #{item.convertType},
-                #{item.discount}
+            #{item.warehouseId},
+            #{item.goodsId},
+            #{item.productName},
+            #{item.goodsCount},
+            #{item.price},
+            #{item.buyAt},
+            #{item.convertAt},
+            #{item.inOut},
+            #{item.remark},
+            #{item.convertType},
+            #{item.discount}
             )
         </foreach>
 

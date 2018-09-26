@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Date;
 
 /**
- * @Author zhangfeng created in 2018/9/12 12:05
+ * @author zhangfeng created in 2018/9/12 12:05
  **/
 @Data
 public class BalanceLog {

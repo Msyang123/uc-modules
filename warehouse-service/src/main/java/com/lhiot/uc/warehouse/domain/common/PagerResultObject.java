@@ -1,11 +1,11 @@
 /**
-* @Title: Pager.java
-* @Package cn.analysys.data.mobitor.manager.model
-* @Description:
-* @author LiMiaojun
-* @date 2017年7月17日 上午10:59:45
-* @version V1.0
-*/
+ * @Title: Pager.java
+ * @Package cn.analysys.data.mobitor.manager.model
+ * @Description:
+ * @author LiMiaojun
+ * @date 2017年7月17日 上午10:59:45
+ * @version V1.0
+ */
 package com.lhiot.uc.warehouse.domain.common;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -67,8 +67,8 @@ public class PagerResultObject<T> {
         if (pageObj instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> pager = (Map<String, Object>) pageObj;
-            page = (long) pager.getOrDefault("page",0);
-            records = (long) pager.getOrDefault("rows",0);
+            page = (long) pager.getOrDefault("page", 0);
+            records = (long) pager.getOrDefault("rows", 0);
         }
         if (records > 0) {
             pagerResultObject.setPage(page);

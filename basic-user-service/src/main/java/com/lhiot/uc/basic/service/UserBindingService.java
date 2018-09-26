@@ -33,8 +33,8 @@ public class UserBindingService extends BaseUserService {
     /**
      * 判断手机号是否绑定微信
      *
-     * @param applyUser
-     * @return
+     * @param applyUser ApplyUser
+     * @return boolean
      */
     public boolean isBindingWeChat(ApplyUser applyUser) {
         String openId = applyUserMapper.findOpenIdByPhone(applyUser);
@@ -44,8 +44,8 @@ public class UserBindingService extends BaseUserService {
     /**
      * 判断微信注册用户是否绑定手机号
      *
-     * @param openId
-     * @return
+     * @param openId String
+     * @return boolean
      */
     public boolean isBindingPhone(String openId) {
         String phone = applyUserMapper.findPhoneByOpenId(openId);
@@ -56,8 +56,8 @@ public class UserBindingService extends BaseUserService {
     /**
      * 微信注册用户绑定基础用户
      *
-     * @param param
-     * @return
+     * @param param UserBindingPhoneParam
+     * @return UserDetailResult
      */
     public UserDetailResult bindingPhone(UserBindingPhoneParam param) {
         BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());

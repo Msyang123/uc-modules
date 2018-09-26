@@ -1,7 +1,7 @@
 package com.lhiot.uc.session.model;
 
 /**
- * @Author zhangfeng created in 2018/9/13 15:17
+ * @author zhangfeng created in 2018/9/13 15:17
  **/
 public enum LoginType {
     PHONE_CAPTCHA,

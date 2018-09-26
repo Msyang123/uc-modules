@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Map;
 
 /**
- * @Author zhangfeng created in 2018/9/7 16:34
+ * @author zhangfeng created in 2018/9/7 16:34
  **/
 @FeignClient("thirdparty-service-v1-0")
 @Component

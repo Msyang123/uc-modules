@@ -3,7 +3,6 @@ package com.lhiot.uc.session.api;
 import com.leon.microx.support.session.Sessions;
 import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.session.feign.BasicUserService;
-import com.lhiot.uc.session.feign.ThirdPartyService;
 import com.lhiot.uc.session.model.LockStatus;
 import com.lhiot.uc.session.model.LoginParam;
 import com.lhiot.uc.session.model.LoginResult;
@@ -30,26 +29,24 @@ public class SessionApi {
     private final Sessions session;
     private SessionService service;
     private BasicUserService basicUserService;
-    private ThirdPartyService thirdPartyService;
 
-    public SessionApi(Sessions session, SessionService service, BasicUserService basicUserService, ThirdPartyService thirdPartyService) {
+    public SessionApi(Sessions session, SessionService service, BasicUserService basicUserService) {
         this.session = session;
         this.service = service;
         this.basicUserService = basicUserService;
-        this.thirdPartyService = thirdPartyService;
     }
 
     @Sessions.Uncheck
     @ApiOperation(value = "手机密码登录", response = LoginResult.class)
-    @ApiHideBodyProperty({"captcha", "userId", "sessionId", "loginAt","openId"})
+    @ApiHideBodyProperty({"captcha", "userId", "sessionId", "loginAt", "openId"})
     @PostMapping("/password/session")
     public ResponseEntity cellphoneLogin(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
         // TODO Feign调用基础服务 查询用户信息：用户ID、用户名、可以访问的API集合（ANT匹配）
-        ResponseEntity<LoginResult> response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
-        if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful()) {
+        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
+        if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
-        LoginResult result = response.getBody();
+        LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
         }
@@ -59,18 +56,18 @@ public class SessionApi {
         }
         param.setSessionId(service.createSession(result, request));
         param.setUserId(result.getId());
-        return this.sessionResult(param,result);
+        return this.sessionResult(param, result);
     }
 
     @ApiOperation(value = "手机验证码登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt"})
     @PostMapping("/captcha/session")
     public ResponseEntity captchaSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
-        ResponseEntity<LoginResult> response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
-        if (!response.getStatusCode().is2xxSuccessful()) {
+        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
+        if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.status(SEE_OTHER).body("用户不存在，去注册！");
         }
-        LoginResult result = response.getBody();
+        LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
         }
@@ -80,27 +77,27 @@ public class SessionApi {
 //        }
         param.setSessionId(service.createSession(result, request));
         param.setUserId(result.getId());
-        return this.sessionResult(param,result);
+        return this.sessionResult(param, result);
     }
 
     @ApiOperation(value = "微信登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt", "captcha", "phoneNumber"})
     @GetMapping("/we-chat/session")
     public ResponseEntity weChatSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
-        ResponseEntity<LoginResult> response = basicUserService.getUserByOpenId(param.getOpenId());
-        if (!response.getStatusCode().is2xxSuccessful()) {
+        ResponseEntity response = basicUserService.getUserByOpenId(param.getOpenId());
+        if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.status(SEE_OTHER).body("用户不存在，去注册！");
         }
-        LoginResult result = response.getBody();
+        LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
         }
         param.setSessionId(service.createSession(result, request));
         param.setUserId(result.getId());
-        return this.sessionResult(param,result);
+        return this.sessionResult(param, result);
     }
 
-    private ResponseEntity sessionResult(LoginParam param,LoginResult result){
+    private ResponseEntity sessionResult(LoginParam param, LoginResult result) {
         try {
             // 返回session
             return ResponseEntity.ok()

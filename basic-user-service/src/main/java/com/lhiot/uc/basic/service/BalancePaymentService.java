@@ -1,12 +1,10 @@
 package com.lhiot.uc.basic.service;
 
-import com.leon.microx.util.ImmutableMap;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.Retry;
-import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.entity.BalanceLog;
-import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.mapper.BalanceLogMapper;
+import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 /**
- * @Author zhangfeng created in 2018/9/12 10:51
+ * @author zhangfeng created in 2018/9/12 10:51
  **/
 @Service
 @Slf4j
@@ -31,11 +29,11 @@ public class BalancePaymentService {
     /**
      * 用户扣除鲜果币
      *
-     * @param baseUserId        基础用户Id
+     * @param baseUserId     基础用户Id
      * @param operationMoney 需要扣除的金额
      * @return
      */
-    public boolean subCurrency(Long balance, Long operationMoney,Long baseUserId) {
+    public boolean subCurrency(Long balance, Long operationMoney, Long baseUserId) {
         Retry<Boolean> retry = Retry.of(() -> {
             int count = baseUserMapper.updateCurrencyByIdForSub(Maps.of("id", baseUserId, "balance", balance, "money", operationMoney));
             if (count <= 0) {
@@ -52,12 +50,12 @@ public class BalancePaymentService {
     /**
      * 增加鲜果币
      *
-     * @param baseUserId
-     * @param operationMoney
-     * @return
+     * @param baseUserId     Long
+     * @param operationMoney Long
+     * @return boolean
      */
     public boolean addCurrency(Long baseUserId, Long operationMoney) {
-        return baseUserMapper.updateCurrencyByIdForAdd(Maps.of("id",baseUserId,"money",operationMoney)) > 0;
+        return baseUserMapper.updateCurrencyByIdForAdd(Maps.of("id", baseUserId, "money", operationMoney)) > 0;
     }
 
     public boolean addCurrencyLog(BalanceLog balanceLog) {

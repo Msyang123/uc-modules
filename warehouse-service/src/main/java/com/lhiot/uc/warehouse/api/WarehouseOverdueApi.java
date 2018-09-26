@@ -1,7 +1,7 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
+import com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.service.WarehouseOverdueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,10 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* Description:仓库商品过期降价值处理接口类
-* @author yijun
-* @date 2018/09/07
-*/
+ * Description:仓库商品过期降价值处理接口类
+ *
+ * @author yijun
+ * @date 2018/09/07
+ */
 @Api(description = "仓库商品过期降价值处理接口")
 @Slf4j
 @RestController
@@ -33,18 +34,18 @@ public class WarehouseOverdueApi {
     @ApiOperation(value = "添加仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要添加的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
     public ResponseEntity<Integer> add(@RequestBody WarehouseOverdue warehouseOverdue) {
-        log.debug("添加仓库商品过期降价值处理\t param:{}",warehouseOverdue);
-        
+        log.debug("添加仓库商品过期降价值处理\t param:{}", warehouseOverdue);
+
         return ResponseEntity.ok(warehouseOverdueService.add(warehouseOverdue));
     }
 
     @PutMapping("/update/{id}")
     @ApiOperation(value = "根据id更新仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要更新的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
-    public ResponseEntity<Integer> update(@PathVariable("id") Long id,@RequestBody WarehouseOverdue warehouseOverdue) {
-        log.debug("根据id更新仓库商品过期降价值处理\t id:{} param:{}",id,warehouseOverdue);
+    public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody WarehouseOverdue warehouseOverdue) {
+        log.debug("根据id更新仓库商品过期降价值处理\t id:{} param:{}", id, warehouseOverdue);
         warehouseOverdue.setId(id);
-        
+
         return ResponseEntity.ok(warehouseOverdueService.updateById(warehouseOverdue));
     }
 
@@ -52,11 +53,11 @@ public class WarehouseOverdueApi {
     @ApiOperation(value = "根据ids删除仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "path", name = "ids", value = "要删除仓库商品过期降价值处理的ids,逗号分割", required = true, dataType = "String")
     public ResponseEntity<Integer> deleteByIds(@PathVariable("ids") String ids) {
-        log.debug("根据ids删除仓库商品过期降价值处理\t param:{}",ids);
-        
+        log.debug("根据ids删除仓库商品过期降价值处理\t param:{}", ids);
+
         return ResponseEntity.ok(warehouseOverdueService.deleteByIds(ids));
     }
-    
+
     @ApiOperation(value = "根据id查询仓库商品过期降价值处理", notes = "根据id查询仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long")
     @GetMapping("/{id}")
@@ -64,13 +65,13 @@ public class WarehouseOverdueApi {
 
         return ResponseEntity.ok(warehouseOverdueService.selectById(id));
     }
-    
+
     @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品过期降价值处理分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageSelect(WarehouseOverdue warehouseOverdue){
-        log.debug("查询仓库商品过期降价值处理分页列表\t param:{}",warehouseOverdue);
-        
+    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageSelect(WarehouseOverdue warehouseOverdue) {
+        log.debug("查询仓库商品过期降价值处理分页列表\t param:{}", warehouseOverdue);
+
         return ResponseEntity.ok(warehouseOverdueService.pageList(warehouseOverdue));
     }
-    
+
 }
