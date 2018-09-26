@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @Author zhangfeng created in 2018/9/17 16:51
+ * @author zhangfeng created in 2018/9/17 16:51
  **/
 @Service
 @Slf4j
@@ -22,23 +22,23 @@ public class UserAddressService {
         this.userAddressMapper = userAddressMapper;
     }
 
-    public boolean addUserAddress(UserAddress userAddress){
-      return userAddressMapper.insert(userAddress) > 0 ;
+    public boolean addUserAddress(UserAddress userAddress) {
+        return userAddressMapper.insert(userAddress) > 0;
     }
 
     public boolean updateAddress(UserAddress userAddress) {
-        return userAddressMapper.updateAddress(userAddress) > 0 ;
+        return userAddressMapper.updateAddress(userAddress) > 0;
     }
 
-    public boolean deleteByIds(List list){
+    public boolean deleteByIds(List list) {
         return userAddressMapper.deleteByIds(list) > 0;
     }
 
-    public UserAddress findById(Long id){
-       return userAddressMapper.findById(id);
+    public UserAddress findById(Long id) {
+        return userAddressMapper.findById(id);
     }
 
-    public List<UserAddress> findListByUserId(Long baseUserId){
+    public List<UserAddress> findListByUserId(Long baseUserId) {
         return userAddressMapper.findListByUserId(baseUserId);
     }
 }

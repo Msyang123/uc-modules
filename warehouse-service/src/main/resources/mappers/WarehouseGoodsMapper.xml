@@ -41,32 +41,32 @@
     <insert id="batchSave" parameterType="java.util.List">
         insert into warehouse_goods
         (
-            warehouse_id,
-            goods_id,
-            goods_count,
-            price,
-            if_split,
-            barcode,
-            product_name,
-            image,
-            small_image,
-            large_image,
-            buy_at
+        warehouse_id,
+        goods_id,
+        goods_count,
+        price,
+        if_split,
+        barcode,
+        product_name,
+        image,
+        small_image,
+        large_image,
+        buy_at
         )
         value
         <foreach collection="list" item="item" separator=",">
             (
-                #{item.warehouseId},
-                #{item.goodsId},
-                #{item.goodsCount},
-                #{item.price},
-                #{item.ifSplit},
-                #{item.barcode},
-                #{item.productName},
-                #{item.image},
-                #{item.smallImage},
-                #{item.largeImage},
-                #{item.buyAt}
+            #{item.warehouseId},
+            #{item.goodsId},
+            #{item.goodsCount},
+            #{item.price},
+            #{item.ifSplit},
+            #{item.barcode},
+            #{item.productName},
+            #{item.image},
+            #{item.smallImage},
+            #{item.largeImage},
+            #{item.buyAt}
             )
         </foreach>
     </insert>

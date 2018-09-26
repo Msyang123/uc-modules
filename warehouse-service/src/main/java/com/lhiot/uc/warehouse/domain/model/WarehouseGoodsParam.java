@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 @Data
 public class WarehouseGoodsParam {
 
-	@ApiModelProperty(notes = "商品ID", dataType = "Long", required = true)
-	@Min(1)
-	private long goodsId;
+    @ApiModelProperty(notes = "商品ID", dataType = "Long", required = true)
+    @Min(1)
+    private long goodsId;
 
-	@ApiModelProperty(notes = "商品重量/数量", dataType = "BigDecimal", required = true)
-	private BigDecimal goodsCount;
+    @ApiModelProperty(notes = "商品重量/数量", dataType = "BigDecimal", required = true)
+    private BigDecimal goodsCount;
 }

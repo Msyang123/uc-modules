@@ -4,28 +4,29 @@
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-        type="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" >
+               type="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
         <id column="id" property="id"/>
-        <result column="base_user_id" property="baseUserId" />
+        <result column="base_user_id" property="baseUserId"/>
     </resultMap>
 
     <!-- base查询字段  -->
-    <sql id="Base_Column_List" >
-        <trim suffixOverrides="," >
+    <sql id="Base_Column_List">
+        <trim suffixOverrides=",">
             id,
             base_user_id,
         </trim>
     </sql>
 
     <!--新增用户仓库-->
-    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true"
+            keyProperty="id">
         insert into warehouse_user
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="baseUserId != null ">
                 base_user_id,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="baseUserId != null ">
                 #{baseUserId},
             </if>
@@ -50,26 +51,28 @@
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from warehouse_user where id in
         <foreach collection="list" item="item" open="("
-            separator="," close=")">
+                 separator="," close=")">
             #{item}
         </foreach>
     </delete>
 
 
     <!-- 根据id查找用户仓库 -->
-	<select id="selectById" resultMap="BaseResultMap"
-		parameterType="long"> select <include refid="Base_Column_List" />
-		from warehouse_user where id = #{id}
-	</select>
+    <select id="selectById" resultMap="BaseResultMap"
+            parameterType="long">select
+        <include refid="Base_Column_List"/>
+        from warehouse_user where id = #{id}
+    </select>
 
     <!--依据基础用户id查找用户仓库-->
     <select id="findByBaseUserId" resultMap="BaseResultMap"
-            parameterType="long"> select <include refid="Base_Column_List" />
+            parameterType="long">select
+        <include refid="Base_Column_List"/>
         from warehouse_user where base_user_id = #{baseUserId}
     </select>
 
     <!-- base where条件  -->
-    <sql id="Base_Where_Condition" >
+    <sql id="Base_Where_Condition">
         <where>
             <if test="id != null ">
                 and id = #{id}
@@ -82,20 +85,21 @@
 
 
     <!--查询用户仓库列表-->
-     <select id="pageWarehouseUsers" resultMap="BaseResultMap"
-        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
-	        select <include refid="Base_Column_List" />
-	        from warehouse_user
-	        <include refid="Base_Where_Condition" />
-	        <include refid="common.pager" />
+    <select id="pageWarehouseUsers" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+        select
+        <include refid="Base_Column_List"/>
+        from warehouse_user
+        <include refid="Base_Where_Condition"/>
+        <include refid="common.pager"/>
     </select>
 
     <!--查询用户仓库总记录-->
     <select id="pageWarehouseUserCounts" resultType="long"
-        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
-            select count(1)
-            from warehouse_user
-            <include refid="Base_Where_Condition" />
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+        select count(1)
+        from warehouse_user
+        <include refid="Base_Where_Condition"/>
     </select>
 
 </mapper>

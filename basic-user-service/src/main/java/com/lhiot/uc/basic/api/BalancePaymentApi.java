@@ -1,6 +1,5 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.lhiot.uc.basic.entity.BalanceLog;
 import com.lhiot.uc.basic.entity.OperationStatus;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 /**
- * @Author zhangfeng created in 2018/9/12 14:40
+ * @author zhangfeng created in 2018/9/12 14:40
  **/
 @RestController
 @Slf4j

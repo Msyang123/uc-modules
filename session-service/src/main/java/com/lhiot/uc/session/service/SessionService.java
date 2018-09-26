@@ -36,9 +36,9 @@ public class SessionService {
     /**
      * 用户登录生成sessionId并缓存
      *
-     * @param object
-     * @param request
-     * @return
+     * @param object Object 需要被缓存的信息
+     * @param request HttpServletRequest
+     * @return String
      */
     public String createSession(Object object, HttpServletRequest request) {
         Map<String, Object> map = BeanUtils.of(object).toMap();

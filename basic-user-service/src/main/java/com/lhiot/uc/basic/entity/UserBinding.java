@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @Author zhangfeng created in 2018/9/7 15:30
+ * @author zhangfeng created in 2018/9/7 15:30
  **/
 @Data
 public class UserBinding {

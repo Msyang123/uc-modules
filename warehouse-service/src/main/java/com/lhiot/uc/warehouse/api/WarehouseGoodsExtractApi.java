@@ -1,7 +1,7 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract;
 import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
+import com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract;
 import com.lhiot.uc.warehouse.service.WarehouseGoodsExtractService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,10 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* Description:仓库商品提取接口类
-* @author yijun
-* @date 2018/09/07
-*/
+ * Description:仓库商品提取接口类
+ *
+ * @author yijun
+ * @date 2018/09/07
+ */
 @Api(description = "仓库商品提取接口")
 @Slf4j
 @RestController
@@ -41,10 +42,10 @@ public class WarehouseGoodsExtractApi {
     @PutMapping("/update/{id}")
     @ApiOperation(value = "根据id更新仓库商品提取")
     @ApiImplicitParam(paramType = "body", name = "warehouseGoodsExtract", value = "要更新的仓库商品提取", required = true, dataType = "WarehouseGoodsExtract")
-    public ResponseEntity<Integer> update(@PathVariable("id") Long id,@RequestBody WarehouseGoodsExtract warehouseGoodsExtract) {
-        log.debug("根据id更新仓库商品提取\t id:{} param:{}",id,warehouseGoodsExtract);
+    public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody WarehouseGoodsExtract warehouseGoodsExtract) {
+        log.debug("根据id更新仓库商品提取\t id:{} param:{}", id, warehouseGoodsExtract);
         warehouseGoodsExtract.setId(id);
-        
+
         return ResponseEntity.ok(warehouseGoodsExtractService.updateById(warehouseGoodsExtract));
     }
 
@@ -56,7 +57,7 @@ public class WarehouseGoodsExtractApi {
         
         return ResponseEntity.ok(warehouseGoodsExtractService.deleteByIds(ids));
     }*/
-    
+
     @ApiOperation(value = "根据id查询仓库商品提取", notes = "根据id查询仓库商品提取")
     @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long")
     @GetMapping("/{id}")
@@ -64,13 +65,13 @@ public class WarehouseGoodsExtractApi {
 
         return ResponseEntity.ok(warehouseGoodsExtractService.selectById(id));
     }
-    
+
     @GetMapping("/page/select")
     @ApiOperation(value = "查询仓库商品提取分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageSelect(WarehouseGoodsExtract warehouseGoodsExtract){
-        log.debug("查询仓库商品提取分页列表\t param:{}",warehouseGoodsExtract);
-        
+    public ResponseEntity<PagerResultObject<WarehouseGoodsExtract>> pageSelect(WarehouseGoodsExtract warehouseGoodsExtract) {
+        log.debug("查询仓库商品提取分页列表\t param:{}", warehouseGoodsExtract);
+
         return ResponseEntity.ok(warehouseGoodsExtractService.pageList(warehouseGoodsExtract));
     }
-    
+
 }

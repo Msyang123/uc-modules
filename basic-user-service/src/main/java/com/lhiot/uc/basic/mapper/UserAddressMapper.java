@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @Author zhangfeng created in 2018/9/17 16:08
+ * @author zhangfeng created in 2018/9/17 16:08
  **/
 @Mapper
 @Repository

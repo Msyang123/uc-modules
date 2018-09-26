@@ -4,19 +4,19 @@
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-        type="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" >
+               type="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
         <id column="id" property="id"/>
-        <result column="goods_id" property="goodsId" />
-        <result column="product_name" property="productName" />
-        <result column="goods_count" property="goodsCount" />
-        <result column="price" property="price" />
-        <result column="buy_at" property="buyAt" />
-        <result column="warehouse_id" property="warehouseId" />
+        <result column="goods_id" property="goodsId"/>
+        <result column="product_name" property="productName"/>
+        <result column="goods_count" property="goodsCount"/>
+        <result column="price" property="price"/>
+        <result column="buy_at" property="buyAt"/>
+        <result column="warehouse_id" property="warehouseId"/>
     </resultMap>
 
     <!-- base查询字段  -->
-    <sql id="Base_Column_List" >
-        <trim suffixOverrides="," >
+    <sql id="Base_Column_List">
+        <trim suffixOverrides=",">
             id,
             goods_id,
             product_name,
@@ -28,9 +28,10 @@
     </sql>
 
     <!--新增仓库商品过期降价值处理-->
-    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" useGeneratedKeys="true"
+            keyProperty="id">
         insert into warehouse_overdue
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">
                 id,
             </if>
@@ -53,7 +54,7 @@
                 warehouse_id,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">
                 #{id},
             </if>
@@ -111,21 +112,22 @@
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from warehouse_overdue where id in
         <foreach collection="list" item="item" open="("
-            separator="," close=")">
+                 separator="," close=")">
             #{item}
         </foreach>
     </delete>
 
 
     <!-- 根据id查找仓库商品过期降价值处理 -->
-	<select id="selectById" resultMap="BaseResultMap"
-		parameterType="long"> select <include refid="Base_Column_List" />
-		from warehouse_overdue where id = #{id}
-	</select>
+    <select id="selectById" resultMap="BaseResultMap"
+            parameterType="long">select
+        <include refid="Base_Column_List"/>
+        from warehouse_overdue where id = #{id}
+    </select>
 
 
     <!-- base where条件  -->
-    <sql id="Base_Where_Condition" >
+    <sql id="Base_Where_Condition">
         <where>
             <if test="id != null ">
                 and id = #{id}
@@ -153,20 +155,21 @@
 
 
     <!--查询仓库商品过期降价值处理列表-->
-     <select id="pageWarehouseOverdues" resultMap="BaseResultMap"
-        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
-	        select <include refid="Base_Column_List" />
-	        from warehouse_overdue
-	        <include refid="Base_Where_Condition" />
-	        <include refid="common.pager" />
+    <select id="pageWarehouseOverdues" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+        select
+        <include refid="Base_Column_List"/>
+        from warehouse_overdue
+        <include refid="Base_Where_Condition"/>
+        <include refid="common.pager"/>
     </select>
 
     <!--查询仓库商品过期降价值处理总记录-->
     <select id="pageWarehouseOverdueCounts" resultType="long"
-        parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
-            select count(1)
-            from warehouse_overdue
-            <include refid="Base_Where_Condition" />
+            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+        select count(1)
+        from warehouse_overdue
+        <include refid="Base_Where_Condition"/>
     </select>
 
 </mapper>

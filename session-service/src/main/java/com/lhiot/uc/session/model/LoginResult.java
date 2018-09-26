@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @Author zhangfeng created in 2018/9/13 10:00
+ * @author zhangfeng created in 2018/9/13 10:00
  **/
 @Data
 @ApiModel

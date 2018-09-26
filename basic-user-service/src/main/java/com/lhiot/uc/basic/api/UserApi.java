@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * @Author zhangfeng created in 2018/9/7 11:15
+ * @author zhangfeng created in 2018/9/7 11:15
  **/
 @RestController
 @Slf4j
@@ -165,31 +165,31 @@ public class UserApi {
     }
 
     @ApiOperation("判断是否可使用余额支付")
-    @ApiImplicitParam(paramType = "body",name = "param",value = "用户信息",dataType = "PaymentPasswordParam",required = true)
+    @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PaymentPasswordParam", required = true)
     @PutMapping("/payment-password")
-    public ResponseEntity determinePaymentPassword(@RequestBody PaymentPasswordParam param){
+    public ResponseEntity determinePaymentPassword(@RequestBody PaymentPasswordParam param) {
         ApplyUser user = userService.findPaymentPasswordById(param.getUserId());
-        if (Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
-        if (SwitchStatus.OPEN.equals(user.getPaymentPermissions())){
+        if (SwitchStatus.OPEN.equals(user.getPaymentPermissions())) {
             return ResponseEntity.ok().build();
         }
-        if (Objects.equals(user.getPaymentPassword(),param.getPaymentPassword())){
+        if (Objects.equals(user.getPaymentPassword(), param.getPaymentPassword())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().body("支付密码不正确！");
     }
 
     @ApiOperation("根据基础用户Id查询用户信息")
-    @ApiImplicitParam(paramType = "path",name = "baseUserId",value = "基础用户Id",dataType = "Long",required = true)
+    @ApiImplicitParam(paramType = "path", name = "baseUserId", value = "基础用户Id", dataType = "Long", required = true)
     @GetMapping("base-user/{baseUserId}")
-    public ResponseEntity findByBaseUserId(@PathVariable("baseUserId") Long baseUserId){
-       BaseUserResult result =  userService.findByBaseUserId(baseUserId);
-       if (Objects.isNull(result)){
-           return ResponseEntity.badRequest().body("用户不存在！");
-       }
-       return ResponseEntity.ok().body(result);
+    public ResponseEntity findByBaseUserId(@PathVariable("baseUserId") Long baseUserId) {
+        BaseUserResult result = userService.findByBaseUserId(baseUserId);
+        if (Objects.isNull(result)) {
+            return ResponseEntity.badRequest().body("用户不存在！");
+        }
+        return ResponseEntity.ok().body(result);
     }
 
 }
