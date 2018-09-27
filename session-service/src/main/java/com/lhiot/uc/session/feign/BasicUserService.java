@@ -1,6 +1,6 @@
 package com.lhiot.uc.session.feign;
 
-import com.lhiot.uc.session.model.Apply;
+import com.lhiot.uc.session.model.ApplicationType;
 import com.lhiot.uc.session.model.LoginResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface BasicUserService {
 
     @RequestMapping(value = "/users/phone/{phoneNumber}", method = RequestMethod.GET)
-    ResponseEntity<LoginResult> getUserByPhone(@PathVariable("phoneNumber") String phone, @RequestParam("apply") Apply apply);
+    ResponseEntity<LoginResult> getUserByPhone(@PathVariable("phoneNumber") String phone, @RequestParam("applicationType") ApplicationType applicationType);
 
     @RequestMapping(value = "/users/password/{id}", method = RequestMethod.GET)
     ResponseEntity<LoginResult> determineLoginPassword(@PathVariable("id") Long userId, @RequestParam("password") String password);

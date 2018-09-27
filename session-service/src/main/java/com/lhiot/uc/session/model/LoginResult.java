@@ -72,7 +72,7 @@ public class LoginResult {
     private LockStatus locked;
 
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private Apply apply;
+    private ApplicationType applicationType;
 
     @ApiModelProperty(notes = "免密支付权限", dataType = "SwitchStatus")
     private SwitchStatus paymentPermissions;

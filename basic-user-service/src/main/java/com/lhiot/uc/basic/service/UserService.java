@@ -150,6 +150,10 @@ public class UserService {
         return applyUserMapper.updatePaymentPermissionsById(user) > 0;
     }
 
+    public boolean updateUnionIdByUserId(ApplyUser user){
+        return applyUserMapper.updateUnionIdByUserId(user) > 0;
+    }
+
     public boolean countByIdAndPassword(ApplyUser user) {
         return applyUserMapper.countByIdAndPassword(user) > 0;
     }

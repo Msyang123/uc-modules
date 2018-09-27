@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.session.mapper.SessionMapper">
     <insert id="insert" parameterType="com.lhiot.uc.session.model.LoginParam">
-        INSERT INTO user_login(user_id,address,lat,lng,apply,login_type,session_id,login_at)
-        VALUE (#{userId},#{address},#{lat},#{lng},#{apply},#{loginType},#{sessionId},#{loginAt})
+        INSERT INTO user_login(user_id,address,lat,lng,application_type,login_type,session_id,login_at)
+        VALUE (#{userId},#{address},#{lat},#{lng},#{applicationType},#{loginType},#{sessionId},#{loginAt})
     </insert>
 </mapper>

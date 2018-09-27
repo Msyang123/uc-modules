@@ -140,6 +140,12 @@
 		WHERE id = #{id}
 	</update>
 
+    <update id="updateUnionIdByUserId" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
+        UPDATE apply_user
+        SET union_id = #{unionId}
+        WHERE id = #{id}
+    </update>
+
     <!--手机号注册绑定微信-->
     <update id="updateWeChatInfoById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		UPDATE apply_user
