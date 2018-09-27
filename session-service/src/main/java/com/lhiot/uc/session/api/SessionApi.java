@@ -42,7 +42,7 @@ public class SessionApi {
     @PostMapping("/password/session")
     public ResponseEntity cellphoneLogin(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
         // TODO Feign调用基础服务 查询用户信息：用户ID、用户名、可以访问的API集合（ANT匹配）
-        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
+        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
@@ -63,7 +63,7 @@ public class SessionApi {
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt"})
     @PostMapping("/captcha/session")
     public ResponseEntity captchaSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
-        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApply());
+        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.status(SEE_OTHER).body("用户不存在，去注册！");
         }
@@ -81,7 +81,7 @@ public class SessionApi {
     }
 
     @ApiOperation(value = "微信登录", response = LoginResult.class)
-    @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt", "captcha", "phoneNumber"})
+    @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt", "captcha", "phone"})
     @GetMapping("/we-chat/session")
     public ResponseEntity weChatSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
         ResponseEntity response = basicUserService.getUserByOpenId(param.getOpenId());

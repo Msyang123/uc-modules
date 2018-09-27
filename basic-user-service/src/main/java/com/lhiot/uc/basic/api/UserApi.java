@@ -58,10 +58,10 @@ public class UserApi {
     @ApiOperation(value = "根据业务手机号码查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "phoneNumber", value = "用户ID", dataType = "String", required = true),
-            @ApiImplicitParam(paramType = "query", name = "apply", value = "应用类型", dataTypeClass = ApplicationType.class, required = true)
+            @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", dataTypeClass = ApplicationType.class, required = true)
     })
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("apply") ApplicationType applicationType) {
+    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("applicationType") ApplicationType applicationType) {
         UserDetailResult user = userService.findByPhone(phoneNumber, applicationType);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
@@ -190,6 +190,22 @@ public class UserApi {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @ApiOperation("根据业务用户Id修改unionId")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "userId",value = "业务用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "query",name = "unionId",value = "微信的unionId",dataType = "String",required = true)
+    })
+    @PutMapping("/union-id/{userId}")
+    public ResponseEntity updateUnionId(@PathVariable("userId") Long userId,@RequestParam String unionId){
+        ApplyUser user = new ApplyUser();
+        user.setId(userId);
+        user.setUnionId(unionId);
+        if(!userService.updateUnionIdByUserId(user)){
+            return ResponseEntity.badRequest().body("更新失败！");
+        }
+        return ResponseEntity.ok().build();
     }
 
 }

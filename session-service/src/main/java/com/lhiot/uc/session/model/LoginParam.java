@@ -39,5 +39,5 @@ public class LoginParam {
     @ApiModelProperty(notes = "登录类型", dataType = "LoginType")
     private LoginType loginType;
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private Apply apply;
+    private ApplicationType applicationType;
 }

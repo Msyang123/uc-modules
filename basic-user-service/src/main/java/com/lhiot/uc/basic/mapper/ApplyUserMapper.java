@@ -53,5 +53,7 @@ public interface ApplyUserMapper {
 
     int updatePaymentPermissionsById(ApplyUser user);
 
+    int updateUnionIdByUserId(ApplyUser user);
+
     int countByIdAndPassword(ApplyUser user);
 }
