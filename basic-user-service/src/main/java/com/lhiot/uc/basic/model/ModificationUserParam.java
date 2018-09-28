@@ -26,4 +26,6 @@ public class ModificationUserParam {
     private String sex;
     @ApiModelProperty(notes = "生日", dataType = "String")
     private String birthday;
+    @ApiModelProperty(notes = "微信unionId",dataType = "String")
+    private String unionId;
 }

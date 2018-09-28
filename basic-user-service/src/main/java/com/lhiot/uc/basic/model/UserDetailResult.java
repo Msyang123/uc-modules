@@ -49,7 +49,6 @@ public class UserDetailResult {
     @ApiModelProperty(notes = "备注", dataType = "String")
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(notes = "注册时间", dataType = "Date")
     private Date registerAt;
 
