@@ -129,6 +129,7 @@
             <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
             <if test="address != null and address != ''">address = #{address},</if>
             <if test="description != null and description != ''">description = #{description},</if>
+            <if test="unionId != null and unionId != ''">union_id = #{unionId}</if>
         </trim>
         WHERE id = #{id}
     </update>
