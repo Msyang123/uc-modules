@@ -1,12 +1,13 @@
 package com.lhiot.uc.basic.api;
 
+import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.leon.microx.util.BeanUtils;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.BaseUserResult;
 import com.lhiot.uc.basic.model.ModificationUserParam;
-import com.lhiot.uc.basic.model.PaymentPasswordParam;
+import com.lhiot.uc.basic.model.PasswordParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import com.lhiot.uc.basic.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -149,15 +150,13 @@ public class UserApi {
     }
 
     @ApiOperation("判断登录密码是否正确")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "id", value = "用户ID", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = "query", name = "password", value = "用户登录密码", dataType = "String", required = true)
-    })
-    @GetMapping("/password/{id}")
-    public ResponseEntity determineLoginPassword(@PathVariable("id") Long userId, @RequestParam String password) {
+    @ApiHideBodyProperty("paymentPassword")
+    @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PaymentPasswordParam", required = true)
+    @PostMapping("/password")
+    public ResponseEntity determineLoginPassword(@RequestBody PasswordParam param) {
         ApplyUser applyUser = new ApplyUser();
-        applyUser.setPassword(password);
-        applyUser.setId(userId);
+        applyUser.setPassword(param.getPassword());
+        applyUser.setId(param.getUserId());
         if (!userService.countByIdAndPassword(applyUser)) {
             return ResponseEntity.badRequest().body("密码不正确！");
         }
@@ -165,9 +164,10 @@ public class UserApi {
     }
 
     @ApiOperation("判断是否可使用余额支付")
+    @ApiHideBodyProperty("password")
     @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PaymentPasswordParam", required = true)
-    @PutMapping("/payment-password")
-    public ResponseEntity determinePaymentPassword(@RequestBody PaymentPasswordParam param) {
+    @PostMapping("/payment-password")
+    public ResponseEntity determinePaymentPassword(@RequestBody PasswordParam param) {
         ApplyUser user = userService.findPaymentPasswordById(param.getUserId());
         if (Objects.isNull(user)) {
             return ResponseEntity.badRequest().body("用户不存在！");
