@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * @Author zhangfeng created in 2018/9/13 9:19
+ * @author zhangfeng created in 2018/9/13 9:19
  **/
 @FeignClient("basic-user-service-v1-0")
 @Component
