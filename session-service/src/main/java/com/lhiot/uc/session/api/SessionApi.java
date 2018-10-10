@@ -8,6 +8,7 @@ import com.lhiot.uc.session.mapper.SessionMapper;
 import com.lhiot.uc.session.model.LockStatus;
 import com.lhiot.uc.session.model.LoginParam;
 import com.lhiot.uc.session.model.LoginResult;
+import com.lhiot.uc.session.model.SearchParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
  */
 @Slf4j
 @RestController
+//TODO 返回仓库Id
 public class SessionApi {
 
     private static final String LOGIN_SMS_TEMPLATE_NAME = "from-login";
@@ -37,19 +39,19 @@ public class SessionApi {
 
     @ApiOperation(value = "手机密码登录", response = LoginResult.class)
     @ApiHideBodyProperty({"captcha", "userId", "sessionId", "loginAt", "openId"})
-    @PostMapping("/password/session")
+    @PostMapping("/password/sessions")
     public ResponseEntity cellphoneLogin(@RequestBody LoginParam param) {
-        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
+        SearchParam searchParam = new SearchParam();
+        searchParam.setPhone(param.getPhone());
+        searchParam.setPassword(param.getPassword());
+        searchParam.setApplicationType(param.getApplicationType());
+        ResponseEntity response = basicUserService.getUserByPhoneAndPassword(searchParam);
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
-            return ResponseEntity.badRequest().body("用户不存在！");
+            return ResponseEntity.badRequest().body("用户不存在或密码错误！");
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
-        }
-        ResponseEntity determineResponse = basicUserService.determineLoginPassword(result.getId(), param.getPassword());
-        if (Objects.isNull(determineResponse) || !determineResponse.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.badRequest().body("密码不正确！");
         }
         sessionMapper.insert(param);
         return ResponseEntity.ok().body(result);
@@ -57,7 +59,7 @@ public class SessionApi {
 
     @ApiOperation(value = "手机验证码登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt"})
-    @PostMapping("/captcha/session")
+    @PostMapping("/captcha/sessions")
     public ResponseEntity captchaSession(@RequestBody LoginParam param) {
         ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
@@ -77,7 +79,7 @@ public class SessionApi {
 
     @ApiOperation(value = "微信登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt", "captcha", "phone"})
-    @GetMapping("/we-chat/session")
+    @PostMapping("/we-chat/sessions")
     public ResponseEntity weChatSession(@RequestBody LoginParam param) {
         ResponseEntity response = basicUserService.getUserByOpenId(param.getOpenId());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
