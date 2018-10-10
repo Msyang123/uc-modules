@@ -68,7 +68,20 @@
 		END locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
-		WHERE a.phone = #{phone} AND a.apply = #{apply}
+		WHERE a.phone = #{phone} AND a.applicaiton_type = #{applicationType}
+	</select>
+
+    <select id="findByPhoneAndPassword" parameterType="com.lhiot.uc.basic.model.PhoneAndPasswordSearchParam"
+            resultType="com.lhiot.uc.basic.model.UserDetailResult">
+		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,applicaiton_type,sex
+		,birthday,payment_permissions,register_at,balance,member_points,
+		CASE b.locked
+		WHEN 'LOCK' THEN b.locked
+		ELSE a.locked
+		END locked
+		FROM apply_user a
+		LEFT JOIN base_user b ON a.base_user_id = b.id
+		WHERE a.phone = #{phone} AND a.applicaiton_type = #{applicationType} and a.password = #{password}
 	</select>
 
     <select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
@@ -102,8 +115,13 @@
             #{item}
         </foreach>
     </select>
+    
+    <select id="findPermissionsByIdAndPaymentPassword" parameterType="map" resultType="String">
+        select payment_permissions from apply_user where id = #{id}
+        <if test="paymentPassword != null and paymentPassword != ''">and payment_password = #{paymentPassword}</if>
+    </select>
 
-    <select id="findByKeyword" parameterType="String" resultType="com.lhiot.uc.basic.entity.ApplyUser">
+    <select id="findByKeyword" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT id ,birthday,sex,phone,nickname,email,qq,avatar,address,description,register_at
 		FROM apply_user
 		WHERE
@@ -163,13 +181,10 @@
 
     <update id="updatePasswordById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
         UPDATE apply_user
-        SET password = #{password}
-        WHERE id = #{id}
-    </update>
-
-    <update id="updatePaymentPasswordById" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
-        UPDATE apply_user
-        SET payment_password = #{paymentPassword}
+        <trim prefix="set" suffixOverrides=",">
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="paymentPassword != null and paymentPassword != ''">payment_password = #{paymentPassword}</if>
+        </trim>
         WHERE id = #{id}
     </update>
 

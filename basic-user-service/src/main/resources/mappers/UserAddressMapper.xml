@@ -38,10 +38,11 @@
 	</select>
 
     <select id="findListByUserId" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserAddress">
-		SELECT id,base_user_id AS baseUserId,delivery_name AS deliveryName,delivery_mobile AS deliveryMobile,if_default AS ifDefault
-		,lat,lng,delivery_sex AS deliverySex,delivery_detail AS deliveryDetail,street_detail AS streetDetail
-		FROM user_address
-		WHERE base_user_id = #{0}
+		SELECT a.id,a.base_user_id AS baseUserId,a.delivery_name AS deliveryName,a.delivery_mobile AS deliveryMobile,a.if_default AS ifDefault
+		,a.lat,a.lng,a.delivery_sex AS deliverySex,a.delivery_detail AS deliveryDetail,a.street_detail AS streetDetail
+		FROM user_address a
+		left join apply_user b on a.base_user_id = b.base_user_id
+		WHERE b.id = #{0}
 	</select>
 
 </mapper>

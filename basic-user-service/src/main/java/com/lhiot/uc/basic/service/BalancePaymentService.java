@@ -1,14 +1,20 @@
 package com.lhiot.uc.basic.service;
 
+import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.Maps;
+import com.leon.microx.util.Pair;
 import com.leon.microx.util.Retry;
 import com.lhiot.uc.basic.entity.BalanceLog;
+import com.lhiot.uc.basic.entity.SwitchStatus;
+import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.mapper.BalanceLogMapper;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -19,50 +25,37 @@ import java.util.Objects;
 @Transactional
 public class BalancePaymentService {
     private BaseUserMapper baseUserMapper;
-    private BalanceLogMapper balanceLogMapper;
 
-    public BalancePaymentService(BaseUserMapper baseUserMapper, BalanceLogMapper balanceLogMapper) {
+    public BalancePaymentService(BaseUserMapper baseUserMapper) {
         this.baseUserMapper = baseUserMapper;
-        this.balanceLogMapper = balanceLogMapper;
     }
 
     /**
      * 用户扣除鲜果币
      *
-     * @param baseUserId     基础用户Id
+     * @param userId     基础用户Id
      * @param operationMoney 需要扣除的金额
+     * @param map
      * @return
      */
-    public boolean subCurrency(Long balance, Long operationMoney, Long baseUserId) {
+    public Tips subCurrency(Long balance, Long operationMoney, Long userId,String paymentPassword, Map<String,Object> map) {
+        SwitchStatus permissions = SwitchStatus.valueOf((String)map.get("paymentPermissions"));
+        /**支付权限开启---->可以进行余额支付
+         * 支付权限未开启---->支付密码正确可进行余额支付，支付密码错误返回错误信息
+         */
+        if (!Objects.equals(SwitchStatus.OPEN,permissions) && !Objects.equals(paymentPassword,map.get("paymentPassword"))){
+            return Tips.warn("支付密码错误！");
+        }
         Retry<Boolean> retry = Retry.of(() -> {
-            int count = baseUserMapper.updateCurrencyByIdForSub(Maps.of("id", baseUserId, "balance", balance, "money", operationMoney));
+            int count = baseUserMapper.updateCurrencyByApplyUserIdForSub(Maps.of("id", userId, "balance", balance, "money", operationMoney));
             if (count <= 0) {
                 throw new RuntimeException("减鲜果币失败！");
             }
             return true;
         }).count(3).intervalMs(30L).run();
         if (Objects.nonNull(retry.exception())) {
-            return false;
+            return Tips.warn("扣除鲜果币失败！");
         }
-        return retry.result();
-    }
-
-    /**
-     * 增加鲜果币
-     *
-     * @param baseUserId     Long
-     * @param operationMoney Long
-     * @return boolean
-     */
-    public boolean addCurrency(Long baseUserId, Long operationMoney) {
-        return baseUserMapper.updateCurrencyByIdForAdd(Maps.of("id", baseUserId, "money", operationMoney)) > 0;
-    }
-
-    public boolean addCurrencyLog(BalanceLog balanceLog) {
-        return balanceLogMapper.insert(balanceLog) > 0;
-    }
-
-    public Long findCurrencyById(Long baseUserId) {
-        return baseUserMapper.findCurrencyById(baseUserId);
+        return Tips.info("扣除成功！");
     }
 }

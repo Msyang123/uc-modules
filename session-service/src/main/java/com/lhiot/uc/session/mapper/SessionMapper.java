@@ -13,6 +13,4 @@ import org.springframework.stereotype.Repository;
 public interface SessionMapper {
 
     int insert(LoginParam login);
-
-    void updateLastLogin(Sessions.User user);
 }

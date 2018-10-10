@@ -14,6 +14,4 @@ public class UserBindingWeChatParam {
     private String openId;
     @ApiModelProperty(notes = "微信unionId", dataType = "String")
     private String unionId;
-    @ApiModelProperty(notes = "业务用户Id", dataType = "Long")
-    private Long applyUserId;
 }

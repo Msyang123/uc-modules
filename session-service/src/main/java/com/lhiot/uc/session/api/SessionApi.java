@@ -1,19 +1,19 @@
 package com.lhiot.uc.session.api;
 
-import com.leon.microx.support.session.Sessions;
 import com.leon.microx.support.swagger.ApiHideBodyProperty;
+import com.leon.microx.util.Maps;
 import com.lhiot.uc.session.feign.BasicUserService;
+import com.lhiot.uc.session.feign.ThirdPartyService;
+import com.lhiot.uc.session.mapper.SessionMapper;
 import com.lhiot.uc.session.model.LockStatus;
 import com.lhiot.uc.session.model.LoginParam;
 import com.lhiot.uc.session.model.LoginResult;
-import com.lhiot.uc.session.service.SessionService;
+import com.lhiot.uc.session.model.SearchParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.SEE_OTHER;
@@ -23,99 +23,73 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
  */
 @Slf4j
 @RestController
+//TODO 返回仓库Id
 public class SessionApi {
 
-    private static final String LOGIN_SMS_TEMPLATE_NAME = "";
-    private final Sessions session;
-    private SessionService service;
+    private static final String LOGIN_SMS_TEMPLATE_NAME = "from-login";
     private BasicUserService basicUserService;
+    private ThirdPartyService thirdPartyService;
+    private SessionMapper sessionMapper;
 
-    public SessionApi(Sessions session, SessionService service, BasicUserService basicUserService) {
-        this.session = session;
-        this.service = service;
+    public SessionApi(BasicUserService basicUserService, ThirdPartyService thirdPartyService, SessionMapper sessionMapper) {
         this.basicUserService = basicUserService;
+        this.thirdPartyService = thirdPartyService;
+        this.sessionMapper = sessionMapper;
     }
 
-    @Sessions.Uncheck
     @ApiOperation(value = "手机密码登录", response = LoginResult.class)
     @ApiHideBodyProperty({"captcha", "userId", "sessionId", "loginAt", "openId"})
-    @PostMapping("/password/session")
-    public ResponseEntity cellphoneLogin(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
-        // TODO Feign调用基础服务 查询用户信息：用户ID、用户名、可以访问的API集合（ANT匹配）
-        ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
+    @PostMapping("/password/sessions")
+    public ResponseEntity cellphoneLogin(@RequestBody LoginParam param) {
+        SearchParam searchParam = new SearchParam();
+        searchParam.setPhone(param.getPhone());
+        searchParam.setPassword(param.getPassword());
+        searchParam.setApplicationType(param.getApplicationType());
+        ResponseEntity response = basicUserService.getUserByPhoneAndPassword(searchParam);
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
-            return ResponseEntity.badRequest().body("用户不存在！");
+            return ResponseEntity.badRequest().body("用户不存在或密码错误！");
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
+            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
         }
-        ResponseEntity determineResponse = basicUserService.determineLoginPassword(result.getId(), param.getPassword());
-        if (Objects.isNull(determineResponse) || !determineResponse.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.badRequest().body("密码不正确！");
-        }
-        param.setSessionId(service.createSession(result, request));
-        param.setUserId(result.getId());
-        return this.sessionResult(param, result);
+        sessionMapper.insert(param);
+        return ResponseEntity.ok().body(result);
     }
 
     @ApiOperation(value = "手机验证码登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt"})
-    @PostMapping("/captcha/session")
-    public ResponseEntity captchaSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
+    @PostMapping("/captcha/sessions")
+    public ResponseEntity captchaSession(@RequestBody LoginParam param) {
         ResponseEntity response = basicUserService.getUserByPhone(param.getPhone(), param.getApplicationType());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.status(SEE_OTHER).body("用户不存在，去注册！");
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
+            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
         }
-//        ResponseEntity thirdPartyResponse = thirdPartyService.validate(LOGIN_SMS_TEMPLATE_NAME, param.getPhoneNumber(), ImmutableMap.of("number", param.getCaptcha()));
-//        if (!thirdPartyResponse.getStatusCode().is2xxSuccessful()) {
-//            return ResponseEntity.badRequest().body(response.hasBody() ? response.getBody() : "验证码错误！");
-//        }
-        param.setSessionId(service.createSession(result, request));
-        param.setUserId(result.getId());
-        return this.sessionResult(param, result);
+        ResponseEntity thirdPartyResponse = thirdPartyService.validate(LOGIN_SMS_TEMPLATE_NAME, param.getPhone(), Maps.of("number", param.getCaptcha()));
+        if (!thirdPartyResponse.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.badRequest().body(response.hasBody() ? response.getBody() : "验证码错误！");
+        }
+        sessionMapper.insert(param);
+        return ResponseEntity.ok().body(result);
     }
 
     @ApiOperation(value = "微信登录", response = LoginResult.class)
     @ApiHideBodyProperty({"password", "userId", "sessionId", "loginAt", "captcha", "phone"})
-    @GetMapping("/we-chat/session")
-    public ResponseEntity weChatSession(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
+    @PostMapping("/we-chat/sessions")
+    public ResponseEntity weChatSession(@RequestBody LoginParam param) {
         ResponseEntity response = basicUserService.getUserByOpenId(param.getOpenId());
         if (Objects.isNull(response) || !response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
             return ResponseEntity.status(SEE_OTHER).body("用户不存在，去注册！");
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录如有疑问请联系客服0731-85240088");
+            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
         }
-        param.setSessionId(service.createSession(result, request));
-        param.setUserId(result.getId());
-        return this.sessionResult(param, result);
-    }
-
-    private ResponseEntity sessionResult(LoginParam param, LoginResult result) {
-        try {
-            // 返回session
-            return ResponseEntity.ok()
-                    .header(Sessions.HTTP_HEADER_NAME, param.getSessionId())
-                    .body(result);
-        } finally {
-            // 更新登录状态
-            service.online(param);
-        }
-    }
-
-    @ApiOperation("退出登录")
-    @DeleteMapping("/session")
-    public ResponseEntity logout(Sessions.User current, @ApiIgnore HttpServletRequest request) {
-        String sessionId = Sessions.id(request);
-        session.invalidate(sessionId);
-        service.logout(current);
-        log.info("user {} logout.", current);
-        return ResponseEntity.noContent().build();
+        sessionMapper.insert(param);
+        return ResponseEntity.ok().body(result);
     }
 }

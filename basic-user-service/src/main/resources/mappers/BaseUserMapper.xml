@@ -6,23 +6,33 @@
 		INSERT INTO base_user (id,phone) VALUE (#{id},#{phone})
 	</insert>
 
-    <select id="findCurrencyById" resultType="Long" parameterType="Long">
-		SELECT balance FROM base_user WHERE id = #{0}
+    <select id="findPaymentPermissionsByApplyUserId" resultType="Long" parameterType="map">
+		SELECT a.balance,b.payment_password as paymentPassword,b.payment_permissions as paymentPermissions FROM base_user a
+		LEFT JOIN apply_user b ON a.id = b.base_user_id
+		WHERE b.id = #{0}
+	</select>
+
+	<select id="findCurrencyByApplyUserId" resultType="Long" parameterType="Long">
+		SELECT balance FROM base_user a
+		LEFT JOIN apply_user b ON a.id = b.base_user_id
+		WHERE b.id = #{0}
 	</select>
 
     <select id="findById" resultType="com.lhiot.uc.basic.model.BaseUserResult" parameterType="Long">
 		SELECT id,phone,balance,locked,member_points,real_name,id_card FROM base_user WHERE id = #{0}
 	</select>
 
-    <update id="updateCurrencyByIdForSub" parameterType="map">
-		UPDATE base_user
-		SET balance = balance - #{money}
-		WHERE balance = #{balance} AND id = #{id}
+    <update id="updateCurrencyByApplyUserIdForSub" parameterType="map">
+		UPDATE base_user a
+		LEFT JOIN apply_user b ON a.id = b.base_user_id
+		SET a.balance = a.balance - #{money}
+		WHERE a.balance = #{balance} AND b.id = #{id}
 	</update>
 
-    <update id="updateCurrencyByIdForAdd" parameterType="map">
-		UPDATE base_user
-		SET balance = balance + #{moeny}
-		WHERE id = #{id}
+    <update id="updateCurrencyByApplyUserIdForAdd" parameterType="map">
+		UPDATE base_user a
+		LEFT JOIN apply_user b ON a.id = b.base_user_id
+		SET a.balance = a.balance + #{moeny}
+		WHERE b.id = #{id}
 	</update>
 </mapper>

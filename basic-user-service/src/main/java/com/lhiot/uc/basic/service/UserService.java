@@ -1,11 +1,13 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.support.result.Multiple;
+import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.model.BaseUserResult;
+import com.lhiot.uc.basic.model.SearchParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhangfeng created in 2018/9/7 11:23
@@ -65,6 +68,7 @@ public class UserService {
         return applyUserMapper.findByPhone(applyUser);
     }
 
+
     /**
      * 根据用户ID字符串集合查询用户集合
      *
@@ -72,7 +76,7 @@ public class UserService {
      * @return Multiple<UserDetailResult>
      */
     public Multiple<UserDetailResult> findUsersByIds(String ids) {
-        List<String> idList = Arrays.asList(ids.split(","));
+        List<String> idList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(ids));
         List<UserDetailResult> userList = applyUserMapper.findByIdList(idList);
         if (CollectionUtils.isEmpty(userList)) {
             return Multiple.of(new ArrayList<>());
@@ -101,27 +105,13 @@ public class UserService {
      * @param keyword String
      * @return Multiple
      */
-    public Multiple<ApplyUser> findByKeyword(String keyword) {
+    public Multiple<UserDetailResult> findByKeyword(String keyword) {
         keyword = "%" + keyword + "%";
-        List<ApplyUser> applyUsers = applyUserMapper.findByKeyword(keyword);
-        if (CollectionUtils.isEmpty(applyUsers)) {
+        List<UserDetailResult> userList = applyUserMapper.findByKeyword(keyword);
+        if (CollectionUtils.isEmpty(userList)) {
             return Multiple.of(new ArrayList<>());
         }
-        return Multiple.of(applyUsers);
-    }
-
-    public ApplyUser findPaymentPasswordById(Long userId) {
-        return applyUserMapper.findPaymentPasswordById(userId);
-    }
-
-    /**
-     * 根据基础用户Id查询基础信息
-     *
-     * @param baseUserId Long
-     * @return BaseUserResult
-     */
-    public BaseUserResult findByBaseUserId(Long baseUserId) {
-        return baseUserMapper.findById(baseUserId);
+        return Multiple.of(userList);
     }
 
     public boolean countById(Long id) {
@@ -140,10 +130,6 @@ public class UserService {
 
     public boolean updatePasswordById(ApplyUser user) {
         return applyUserMapper.updatePasswordById(user) > 0;
-    }
-
-    public boolean updatePaymentPasswordById(ApplyUser user) {
-        return applyUserMapper.updatePaymentPasswordById(user) > 0;
     }
 
     public boolean updatePaymentPermissionsById(ApplyUser user) {

@@ -1,11 +1,15 @@
 package com.lhiot.uc.basic.mapper;
 
 import com.lhiot.uc.basic.entity.ApplyUser;
+import com.lhiot.uc.basic.entity.SwitchStatus;
+import com.lhiot.uc.basic.model.PhoneAndPasswordSearchParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -19,6 +23,13 @@ public interface ApplyUserMapper {
 
     int insert(ApplyUser param);
 
+    /**
+     * 根据用户ID跟支付密码查询用户支付权限
+     * @param map id和支付密码
+     * @return
+     */
+    SwitchStatus findPermissionsByIdAndPaymentPassword(Map<String,Object> map);
+
     ApplyUser findPaymentPasswordById(Long userId);
 
     UserDetailResult findById(Long userId);
@@ -31,7 +42,8 @@ public interface ApplyUserMapper {
 
     List<UserDetailResult> findByPhoneList(List<String> ids);
 
-    List<ApplyUser> findByKeyword(String keyword);
+    List<UserDetailResult> findByKeyword(String keyword);
+    UserDetailResult findByPhoneAndPassword(PhoneAndPasswordSearchParam param);
 
     int updateUserById(ApplyUser user);
 
@@ -48,8 +60,6 @@ public interface ApplyUserMapper {
     int updateWeChatBinding(Long userId);
 
     int updatePasswordById(ApplyUser user);
-
-    int updatePaymentPasswordById(ApplyUser user);
 
     int updatePaymentPermissionsById(ApplyUser user);
 
