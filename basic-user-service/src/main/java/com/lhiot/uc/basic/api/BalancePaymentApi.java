@@ -1,16 +1,26 @@
 package com.lhiot.uc.basic.api;
 
+import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Maps;
 import com.lhiot.uc.basic.entity.BalanceLog;
 import com.lhiot.uc.basic.entity.OperationStatus;
+import com.lhiot.uc.basic.mapper.BalanceLogMapper;
+import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.model.BalanceOperationParam;
 import com.lhiot.uc.basic.service.BalancePaymentService;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -18,50 +28,57 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@RequestMapping("/users/balance")
 public class BalancePaymentApi {
     private BalancePaymentService balancePaymentService;
+    private BaseUserMapper baseUserMapper;
+    private BalanceLogMapper balanceLogMapper;
 
-    public BalancePaymentApi(BalancePaymentService balancePaymentService) {
+    public BalancePaymentApi(BalancePaymentService balancePaymentService, BaseUserMapper baseUserMapper, BalanceLogMapper balanceLogMapper) {
         this.balancePaymentService = balancePaymentService;
+        this.baseUserMapper = baseUserMapper;
+        this.balanceLogMapper = balanceLogMapper;
     }
 
     @ApiOperation("用户鲜果币加减")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "BalanceOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
-    @PutMapping("/operation")
-    public ResponseEntity userBalanceOperation(@RequestBody BalanceOperationParam param) {
-        Long balance = balancePaymentService.findCurrencyById(param.getBaseUserId());
-        if (Objects.isNull(balance)) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "id",value = "业务用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "body", name = "param", value = "用户加减鲜果币操作", dataType = "BalanceOperationParam", dataTypeClass = BalanceOperationParam.class, required = true)
+    })
+    @PutMapping("/users/{id}/balance")
+    public ResponseEntity userBalanceOperation(@PathVariable("id") Long userId, @RequestBody BalanceOperationParam param) {
+        //返回balance,paymentPassword,paymentPermissions
+       Map<String,Object> map =  baseUserMapper.findPaymentPermissionsByApplyUserId(userId);
+        if (CollectionUtils.isEmpty(map)) {
             ResponseEntity.badRequest().body("用户不存在!");
         }
         long money = param.getMoney();
-        long baseUserId = param.getBaseUserId();
         if (Objects.equals(OperationStatus.ADD, param.getOperation())) {
-            boolean flag = balancePaymentService.addCurrency(baseUserId, money);
+            boolean flag = baseUserMapper.updateCurrencyByApplyUserIdForAdd(Maps.of("id", userId, "money", money))>0;
             if (!flag) {
                 return ResponseEntity.badRequest().body("增加鲜果币失败！");
             }
         } else {
-            if (balance < money) {
+            Long balance = (Long) map.get("balance");
+            if (Objects.isNull(balance) || balance < money) {
                 return ResponseEntity.badRequest().body("余额不足");
             }
-            boolean flag = balancePaymentService.subCurrency(balance, money, baseUserId);
-            if (!flag) {
-                return ResponseEntity.badRequest().body("扣除鲜果币失败！");
+            Tips tips = balancePaymentService.subCurrency(balance,money,userId,param.getPaymentPassword(),map);
+            if (Objects.equals(HttpStatus.BAD_REQUEST.toString(),tips.getCode())) {
+                return ResponseEntity.badRequest().body(tips.getMessage());
             }
         }
         BalanceLog balanceLog = new BalanceLog();
         BeanUtils.of(balanceLog).populate(param);
         balanceLog.setMoney(money);
-        balancePaymentService.addCurrencyLog(balanceLog);
+        balanceLogMapper.insert(balanceLog);
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation("查询用户余额")
-    @ApiImplicitParam(paramType = "path", name = "id", value = "基础用户Id", dataType = "Long", required = true)
-    @GetMapping("/{id}")
-    public ResponseEntity findFruitCurrency(@PathVariable("id") Long baseUserId) {
-        Long balance = balancePaymentService.findCurrencyById(baseUserId);
+    @ApiImplicitParam(paramType = "path", name = "id", value = "业务用户Id", dataType = "Long", required = true)
+    @GetMapping("/users/{id}/balance")
+    public ResponseEntity findFruitCurrency(@PathVariable("id") Long userId) {
+        Long balance = baseUserMapper.findCurrencyByApplyUserId(userId);
         if (Objects.isNull(balance)) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }

@@ -5,6 +5,7 @@ import com.lhiot.uc.basic.model.BaseUserResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Mapper
@@ -19,11 +20,13 @@ public interface BaseUserMapper {
      */
     Long insert(BaseUser param);
 
-    int updateCurrencyByIdForSub(Map<String, Object> map);
+    int updateCurrencyByApplyUserIdForSub(Map<String, Object> map);
 
-    int updateCurrencyByIdForAdd(Map<String, Object> map);
+    int updateCurrencyByApplyUserIdForAdd(Map<String, Object> map);
 
-    Long findCurrencyById(Long id);
+    Map<String,Object> findPaymentPermissionsByApplyUserId(Long userId);
+
+    Long findCurrencyByApplyUserId(Long userId);
 
     BaseUserResult findById(Long id);
 }

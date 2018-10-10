@@ -59,18 +59,18 @@ public class UserBindingService extends BaseUserService {
      * @param param UserBindingPhoneParam
      * @return UserDetailResult
      */
-    public UserDetailResult bindingPhone(UserBindingPhoneParam param) {
+    public UserDetailResult bindingPhone(Long userId,UserBindingPhoneParam param) {
         BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());
 
         UserBinding userBinding = new UserBinding();
         userBinding.setPhone(param.getPhone());
         userBinding.setBaseUserId(baseUser.getId());
-        userBinding.setApplyUserId(param.getApplyUserId());
+        userBinding.setApplyUserId(userId);
         userBindingMapper.insert(userBinding);
 
         ApplyUser applyUser = new ApplyUser();
         applyUser.setBaseUserId(baseUser.getId());
-        applyUser.setId(param.getApplyUserId());
+        applyUser.setId(userId);
         applyUser.setPhone(param.getPhone());
         applyUserMapper.updateByBindPhone(applyUser);
 
@@ -82,11 +82,11 @@ public class UserBindingService extends BaseUserService {
         return userDetailResult;
     }
 
-    public boolean bindingWeChat(UserBindingWeChatParam param) {
+    public boolean bindingWeChat(Long userId,UserBindingWeChatParam param) {
         ApplyUser user = new ApplyUser();
         user.setOpenId(param.getOpenId());
         user.setUnionId(param.getUnionId());
-        user.setId(param.getApplyUserId());
+        user.setId(userId);
         applyUserMapper.updateWeChatInfoById(user);
         return applyUserMapper.updateWeChatInfoById(user) > 0;
     }

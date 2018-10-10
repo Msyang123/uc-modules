@@ -8,6 +8,7 @@ import com.lhiot.uc.basic.model.UserBindingWeChatParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import com.lhiot.uc.basic.service.UserBindingService;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@RequestMapping("/users/binding")
 public class UserBindingApi {
 
     private UserBindingService userBindingService;
@@ -31,12 +31,15 @@ public class UserBindingApi {
         this.applyUserMapper = applyUserMapper;
     }
 
-    @ApiOperation("微信业务用户绑定手机号码---在业务上规避一个手机号存在多个账号")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "手机号，业务用户Id", dataType = "UserBindingPhoneParam", required = true)
-    @PutMapping("/phone")
-    public ResponseEntity userBindingPhone(@RequestBody UserBindingPhoneParam param) {
+    @ApiOperation("用户绑定手机号码---在业务上规避一个手机号存在多个账号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "id",value = "用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "body", name = "param", value = "手机号，业务用户Id", dataType = "UserBindingPhoneParam", required = true)
+    })
+    @PutMapping("/users/{id}/binding-phone")
+    public ResponseEntity userBindingPhone(@PathVariable("id") Long userId,@RequestBody UserBindingPhoneParam param) {
 
-        UserDetailResult userDetailResult = applyUserMapper.findById(param.getApplyUserId());
+        UserDetailResult userDetailResult = applyUserMapper.findById(userId);
         if (Objects.isNull(userDetailResult)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
@@ -51,16 +54,19 @@ public class UserBindingApi {
             return ResponseEntity.badRequest().body("该手机号已被其它账号绑定！");
         }
 
-        userDetailResult = userBindingService.bindingPhone(param);
+        userDetailResult = userBindingService.bindingPhone(userId,param);
         return ResponseEntity.ok(userDetailResult);
     }
 
-    @ApiOperation("手机号绑定微信")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "微信信息", dataType = "UserBindingWeChatParam", dataTypeClass = UserBindingWeChatParam.class, required = true)
-    @PutMapping("/we-chat")
-    public ResponseEntity userBindingWeChat(@RequestBody UserBindingWeChatParam param) {
+    @ApiOperation("用户绑定微信")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "Long",name = "userId",value = "用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "body", name = "param", value = "微信信息", dataType = "UserBindingWeChatParam", dataTypeClass = UserBindingWeChatParam.class, required = true)
+    })
+    @PutMapping("/users/{id}/binding-we-chat")
+    public ResponseEntity userBindingWeChat(@PathVariable("id")Long userId,@RequestBody UserBindingWeChatParam param) {
 
-        UserDetailResult userDetailResult = applyUserMapper.findById(param.getApplyUserId());
+        UserDetailResult userDetailResult = applyUserMapper.findById(userId);
         if (Objects.isNull(userDetailResult)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
@@ -71,7 +77,7 @@ public class UserBindingApi {
         if (isBinding) {
             return ResponseEntity.badRequest().body("该微信已被其它账号绑定！");
         }
-        boolean flag = userBindingService.bindingWeChat(param);
+        boolean flag = userBindingService.bindingWeChat(userId,param);
         return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("绑定微信失败！");
     }
 

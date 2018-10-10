@@ -10,8 +10,6 @@ import lombok.Data;
 @Data
 @ApiModel
 public class PasswordParam {
-    @ApiModelProperty(notes = "用户Id",dataType = "Long")
-    private Long userId;
     @ApiModelProperty(notes = "支付密码",dataType = "String")
     private String paymentPassword;
     @ApiModelProperty(notes = "登录密码",dataType = "String")
