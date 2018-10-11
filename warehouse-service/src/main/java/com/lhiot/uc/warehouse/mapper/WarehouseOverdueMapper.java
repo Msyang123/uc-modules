@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.mapper;
 
-import com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue;
+import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +60,7 @@ public interface WarehouseOverdueMapper {
     * Description: 查询仓库商品过期降价值处理总记录数
     *
     * @param warehouseOverdue WarehouseOverdue
-    * @return long
+    * @return int
     */
-    long pageWarehouseOverdueCounts(WarehouseOverdue warehouseOverdue);
+    int pageWarehouseOverdueCounts(WarehouseOverdue warehouseOverdue);
 }

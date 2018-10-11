@@ -4,7 +4,7 @@
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-               type="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+               type="com.lhiot.uc.warehouse.entity.WarehouseUser">
         <id column="id" property="id"/>
         <result column="base_user_id" property="baseUserId"/>
     </resultMap>
@@ -18,7 +18,7 @@
     </sql>
 
     <!--新增用户仓库-->
-    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser" useGeneratedKeys="true"
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.entity.WarehouseUser" useGeneratedKeys="true"
             keyProperty="id">
         insert into warehouse_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -34,7 +34,7 @@
     </insert>
 
     <!--根据id修改用户仓库-->
-    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.entity.WarehouseUser">
         update warehouse_user
         <set>
             <if test="id != null ">
@@ -86,7 +86,7 @@
 
     <!--查询用户仓库列表-->
     <select id="pageWarehouseUsers" resultMap="BaseResultMap"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseUser">
         select
         <include refid="Base_Column_List"/>
         from warehouse_user
@@ -95,8 +95,8 @@
     </select>
 
     <!--查询用户仓库总记录-->
-    <select id="pageWarehouseUserCounts" resultType="long"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseUser">
+    <select id="pageWarehouseUserCounts" resultType="int"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseUser">
         select count(1)
         from warehouse_user
         <include refid="Base_Where_Condition"/>

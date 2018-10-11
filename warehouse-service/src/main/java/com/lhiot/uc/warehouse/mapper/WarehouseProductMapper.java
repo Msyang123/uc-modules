@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.mapper;
 
-import com.lhiot.uc.warehouse.domain.entity.WarehouseGoods;
+import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,34 +14,34 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface WarehouseGoodsMapper {
+public interface WarehouseProductMapper {
 
     /**
      * Description:批量新增仓库商品
      *
-     * @param warehouseGoodsList List<WarehouseGoods>
+     * @param warehouseProductList List<WarehouseProduct>
      * @return int
      */
-    int batchSave(List<WarehouseGoods> warehouseGoodsList);
+    int batchSave(List<WarehouseProduct> warehouseProductList);
 
 
-    int updateCountAndPrice(WarehouseGoods warehouseGoods);
+    int updateCountAndPrice(WarehouseProduct warehouseProduct);
 
     /**
      * Description:根据id修改仓库商品
      *
-     * @param warehouseGoods WarehouseGoods
+     * @param warehouseProduct WarehouseProduct
      * @return int
      */
-    int updateById(WarehouseGoods warehouseGoods);
+    int updateById(WarehouseProduct warehouseProduct);
 
     /**
      * Description:根据id修改仓库商品数量
      *
-     * @param warehouseGoods WarehouseGoods
+     * @param warehouseProduct WarehouseProduct
      * @return int
      */
-    int updateGoodsCount(WarehouseGoods warehouseGoods);
+    int updateProductCount(WarehouseProduct warehouseProduct);
 
 
     /**
@@ -56,33 +56,33 @@ public interface WarehouseGoodsMapper {
      * Description:根据id查找仓库商品
      *
      * @param id Long
-     * @return WarehouseGoods
+     * @return WarehouseProduct
      */
-    WarehouseGoods selectById(Long id);
+    WarehouseProduct selectById(Long id);
 
 
     /**
      * Description:查询仓库商品列表
      *
-     * @param warehouseGoods WarehouseGoods
-     * @return List<WarehouseGoods>
+     * @param warehouseProduct WarehouseProduct
+     * @return List<WarehouseProduct>
      */
-    List<WarehouseGoods> pageWarehouseGoodss(WarehouseGoods warehouseGoods);
+    List<WarehouseProduct> pageWarehouseProducts(WarehouseProduct warehouseProduct);
 
 
     /**
      * Description: 查询仓库商品总记录数
      *
-     * @param warehouseGoods WarehouseGoods
-     * @return long
+     * @param warehouseProduct WarehouseProduct
+     * @return int
      */
-    long pageWarehouseGoodsCounts(WarehouseGoods warehouseGoods);
+    int pageWarehouseProductCounts(WarehouseProduct warehouseProduct);
 
     /**
      * 查询当天的水果清单
      *
      * @param warehouseId Long
-     * @return List<WarehouseGoods>
+     * @return List<WarehouseProduct>
      */
-    List<WarehouseGoods> findWarehouseGoodsByWareHouseIdAndToday(Long warehouseId);
+    List<WarehouseProduct> findWarehouseProductByWareHouseIdAndToday(Long warehouseId);
 }

@@ -1,7 +1,7 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
-import com.lhiot.uc.warehouse.domain.entity.WarehouseConvert;
+import com.leon.microx.support.result.Pages;
+import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.mapper.WarehouseConvertMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,6 @@ public class WarehouseConvertService {
     @Autowired
     public WarehouseConvertService(WarehouseConvertMapper warehouseConvertMapper) {
         this.warehouseConvertMapper = warehouseConvertMapper;
-    }
-
-    /**
-     * Description:新增仓库出入库记录明细
-     *
-     * @param warehouseConvertList List<WarehouseConvert>
-     * @return int
-     */
-    public int saveWarehouseConvertBatch(List<WarehouseConvert> warehouseConvertList) {
-        return this.warehouseConvertMapper.saveWarehouseConvertBatch(warehouseConvertList);
     }
 
     /**
@@ -68,28 +58,13 @@ public class WarehouseConvertService {
     }
 
     /**
-     * Description: 查询仓库出入库记录明细总记录数
-     *
-     * @param warehouseConvert WarehouseConvert
-     * @return long
-     */
-    public long count(WarehouseConvert warehouseConvert) {
-        return this.warehouseConvertMapper.pageWarehouseConvertCounts(warehouseConvert);
-    }
-
-    /**
      * Description: 查询仓库出入库记录明细分页列表
      *
      * @param warehouseConvert WarehouseConvert
-     * @return PagerResultObject<WarehouseConvert>
+     * @return Pages<WarehouseConvert>
      */
-    public PagerResultObject<WarehouseConvert> pageList(WarehouseConvert warehouseConvert) {
-        long total = 0;
-        if (warehouseConvert.getRows() != null && warehouseConvert.getRows() > 0) {
-            total = this.count(warehouseConvert);
-        }
-        return PagerResultObject.of(warehouseConvert, total,
-                this.warehouseConvertMapper.pageWarehouseConverts(warehouseConvert));
+    public Pages<WarehouseConvert> pageList(WarehouseConvert warehouseConvert) {
+        return Pages.of(this.warehouseConvertMapper.pageWarehouseConvertCounts(warehouseConvert),this.warehouseConvertMapper.pageWarehouseConverts(warehouseConvert));
     }
 }
 

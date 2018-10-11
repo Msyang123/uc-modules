@@ -1,14 +1,12 @@
-package com.lhiot.uc.warehouse.domain.entity;
+package com.lhiot.uc.warehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lhiot.uc.warehouse.domain.common.PagerRequestObject;
-import com.lhiot.uc.warehouse.domain.enums.ConvertType;
-import com.lhiot.uc.warehouse.domain.enums.InOutType;
+import com.lhiot.uc.warehouse.model.ConvertType;
+import com.lhiot.uc.warehouse.model.InOutType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -24,8 +22,7 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class WarehouseConvert extends PagerRequestObject {
+public class WarehouseConvert{
 
     /**
      * 仓库库存明细ID
@@ -44,9 +41,9 @@ public class WarehouseConvert extends PagerRequestObject {
     /**
      * 商品id
      */
-    @JsonProperty("goodsId")
+    @JsonProperty("productId")
     @ApiModelProperty(value = "商品id", dataType = "Long")
-    private Long goodsId;
+    private Long productId;
 
     /**
      * 商品名称
@@ -58,9 +55,9 @@ public class WarehouseConvert extends PagerRequestObject {
     /**
      * 商品数量/重量
      */
-    @JsonProperty("goodsCount")
+    @JsonProperty("productCount")
     @ApiModelProperty(value = "商品数量/重量", dataType = "BigDecimal")
-    private BigDecimal goodsCount;
+    private BigDecimal productCount;
 
     /**
      * 商品价格

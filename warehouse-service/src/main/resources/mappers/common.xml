@@ -3,10 +3,8 @@
 <mapper namespace="common">
     <!-- 公共执行语句 -->
     <sql id="pager">
-        <if test="sidx != null and sidx != '' ">
-            ORDER BY ${sidx} ${sord}
-        </if>
         <if test="rows != null and rows > 0 ">
+            ORDER BY id desc
             LIMIT #{startRow}, #{rows}
         </if>
     </sql>
