@@ -1,13 +1,14 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
-import com.lhiot.uc.warehouse.domain.entity.WarehouseUser;
+import com.leon.microx.support.result.Pages;
+import com.lhiot.uc.warehouse.entity.WarehouseUser;
 import com.lhiot.uc.warehouse.mapper.WarehouseUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Description:用户仓库服务类
@@ -77,28 +78,25 @@ public class WarehouseUserService {
     }
 
     /**
-     * Description: 查询用户仓库总记录数
-     *
-     * @param warehouseUser WarehouseUser
-     * @return long
-     */
-    public long count(WarehouseUser warehouseUser) {
-        return this.warehouseUserMapper.pageWarehouseUserCounts(warehouseUser);
-    }
-
-    /**
      * Description: 查询用户仓库分页列表
      *
      * @param warehouseUser WarehouseUser
-     * @return PagerResultObject<WarehouseUser>
+     * @return Pair
      */
-    public PagerResultObject<WarehouseUser> pageList(WarehouseUser warehouseUser) {
-        long total = 0;
-        if (warehouseUser.getRows() != null && warehouseUser.getRows() > 0) {
-            total = this.count(warehouseUser);
-        }
-        return PagerResultObject.of(warehouseUser, total,
-                this.warehouseUserMapper.pageWarehouseUsers(warehouseUser));
+    public Pages<WarehouseUser> warehouseUserPageList(WarehouseUser warehouseUser) {
+        return Pages.of(
+                this.warehouseUserMapper.pageWarehouseUserCounts(warehouseUser),
+                this.warehouseUserList(warehouseUser)
+        );
+    }
+
+    /**
+     * 查询用户仓库
+     * @param warehouseUser
+     * @return List
+     */
+    public List<WarehouseUser> warehouseUserList(WarehouseUser warehouseUser){
+        return this.warehouseUserMapper.pageWarehouseUsers(warehouseUser);
     }
 }
 

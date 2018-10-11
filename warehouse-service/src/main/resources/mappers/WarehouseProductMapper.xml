@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseGoodsMapper">
+<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseProductMapper">
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-               type="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+               type="com.lhiot.uc.warehouse.entity.WarehouseProduct">
         <id column="id" property="id"/>
         <result column="warehouse_id" property="warehouseId"/>
-        <result column="goods_id" property="goodsId"/>
-        <result column="goods_count" property="goodsCount"/>
+        <result column="product_id" property="productId"/>
+        <result column="product_count" property="productCount"/>
         <result column="price" property="price"/>
         <result column="if_split" property="ifSplit"/>
         <result column="barcode" property="barcode"/>
@@ -24,8 +24,8 @@
         <trim suffixOverrides=",">
             id,
             warehouse_id,
-            goods_id,
-            goods_count,
+            product_id,
+            product_count,
             price,
             if_split,
             barcode,
@@ -39,11 +39,11 @@
 
     <!--新增仓库商品-->
     <insert id="batchSave" parameterType="java.util.List">
-        insert into warehouse_goods
+        insert into warehouse_product
         (
         warehouse_id,
-        goods_id,
-        goods_count,
+        product_id,
+        product_count,
         price,
         if_split,
         barcode,
@@ -57,8 +57,8 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.warehouseId},
-            #{item.goodsId},
-            #{item.goodsCount},
+            #{item.productId},
+            #{item.productCount},
             #{item.price},
             #{item.ifSplit},
             #{item.barcode},
@@ -73,16 +73,16 @@
 
 
     <!--根据ID添加数量以及修改价格-->
-    <update id="updateCountAndPrice" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
-        UPDATE warehouse_goods
-        SET goods_count = #{goodsCount},
+    <update id="updateCountAndPrice" parameterType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
+        UPDATE warehouse_product
+        SET product_count = #{productCount},
         price = #{price}
         WHERE id = #{id}
 
     </update>
     <!--根据id修改仓库商品-->
-    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
-        update warehouse_goods
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
+        update warehouse_product
         <set>
             <if test="id != null ">
                 id = #{id},
@@ -90,11 +90,11 @@
             <if test="warehouseId != null ">
                 warehouse_id = #{warehouseId},
             </if>
-            <if test="goodsId != null ">
-                goods_id = #{goodsId},
+            <if test="productId != null ">
+                product_id = #{productId},
             </if>
-            <if test="goodsCount != null ">
-                goods_count = #{goodsCount},
+            <if test="productCount != null ">
+                product_count = #{productCount},
             </if>
             <if test="price != null ">
                 price = #{price},
@@ -125,16 +125,16 @@
     </update>
 
 
-    <update id="updateGoodsCount" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
-        update warehouse_goods
+    <update id="updateProductCount" parameterType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
+        update warehouse_product
         set
-        goods_count = goods_count - #{goodsCount}
+        product_count = product_count - #{productCount}
         where id = #{id}
     </update>
 
     <!--根据ids删除仓库商品-->
     <delete id="deleteByIds" parameterType="java.util.List">
-        delete from warehouse_goods where id in
+        delete from warehouse_product where id in
         <foreach collection="list" item="item" open="("
                  separator="," close=")">
             #{item}
@@ -146,7 +146,7 @@
     <select id="selectById" resultMap="BaseResultMap"
             parameterType="long">select
         <include refid="Base_Column_List"/>
-        from warehouse_goods where id = #{id}
+        from warehouse_product where id = #{id}
     </select>
 
 
@@ -159,11 +159,11 @@
             <if test="warehouseId != null ">
                 and warehouse_id = #{warehouseId}
             </if>
-            <if test="goodsId != null ">
-                and goods_id = #{goodsId}
+            <if test="productId != null ">
+                and product_id = #{productId}
             </if>
-            <if test="goodsCount != null ">
-                and goods_count = #{goodsCount}
+            <if test="productCount != null ">
+                and product_count = #{productCount}
             </if>
             <if test="price != null ">
                 and price = #{price}
@@ -194,30 +194,31 @@
 
 
     <!--查询仓库商品列表-->
-    <select id="pageWarehouseGoodss" resultMap="BaseResultMap"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+    <select id="pageWarehouseProducts" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
         select
         <include refid="Base_Column_List"/>
-        from warehouse_goods
+        from warehouse_product
         <include refid="Base_Where_Condition"/>
+        order by buy_at asc
         <include refid="common.pager"/>
     </select>
 
     <!--查询仓库商品总记录-->
-    <select id="pageWarehouseGoodsCounts" resultType="long"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+    <select id="pageWarehouseProductCounts" resultType="int"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
         select count(1)
-        from warehouse_goods
+        from warehouse_product
         <include refid="Base_Where_Condition"/>
     </select>
 
 
     <!--根据仓库ID查询当天的水果列表-->
-    <select id="findWarehouseGoodsByWareHouseIdAndToday" parameterType="long"
-            resultType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoods">
+    <select id="findWarehouseProductByWareHouseIdAndToday" parameterType="long"
+            resultType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM warehouse_goods
+        FROM warehouse_product
         WHERE DATE_FORMAT(buy_at,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND warehouse_id = #{0};
     </select>
 

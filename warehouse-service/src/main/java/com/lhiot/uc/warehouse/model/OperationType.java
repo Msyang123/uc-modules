@@ -1,4 +1,4 @@
-package com.lhiot.uc.warehouse.domain.enums;
+package com.lhiot.uc.warehouse.model;
 
 import lombok.Getter;
 

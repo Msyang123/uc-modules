@@ -1,7 +1,6 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
-import com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue;
+import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.service.WarehouseOverdueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "仓库商品过期降价值处理接口")
 @Slf4j
 @RestController
-@RequestMapping("/warehouse-overdue")
+@RequestMapping("/warehouse/product-overdue")
+//TODO 取消定时过期，打开仓库时触发
 public class WarehouseOverdueApi {
 
     private final WarehouseOverdueService warehouseOverdueService;
@@ -30,7 +30,7 @@ public class WarehouseOverdueApi {
         this.warehouseOverdueService = warehouseOverdueService;
     }
 
-    @PostMapping("/add")
+    @PostMapping({"", "/"})
     @ApiOperation(value = "添加仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要添加的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
     public ResponseEntity<Integer> add(@RequestBody WarehouseOverdue warehouseOverdue) {
@@ -39,7 +39,7 @@ public class WarehouseOverdueApi {
         return ResponseEntity.ok(warehouseOverdueService.add(warehouseOverdue));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @ApiOperation(value = "根据id更新仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要更新的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
     public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody WarehouseOverdue warehouseOverdue) {
@@ -56,22 +56,6 @@ public class WarehouseOverdueApi {
         log.debug("根据ids删除仓库商品过期降价值处理\t param:{}", ids);
 
         return ResponseEntity.ok(warehouseOverdueService.deleteByIds(ids));
-    }
-
-    @ApiOperation(value = "根据id查询仓库商品过期降价值处理", notes = "根据id查询仓库商品过期降价值处理")
-    @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long")
-    @GetMapping("/{id}")
-    public ResponseEntity<WarehouseOverdue> findWarehouseOverdue(@PathVariable("id") Long id) {
-
-        return ResponseEntity.ok(warehouseOverdueService.selectById(id));
-    }
-
-    @GetMapping("/page/select")
-    @ApiOperation(value = "查询仓库商品过期降价值处理分页列表")
-    public ResponseEntity<PagerResultObject<WarehouseOverdue>> pageSelect(WarehouseOverdue warehouseOverdue) {
-        log.debug("查询仓库商品过期降价值处理分页列表\t param:{}", warehouseOverdue);
-
-        return ResponseEntity.ok(warehouseOverdueService.pageList(warehouseOverdue));
     }
 
 }

@@ -1,18 +1,19 @@
-package com.lhiot.uc.warehouse.domain.entity;
+package com.lhiot.uc.warehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lhiot.uc.warehouse.domain.common.PagerRequestObject;
-import com.lhiot.uc.warehouse.domain.enums.IfSplitType;
+import com.lhiot.uc.warehouse.model.IfSplitType;
+import com.lhiot.uc.warehouse.model.OperationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 /**
- * Description:仓库商品提取实体类
+ * Description:仓库商品实体类
  *
  * @author yijun
  * @date 2018/09/07
@@ -21,8 +22,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class WarehouseGoodsExtract extends PagerRequestObject {
+public class WarehouseProduct{
 
     /**
      * 仓库商品ID
@@ -41,16 +41,16 @@ public class WarehouseGoodsExtract extends PagerRequestObject {
     /**
      * 商品id
      */
-    @JsonProperty("goodsId")
+    @JsonProperty("productId")
     @ApiModelProperty(value = "商品id", dataType = "Long")
-    private Long goodsId;
+    private Long productId;
 
     /**
      * 商品数量/重量
      */
-    @JsonProperty("goodsCount")
-    @ApiModelProperty(value = "商品数量/重量", dataType = "Double")
-    private Double goodsCount;
+    @JsonProperty("productCount")
+    @ApiModelProperty(value = "商品数量/重量", dataType = "BigDecimal")
+    private BigDecimal productCount;
 
     /**
      * 是否允许拆分
@@ -109,21 +109,8 @@ public class WarehouseGoodsExtract extends PagerRequestObject {
     @ApiModelProperty(value = "购买时间", dataType = "Date")
     private java.util.Date buyAt;
 
-
     /**
-     * 创建时间
+     * 扣减时操作类型
      */
-    @JsonProperty("createAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "创建时间", dataType = "Date")
-    private java.util.Date createAt;
-
-
-    /**
-     * 提取的订单编号
-     */
-    @JsonProperty("orderCode")
-    @ApiModelProperty(value = "提取的订单编号", dataType = "String")
-    private String orderCode;
-
+    private OperationType operationType;
 }

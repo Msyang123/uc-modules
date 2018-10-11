@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseGoodsExtractMapper">
+<mapper namespace="com.lhiot.uc.warehouse.mapper.WarehouseProductExtractMapper">
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-               type="com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract">
+               type="com.lhiot.uc.warehouse.entity.WarehouseProductExtract">
         <id column="id" property="id"/>
         <result column="warehouse_id" property="warehouseId"/>
-        <result column="goods_id" property="goodsId"/>
-        <result column="goods_count" property="goodsCount"/>
+        <result column="product_id" property="productId"/>
+        <result column="product_count" property="productCount"/>
         <result column="price" property="price"/>
         <result column="if_split" property="ifSplit"/>
         <result column="barcode" property="barcode"/>
@@ -26,8 +26,8 @@
         <trim suffixOverrides=",">
             id,
             warehouse_id,
-            goods_id,
-            goods_count,
+            product_id,
+            product_count,
             price,
             if_split,
             barcode,
@@ -45,11 +45,11 @@
 
     <!-- 批量插入仓库提取表中记录-->
     <insert id="batchSaveExtract" parameterType="list">
-        insert into warehouse_goods_extract
+        insert into warehouse_product_extract
         (
         warehouse_id,
-        goods_id,
-        goods_count,
+        product_id,
+        product_count,
         if_split,
         price,
         barcode,
@@ -65,8 +65,8 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.warehouseId},
-            #{item.goodsId},
-            #{item.goodsCount},
+            #{item.productId},
+            #{item.productCount},
             #{item.ifSplit},
             #{item.price},
             #{item.barcode},
@@ -82,8 +82,8 @@
     </insert>
 
     <!--根据id修改仓库商品提取-->
-    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract">
-        update warehouse_goods_extract
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.entity.WarehouseProductExtract">
+        update warehouse_product_extract
         <set>
             <if test="id != null ">
                 id = #{id},
@@ -91,11 +91,11 @@
             <if test="warehouseId != null ">
                 warehouse_id = #{warehouseId},
             </if>
-            <if test="goodsId != null ">
-                goods_id = #{goodsId},
+            <if test="productId != null ">
+                product_id = #{productId},
             </if>
-            <if test="goodsCount != null ">
-                goods_count = #{goodsCount},
+            <if test="productCount != null ">
+                product_count = #{productCount},
             </if>
             <if test="ifSplit != null ">
                 if_split = #{ifSplit},
@@ -133,7 +133,7 @@
 
     <!--根据ids删除仓库商品提取-->
     <delete id="deleteByIds" parameterType="java.util.List">
-        delete from warehouse_goods_extract where id in
+        delete from warehouse_product_extract where id in
         <foreach collection="list" item="item" open="("
                  separator="," close=")">
             #{item}
@@ -145,7 +145,7 @@
     <select id="selectById" resultMap="BaseResultMap"
             parameterType="long">select
         <include refid="Base_Column_List"/>
-        from warehouse_goods_extract where id = #{id}
+        from warehouse_product_extract where id = #{id}
     </select>
 
 
@@ -158,11 +158,11 @@
             <if test="warehouseId != null ">
                 and warehouse_id = #{warehouseId}
             </if>
-            <if test="goodsId != null ">
-                and goods_id = #{goodsId}
+            <if test="productId != null ">
+                and product_id = #{productId}
             </if>
-            <if test="goodsCount != null ">
-                and goods_count = #{goodsCount}
+            <if test="productCount != null ">
+                and product_count = #{productCount}
             </if>
             <if test="ifSplit != null ">
                 and if_split = #{ifSplit}
@@ -199,20 +199,20 @@
 
 
     <!--查询仓库商品提取列表-->
-    <select id="pageWarehouseGoodsExtracts" resultMap="BaseResultMap"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract">
+    <select id="pageWarehouseProductExtracts" resultMap="BaseResultMap"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseProductExtract">
         select
         <include refid="Base_Column_List"/>
-        from warehouse_goods_extract
+        from warehouse_product_extract
         <include refid="Base_Where_Condition"/>
         <include refid="common.pager"/>
     </select>
 
     <!--查询仓库商品提取总记录-->
-    <select id="pageWarehouseGoodsExtractCounts" resultType="long"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseGoodsExtract">
+    <select id="pageWarehouseProductExtractCounts" resultType="int"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseProductExtract">
         select count(1)
-        from warehouse_goods_extract
+        from warehouse_product_extract
         <include refid="Base_Where_Condition"/>
     </select>
 

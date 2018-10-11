@@ -1,11 +1,10 @@
-package com.lhiot.uc.warehouse.domain.entity;
+package com.lhiot.uc.warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lhiot.uc.warehouse.domain.common.PagerRequestObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -19,8 +18,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class WarehouseUser extends PagerRequestObject {
+public class WarehouseUser{
 
     /**
      * 仓库id
@@ -35,5 +33,16 @@ public class WarehouseUser extends PagerRequestObject {
     @JsonProperty("baseUserId")
     @ApiModelProperty(value = "基础用户id", dataType = "Long")
     private Long baseUserId;
+
+    @JsonIgnore
+    @ApiModelProperty(value = "当前页,默认值1")
+    private Long page = 1L;
+
+    /**
+     * 传入-1可不分页
+     */
+    @JsonIgnore
+    @ApiModelProperty(value = "每页显示条数,默认值10")
+    private Long rows = 10L;
 
 }

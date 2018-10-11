@@ -1,7 +1,7 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.lhiot.uc.warehouse.domain.common.PagerResultObject;
-import com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue;
+import com.leon.microx.support.result.Pages;
+import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.mapper.WarehouseOverdueMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,27 +67,13 @@ public class WarehouseOverdueService {
     }
 
     /**
-     * Description: 查询仓库商品过期降价值处理总记录数
-     *
-     * @param warehouseOverdue WarehouseOverdue
-     * @return long
-     */
-    public long count(WarehouseOverdue warehouseOverdue) {
-        return this.warehouseOverdueMapper.pageWarehouseOverdueCounts(warehouseOverdue);
-    }
-
-    /**
      * Description: 查询仓库商品过期降价值处理分页列表
      *
      * @param warehouseOverdue WarehouseOverdue
-     * @return PagerResultObject<WarehouseOverdue>
+     * @return Pages<WarehouseOverdue>
      */
-    public PagerResultObject<WarehouseOverdue> pageList(WarehouseOverdue warehouseOverdue) {
-        long total = 0;
-        if (warehouseOverdue.getRows() != null && warehouseOverdue.getRows() > 0) {
-            total = this.count(warehouseOverdue);
-        }
-        return PagerResultObject.of(warehouseOverdue, total,
+    public Pages<WarehouseOverdue> pageList(WarehouseOverdue warehouseOverdue) {
+        return Pages.of(this.warehouseOverdueMapper.pageWarehouseOverdueCounts(warehouseOverdue),
                 this.warehouseOverdueMapper.pageWarehouseOverdues(warehouseOverdue));
     }
 }

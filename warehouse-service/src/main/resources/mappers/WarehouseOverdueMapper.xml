@@ -4,11 +4,11 @@
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-               type="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+               type="com.lhiot.uc.warehouse.entity.WarehouseOverdue">
         <id column="id" property="id"/>
-        <result column="goods_id" property="goodsId"/>
+        <result column="product_id" property="productId"/>
         <result column="product_name" property="productName"/>
-        <result column="goods_count" property="goodsCount"/>
+        <result column="product_count" property="productCount"/>
         <result column="price" property="price"/>
         <result column="buy_at" property="buyAt"/>
         <result column="warehouse_id" property="warehouseId"/>
@@ -18,9 +18,9 @@
     <sql id="Base_Column_List">
         <trim suffixOverrides=",">
             id,
-            goods_id,
+            product_id,
             product_name,
-            goods_count,
+            product_count,
             price,
             buy_at,
             warehouse_id,
@@ -28,21 +28,21 @@
     </sql>
 
     <!--新增仓库商品过期降价值处理-->
-    <insert id="add" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue" useGeneratedKeys="true"
+    <insert id="add" parameterType="com.lhiot.uc.warehouse.entity.WarehouseOverdue" useGeneratedKeys="true"
             keyProperty="id">
         insert into warehouse_overdue
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">
                 id,
             </if>
-            <if test="goodsId != null ">
-                goods_id,
+            <if test="productId != null ">
+                product_id,
             </if>
             <if test="productName != null ">
                 product_name,
             </if>
-            <if test="goodsCount != null ">
-                goods_count,
+            <if test="productCount != null ">
+                product_count,
             </if>
             <if test="price != null ">
                 price,
@@ -58,14 +58,14 @@
             <if test="id != null ">
                 #{id},
             </if>
-            <if test="goodsId != null ">
-                #{goodsId},
+            <if test="productId != null ">
+                #{productId},
             </if>
             <if test="productName != null ">
                 #{productName},
             </if>
-            <if test="goodsCount != null ">
-                #{goodsCount},
+            <if test="productCount != null ">
+                #{productCount},
             </if>
             <if test="price != null ">
                 #{price},
@@ -80,20 +80,20 @@
     </insert>
 
     <!--根据id修改仓库商品过期降价值处理-->
-    <update id="updateById" parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+    <update id="updateById" parameterType="com.lhiot.uc.warehouse.entity.WarehouseOverdue">
         update warehouse_overdue
         <set>
             <if test="id != null ">
                 id = #{id},
             </if>
-            <if test="goodsId != null ">
-                goods_id = #{goodsId},
+            <if test="productId != null ">
+                product_id = #{productId},
             </if>
             <if test="productName != null ">
                 product_name = #{productName},
             </if>
-            <if test="goodsCount != null ">
-                goods_count = #{goodsCount},
+            <if test="productCount != null ">
+                product_count = #{productCount},
             </if>
             <if test="price != null ">
                 price = #{price},
@@ -132,14 +132,14 @@
             <if test="id != null ">
                 and id = #{id}
             </if>
-            <if test="goodsId != null ">
-                and goods_id = #{goodsId}
+            <if test="productId != null ">
+                and product_id = #{productId}
             </if>
             <if test="productName != null ">
                 and product_name = #{productName}
             </if>
-            <if test="goodsCount != null ">
-                and goods_count = #{goodsCount}
+            <if test="productCount != null ">
+                and product_count = #{productCount}
             </if>
             <if test="price != null ">
                 and price = #{price}
@@ -156,7 +156,7 @@
 
     <!--查询仓库商品过期降价值处理列表-->
     <select id="pageWarehouseOverdues" resultMap="BaseResultMap"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseOverdue">
         select
         <include refid="Base_Column_List"/>
         from warehouse_overdue
@@ -165,8 +165,8 @@
     </select>
 
     <!--查询仓库商品过期降价值处理总记录-->
-    <select id="pageWarehouseOverdueCounts" resultType="long"
-            parameterType="com.lhiot.uc.warehouse.domain.entity.WarehouseOverdue">
+    <select id="pageWarehouseOverdueCounts" resultType="int"
+            parameterType="com.lhiot.uc.warehouse.entity.WarehouseOverdue">
         select count(1)
         from warehouse_overdue
         <include refid="Base_Where_Condition"/>

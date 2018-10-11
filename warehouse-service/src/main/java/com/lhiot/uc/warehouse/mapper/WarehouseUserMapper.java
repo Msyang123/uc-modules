@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.mapper;
 
-import com.lhiot.uc.warehouse.domain.entity.WarehouseUser;
+import com.lhiot.uc.warehouse.entity.WarehouseUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -70,7 +70,7 @@ public interface WarehouseUserMapper {
     * Description: 查询用户仓库总记录数
     *
     * @param warehouseUser WarehouseUser
-    * @return long
+    * @return int
     */
-    long pageWarehouseUserCounts(WarehouseUser warehouseUser);
+    int pageWarehouseUserCounts(WarehouseUser warehouseUser);
 }
