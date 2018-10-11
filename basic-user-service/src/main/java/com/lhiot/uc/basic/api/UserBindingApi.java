@@ -84,7 +84,7 @@ public class UserBindingApi {
 
     @ApiOperation("微信解除绑定")
     @ApiImplicitParam(paramType = "path", name = "id", value = "业务用户ID", dataType = "Long", required = true)
-    @PutMapping("/{id}")
+    @PutMapping("/unbinding/{id}")
     public ResponseEntity removingBindWeChat(@PathVariable("id") Long userId) {
         boolean flag = userBindingService.removingWeChatBinding(userId);
         return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("解绑失败！");

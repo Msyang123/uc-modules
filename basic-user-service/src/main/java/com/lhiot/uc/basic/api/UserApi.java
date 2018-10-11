@@ -39,8 +39,8 @@ public class UserApi {
 
     @ApiOperation(value = "根据用户ID查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParam(paramType = "path", name = "userId", value = "用户ID", dataType = "Long", required = true)
-    @GetMapping("/{userId}")
-    public ResponseEntity findById(@PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable("id") Long userId) {
         UserDetailResult user = userService.findById(userId);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
