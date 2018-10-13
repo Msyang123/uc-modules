@@ -1,6 +1,5 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.leon.microx.support.result.Pages;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Calculator;
 import com.leon.microx.util.Pair;
@@ -32,7 +31,7 @@ import java.util.Objects;
  * Description:仓库商品服务类
  *
  * @author yijun
- * @date 2018/09/07
+ * 2018/09/07
  */
 @Slf4j
 @Service
@@ -63,33 +62,12 @@ public class WarehouseProductService {
     }
 
     /**
-     * Description: 查询仓库商品总记录数
-     *
-     * @param warehouseProduct WarehouseProduct
-     * @return int
-     */
-    public int count(WarehouseProduct warehouseProduct) {
-        return this.warehouseProductMapper.pageWarehouseProductCounts(warehouseProduct);
-    }
-
-    /**
-     * Description: 查询仓库商品分页列表
-     *
-     * @param warehouseProduct WarehouseProduct
-     * @return Pages<WarehouseProduct>
-     */
-    public Pages<WarehouseProduct> pageList(WarehouseProduct warehouseProduct) {
-        return Pages.of(this.count(warehouseProduct),
-                this.warehouseProductMapper.pageWarehouseProducts(warehouseProduct));
-    }
-
-    /**
      * 添加到仓库
      * 只有当天的水果合并在一起
      *
      * @param warehouseProductList List<WarehouseProduct>
-     * @param baseUserId         Long
-     * @param remark             String
+     * @param baseUserId           Long
+     * @param remark               String
      */
     public boolean addWarehouseProduct(List<WarehouseProduct> warehouseProductList, Long baseUserId, String remark) {
 
@@ -175,7 +153,7 @@ public class WarehouseProductService {
      * @return 总价格、要提取的仓库商品
      */
     public Pair<Integer, List<WarehouseProduct>> waitExtractWarehouseProduct(Long baseUserId,
-                                                                         List<WarehouseProductParam> warehouseProductParamList) {
+                                                                             List<WarehouseProductParam> warehouseProductParamList) {
         WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
         if (Objects.isNull(warehouseUser)) {
             log.error("未找到用户仓库{}", baseUserId);
@@ -269,7 +247,7 @@ public class WarehouseProductService {
      *
      * @param warehouseProduct 需要删除或者修改的仓库商品记录
      */
-    public void batchDeleteOrUpdateWarehouseProduct(List<WarehouseProduct> warehouseProduct, String orderCode, String remark,boolean direct) {
+    public void batchDeleteOrUpdateWarehouseProduct(List<WarehouseProduct> warehouseProduct, String orderCode, String remark, boolean direct) {
 
         //仓库提取中间表数据列表
         final List<WarehouseProductExtract> warehouseProductExtractList = new ArrayList<>();
@@ -327,7 +305,7 @@ public class WarehouseProductService {
                     warehouseProductMapper.updateProductCount(item);
                 });
         //如果是非直接删除，将出库信息添加到仓库商品中间表，否则直接移除仓库中的商品
-        if(!direct) {
+        if (!direct) {
             warehouseProductExtractMapper.batchSaveExtract(warehouseProductExtractList);
         }
         //写出库记录

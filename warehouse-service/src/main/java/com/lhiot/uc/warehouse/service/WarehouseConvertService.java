@@ -3,18 +3,18 @@ package com.lhiot.uc.warehouse.service;
 import com.leon.microx.support.result.Pages;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.mapper.WarehouseConvertMapper;
+import com.lhiot.uc.warehouse.model.WarehouseConvertParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Description:仓库出入库记录明细服务类
  *
  * @author yijun
- * @date 2018/09/07
+ * 2018/09/07
  */
 @Service
 @Transactional
@@ -60,11 +60,11 @@ public class WarehouseConvertService {
     /**
      * Description: 查询仓库出入库记录明细分页列表
      *
-     * @param warehouseConvert WarehouseConvert
+     * @param param WarehouseConvertParam
      * @return Pages<WarehouseConvert>
      */
-    public Pages<WarehouseConvert> pageList(WarehouseConvert warehouseConvert) {
-        return Pages.of(this.warehouseConvertMapper.pageWarehouseConvertCounts(warehouseConvert),this.warehouseConvertMapper.pageWarehouseConverts(warehouseConvert));
+    public Pages<WarehouseConvert> pageList(WarehouseConvertParam param) {
+        return Pages.of(this.warehouseConvertMapper.warehouseConvertCountById(param.getWarehouseId()), this.warehouseConvertMapper.pageWarehouseConverts(param));
     }
 }
 

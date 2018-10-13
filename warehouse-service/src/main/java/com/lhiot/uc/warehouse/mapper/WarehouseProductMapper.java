@@ -1,10 +1,12 @@
 package com.lhiot.uc.warehouse.mapper;
 
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
+import com.lhiot.uc.warehouse.model.CountWarehouseProductResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:仓库商品Mapper类
@@ -85,4 +87,12 @@ public interface WarehouseProductMapper {
      * @return List<WarehouseProduct>
      */
     List<WarehouseProduct> findWarehouseProductByWareHouseIdAndToday(Long warehouseId);
+
+    List<CountWarehouseProductResult> sumProductByWarehouseId(Long warehouseId);
+
+    /**
+     * @param map warehouseId 仓库Id  productId 商品I
+     * @return
+     */
+    List<WarehouseProduct> findProductByIdInWarehouse(Map<String, Object> map);
 }

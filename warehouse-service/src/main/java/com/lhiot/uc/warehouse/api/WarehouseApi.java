@@ -1,8 +1,10 @@
 package com.lhiot.uc.warehouse.api;
 
 import com.leon.microx.support.result.Pages;
+import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
+import com.lhiot.uc.warehouse.model.WarehouseConvertParam;
 import com.lhiot.uc.warehouse.service.WarehouseConvertService;
 import com.lhiot.uc.warehouse.service.WarehouseUserService;
 import io.swagger.annotations.Api;
@@ -85,13 +87,14 @@ public class WarehouseApi {
         return ResponseEntity.ok(warehouseUserService.warehouseUserList(warehouseUser));
     }
 
-    @GetMapping("/in-out-list")
-    @ApiOperation(value = "查询仓库出入库记录明细分页列表")
-    //FIXME 分页处理
-    public ResponseEntity<Pages<WarehouseConvert>> pageSelect(WarehouseConvert warehouseConvert) {
-        log.debug("查询仓库出入库记录明细分页列表\t param:{}", warehouseConvert);
-
-        return ResponseEntity.ok(warehouseConvertService.pageList(warehouseConvert));
+    @PostMapping("/{warehouseId}/in-out-list")
+    @ApiOperation(value = "根据仓库Id查询仓库出入库记录明细分页列表")
+    @ApiHideBodyProperty({"startRow", "warehouseId"})
+    public ResponseEntity<Pages<WarehouseConvert>> pageSelect(@PathVariable("warehouseId") Long warehouseId, @RequestBody WarehouseConvertParam param) {
+        log.debug("查询仓库出入库记录明细分页列表\t param:{}", param);
+        param.setWarehouseId(warehouseId);
+        param.setStartRow((param.getPage() - 1) * param.getRows());
+        return ResponseEntity.ok(warehouseConvertService.pageList(param));
     }
 
 }

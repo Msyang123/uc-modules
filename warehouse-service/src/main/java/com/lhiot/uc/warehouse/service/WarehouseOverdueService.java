@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Description:仓库商品过期降价值处理服务类
  *
  * @author yijun
- * @date 2018/09/07
+ * 2018/09/07
  */
 @Service
 @Transactional

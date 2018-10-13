@@ -1,12 +1,15 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.leon.microx.support.result.Pages;
+import com.leon.microx.support.result.Multiple;
 import com.leon.microx.support.swagger.ApiParamType;
 import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
+import com.lhiot.uc.warehouse.mapper.WarehouseProductMapper;
+import com.lhiot.uc.warehouse.model.CountWarehouseProductResult;
 import com.lhiot.uc.warehouse.model.WarehouseProductParam;
 import com.lhiot.uc.warehouse.service.WarehouseProductExtractService;
 import com.lhiot.uc.warehouse.service.WarehouseProductService;
@@ -40,12 +43,14 @@ public class WarehouseProductApi {
     private final WarehouseUserService warehouseUserService;
     private final WarehouseProductService warehouseProductService;
     private final WarehouseProductExtractService warehouseProductExtractService;
+    private WarehouseProductMapper warehouseProductMapper;
 
     @Autowired
-    public WarehouseProductApi(WarehouseUserService warehouseUserService, WarehouseProductService warehouseProductService, WarehouseProductExtractService warehouseProductExtractService) {
+    public WarehouseProductApi(WarehouseUserService warehouseUserService, WarehouseProductService warehouseProductService, WarehouseProductExtractService warehouseProductExtractService, WarehouseProductMapper warehouseProductMapper) {
         this.warehouseUserService = warehouseUserService;
         this.warehouseProductService = warehouseProductService;
         this.warehouseProductExtractService = warehouseProductExtractService;
+        this.warehouseProductMapper = warehouseProductMapper;
     }
 
 
@@ -57,23 +62,7 @@ public class WarehouseProductApi {
         return ResponseEntity.ok(warehouseProductService.selectById(id));
     }
 
-    @PostMapping("/warehouse/products/pages")
-    @ApiOperation(value = "查询仓库商品分页列表(后台管理系统)")
-    //FIXME 需要处理分页
-    public ResponseEntity<Pages<WarehouseProduct>> pageSelect(@RequestBody WarehouseProduct warehouseProduct) {
-        log.debug("查询仓库商品分页列表\t param:{}", warehouseProduct);
-        if (Objects.isNull(warehouseProduct)) {
-            ResponseEntity.badRequest().body("传递参数错误");
-        }
-        WarehouseUser warehouseUser = warehouseUserService.selectById(warehouseProduct.getWarehouseId());
-
-        if (Objects.isNull(warehouseUser)) {
-            ResponseEntity.badRequest().body("未找到仓库错误");
-        }
-        return ResponseEntity.ok(warehouseProductService.pageList(warehouseProduct));
-    }
-
-    @ApiOperation(value = "水果仓库商品分类查询", notes = "水果仓库商品分类查询")
+    @ApiOperation(value = "根据仓库Id查询仓库商品列表", response = CountWarehouseProductResult.class, responseContainer = "Set")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "warehouseId", value = "仓库id", required = true, dataType = "long")
     @GetMapping("/warehouse/{warehouseId}/products")
     public ResponseEntity getWhProduct(@PathVariable("warehouseId") Long warehouseId) {
@@ -81,11 +70,24 @@ public class WarehouseProductApi {
         if (Objects.isNull(warehouseId)) {
             ResponseEntity.badRequest().body("传递参数错误");
         }
-
         WarehouseProduct warehouseProduct = new WarehouseProduct();
         warehouseProduct.setWarehouseId(warehouseId);
+        List<CountWarehouseProductResult> resultList = warehouseProductMapper.sumProductByWarehouseId(warehouseId);
+        return ResponseEntity.ok(Multiple.of(resultList));
+    }
 
-        return ResponseEntity.ok(warehouseProductService.pageList(warehouseProduct));
+    @ApiOperation(value = "根据仓库ID和商品Id查询商品", response = CountWarehouseProductResult.class, responseContainer = "Set")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "warehouseId", value = "仓库Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "productId", value = "商品Id", dataType = "Long", required = true)
+    })
+    @GetMapping("/warehouse/{warehouseId}/products/{productId}")
+    public ResponseEntity findProductByIdInWarehouse(@PathVariable("warehouseId") Long warehouseId, @PathVariable("productId") Long productId) {
+        List<WarehouseProduct> productList = warehouseProductMapper.findProductByIdInWarehouse(Maps.of("warehouseId", warehouseId, "productId", productId));
+        if (CollectionUtils.isEmpty(productList)) {
+            productList = new ArrayList<>();
+        }
+        return ResponseEntity.ok(Multiple.of(productList));
     }
 
 

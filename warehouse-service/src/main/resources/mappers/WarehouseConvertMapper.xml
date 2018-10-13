@@ -152,35 +152,14 @@
             <if test="productId != null ">
                 and product_id = #{productId}
             </if>
-            <if test="productName != null ">
-                and product_name = #{productName}
-            </if>
-            <if test="productCount != null ">
-                and product_count = #{productCount}
-            </if>
-            <if test="ifSplit != null ">
-                and if_split = #{ifSplit}
-            </if>
-            <if test="price != null ">
-                and price = #{price}
-            </if>
             <if test="buyAt != null ">
                 and buy_at = #{buyAt}
-            </if>
-            <if test="convertAt != null ">
-                and convert_at = #{convertAt}
             </if>
             <if test="inOut != null ">
                 and in_out = #{inOut}
             </if>
-            <if test="remark != null ">
-                and remark = #{remark}
-            </if>
             <if test="convertType != null ">
                 and convert_type = #{convertType}
-            </if>
-            <if test="discount != null ">
-                and discount = #{discount}
             </if>
         </where>
     </sql>
@@ -188,20 +167,19 @@
 
     <!--查询仓库出入库记录明细列表-->
     <select id="pageWarehouseConverts" resultMap="BaseResultMap"
-            parameterType="com.lhiot.uc.warehouse.entity.WarehouseConvert">
+            parameterType="com.lhiot.uc.warehouse.model.WarehouseConvertParam">
         select
         <include refid="Base_Column_List"/>
         from warehouse_convert
-        <include refid="Base_Where_Condition"/>
+        where warehouse_id = #{warehouseId}
         <include refid="common.pager"/>
     </select>
 
     <!--查询仓库出入库记录明细总记录-->
-    <select id="pageWarehouseConvertCounts" resultType="int"
-            parameterType="com.lhiot.uc.warehouse.entity.WarehouseConvert">
+    <select id="warehouseConvertCountById" resultType="int" parameterType="Long">
         select count(1)
         from warehouse_convert
-        <include refid="Base_Where_Condition"/>
+        where warehouse_id = #{0}
     </select>
 
 </mapper>
