@@ -1,6 +1,7 @@
 package com.lhiot.uc.warehouse.mapper;
 
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
+import com.lhiot.uc.warehouse.model.WarehouseConvertParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -51,17 +52,17 @@ public interface WarehouseConvertMapper {
     /**
      * Description:查询仓库出入库记录明细列表
      *
-     * @param warehouseConvert WarehouseConvert
+     * @param param WarehouseConvertParam
      * @return  List<WarehouseConvert>
      */
-    List<WarehouseConvert> pageWarehouseConverts(WarehouseConvert warehouseConvert);
+    List<WarehouseConvert> pageWarehouseConverts(WarehouseConvertParam param);
 
 
     /**
      * Description: 查询仓库出入库记录明细总记录数
      *
-     * @param warehouseConvert WarehouseConvert
+     * @param warehouseId Long
      * @return int
      */
-    int pageWarehouseConvertCounts(WarehouseConvert warehouseConvert);
+    int warehouseConvertCountById(Long warehouseId);
 }

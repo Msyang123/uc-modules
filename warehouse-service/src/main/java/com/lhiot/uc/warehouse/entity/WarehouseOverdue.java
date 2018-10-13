@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -21,7 +20,7 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-public class WarehouseOverdue{
+public class WarehouseOverdue {
 
     /**
      * 过期ID

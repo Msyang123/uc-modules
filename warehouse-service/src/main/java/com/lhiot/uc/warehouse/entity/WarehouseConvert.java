@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Description:仓库出入库记录明细实体类
@@ -22,7 +23,7 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-public class WarehouseConvert{
+public class WarehouseConvert {
 
     /**
      * 仓库库存明细ID
@@ -72,7 +73,7 @@ public class WarehouseConvert{
     @JsonProperty("buyAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "购买时间", dataType = "Date")
-    private java.util.Date buyAt;
+    private Date buyAt;
 
 
     /**
@@ -81,7 +82,7 @@ public class WarehouseConvert{
     @JsonProperty("convertAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "出入库时间", dataType = "Date")
-    private java.util.Date convertAt;
+    private Date convertAt;
 
 
     /**

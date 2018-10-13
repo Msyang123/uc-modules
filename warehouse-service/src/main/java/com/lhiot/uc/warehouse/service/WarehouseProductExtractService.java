@@ -14,7 +14,7 @@ import java.util.List;
  * Description:仓库商品提取服务类
  *
  * @author yijun
- * @date 2018/09/07
+ * 2018/09/07
  */
 @Service
 @Transactional
@@ -89,7 +89,7 @@ public class WarehouseProductExtractService {
      * @param warehouseProductExtract WarehouseProductExtract
      * @return List<WarehouseProductExtract>
      */
-    public List<WarehouseProductExtract> list(WarehouseProductExtract warehouseProductExtract){
+    public List<WarehouseProductExtract> list(WarehouseProductExtract warehouseProductExtract) {
         return this.warehouseProductExtractMapper.pageWarehouseProductExtracts(warehouseProductExtract);
     }
 

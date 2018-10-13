@@ -14,7 +14,7 @@ import java.util.List;
  * Description:用户仓库服务类
  *
  * @author yijun
- * @date 2018/09/07
+ * 2018/09/07
  */
 @Service
 @Transactional
@@ -92,10 +92,11 @@ public class WarehouseUserService {
 
     /**
      * 查询用户仓库
-     * @param warehouseUser
+     *
+     * @param warehouseUser 用户仓库信息
      * @return List
      */
-    public List<WarehouseUser> warehouseUserList(WarehouseUser warehouseUser){
+    public List<WarehouseUser> warehouseUserList(WarehouseUser warehouseUser) {
         return this.warehouseUserMapper.pageWarehouseUsers(warehouseUser);
     }
 }
