@@ -1,6 +1,7 @@
 package com.lhiot.uc.warehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.uc.warehouse.model.ConvertType;
 import com.lhiot.uc.warehouse.model.InOutType;
@@ -111,5 +112,16 @@ public class WarehouseConvert{
     @JsonProperty("discount")
     @ApiModelProperty(value = "兑换折扣", dataType = "Integer")
     private Integer discount;
+
+    @JsonIgnore
+    @ApiModelProperty(value = "当前页,默认值1")
+    private Long page = 1L;
+
+    /**
+     * 传入-1可不分页
+     */
+    @JsonIgnore
+    @ApiModelProperty(value = "每页显示条数,默认值10")
+    private Long rows = 10L;
 
 }
