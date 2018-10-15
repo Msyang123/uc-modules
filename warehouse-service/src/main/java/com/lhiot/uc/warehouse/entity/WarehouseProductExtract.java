@@ -1,6 +1,7 @@
 package com.lhiot.uc.warehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.uc.warehouse.model.IfSplitType;
 import io.swagger.annotations.ApiModel;
@@ -122,5 +123,16 @@ public class WarehouseProductExtract {
     @JsonProperty("orderCode")
     @ApiModelProperty(value = "提取的订单编号", dataType = "String")
     private String orderCode;
+
+    @JsonIgnore
+    @ApiModelProperty(value = "当前页,默认值1")
+    private Long page = 1L;
+
+    /**
+     * 传入-1可不分页
+     */
+    @JsonIgnore
+    @ApiModelProperty(value = "每页显示条数,默认值10")
+    private Long rows = 10L;
 
 }
