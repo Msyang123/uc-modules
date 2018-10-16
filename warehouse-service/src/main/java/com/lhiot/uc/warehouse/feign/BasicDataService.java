@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.feign;
 
-import com.lhiot.uc.warehouse.conversion.CategoryItem;
+import com.lhiot.uc.warehouse.aspect.CategoryItem;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

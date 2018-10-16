@@ -5,7 +5,7 @@ import com.leon.microx.support.swagger.ApiParamType;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
-import com.lhiot.uc.warehouse.conversion.WarehouseProductConvert;
+import com.lhiot.uc.warehouse.aspect.WarehouseProductConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
