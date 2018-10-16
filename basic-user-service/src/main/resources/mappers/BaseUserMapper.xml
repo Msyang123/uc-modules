@@ -35,4 +35,9 @@
 		SET a.balance = a.balance + #{moeny}
 		WHERE b.id = #{id}
 	</update>
+
+	<update id="updateBalanceByIdForAdd" parameterType="map">
+		update base_user set balance = balance + #{money}
+		where id = #{id}
+	</update>
 </mapper>

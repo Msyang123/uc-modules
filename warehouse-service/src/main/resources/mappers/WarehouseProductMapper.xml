@@ -215,5 +215,12 @@
         FROM warehouse_product
         WHERE DATE_FORMAT(buy_at,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND warehouse_id = #{0};
     </select>
+    
+    <select id="findOverdueProduct" parameterType="map" resultType="com.lhiot.uc.warehouse.entity.WarehouseProduct">
+        select id,warehouse_id,product_id,product_count,price,product_name,buy_at
+        from warehouse_product
+        where now() &gt; DATE_ADD(buy_at,interval #{freshDay} day)
+        AND warehouse_id = #{warehouseId} and product_count > 0
+    </select>
 
 </mapper>

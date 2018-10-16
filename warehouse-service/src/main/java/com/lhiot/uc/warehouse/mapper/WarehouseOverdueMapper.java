@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:仓库商品过期降价值处理Mapper类
@@ -64,4 +65,13 @@ public interface WarehouseOverdueMapper {
      * @return int
      */
     int pageWarehouseOverdueCounts(WarehouseOverdue warehouseOverdue);
+
+    void batchInsert(List<WarehouseOverdue> list);
+
+    /**
+     * 根据过期保存时间以及仓库Id查询系统兑换商品列表
+     * @param map day系统保存总天数 warehouseId 仓库Id
+     * @return List<WarehouseOverdue>
+     */
+    List<WarehouseOverdue> findConvertProduct(Map<String,Object> map);
 }

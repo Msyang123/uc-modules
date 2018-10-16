@@ -1,5 +1,6 @@
 package com.lhiot.uc.warehouse.mapper;
 
+import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.model.CountWarehouseProductResult;
 import org.apache.ibatis.annotations.Mapper;
@@ -95,4 +96,11 @@ public interface WarehouseProductMapper {
      * @return
      */
     List<WarehouseProduct> findProductByIdInWarehouse(Map<String, Object> map);
+
+    /**
+     * 查询用户过期商品
+     * @param map freshDay 保鲜天数 warehouseId 仓库Id
+     * @return List<WarehouseOverdue>
+     */
+    List<WarehouseProduct> findOverdueProduct(Map<String,Object> map);
 }
