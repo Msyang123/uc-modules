@@ -82,4 +82,22 @@ public class BalancePaymentApi {
         }
         return ResponseEntity.ok(balance);
     }
+
+    @ApiOperation("根据基础用户Id添加鲜果币(用户仓库转水果专用)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "id",value = "基础用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "path", name = "money", value = "添加鲜果币金额", dataType = "Long", required = true)
+    })
+    @PutMapping("/users/{id}/balance/{money}")
+    public ResponseEntity balanceAdd(@PathVariable("id") Long baseUserId,@PathVariable("money") Long money){
+        baseUserMapper.updateBalanceByIdForAdd(Maps.of("id",baseUserId,"money",money));
+        BalanceLog balanceLog = new BalanceLog();
+        balanceLog.setBaseUserId(baseUserId);
+        balanceLog.setMoney(money);
+        balanceLog.setOperation(OperationStatus.ADD);
+        balanceLog.setSourceType("仓库转换鲜果币");
+        balanceLogMapper.insert(balanceLog);
+        return ResponseEntity.ok().build();
+    }
+
 }

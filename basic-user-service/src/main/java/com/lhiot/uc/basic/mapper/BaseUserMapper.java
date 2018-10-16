@@ -29,4 +29,10 @@ public interface BaseUserMapper {
     Long findCurrencyByApplyUserId(Long userId);
 
     BaseUserResult findById(Long id);
+
+    /**
+     * 根据基础用户Id添加鲜果币
+     * @param map id 基础用户Id money 添加金额
+     */
+    void updateBalanceByIdForAdd(Map<String,Object> map);
 }

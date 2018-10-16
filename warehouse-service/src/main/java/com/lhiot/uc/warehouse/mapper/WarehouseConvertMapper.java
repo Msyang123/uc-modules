@@ -20,7 +20,7 @@ public interface WarehouseConvertMapper {
     /**
      * Description:批量新增仓库出入库记录明细
      *
-     * @param warehouseConvertList List<WarehouseConvert>
+     * @param warehouseConvertList List<WarehouseProductConvert>
      * @return int
      */
     int saveWarehouseConvertBatch(List<WarehouseConvert> warehouseConvertList);
@@ -28,7 +28,7 @@ public interface WarehouseConvertMapper {
     /**
      * Description:根据id修改仓库出入库记录明细
      *
-     * @param warehouseConvert WarehouseConvert
+     * @param warehouseConvert WarehouseProductConvert
      * @return int
      */
     int updateById(WarehouseConvert warehouseConvert);
@@ -45,7 +45,7 @@ public interface WarehouseConvertMapper {
      * Description:根据id查找仓库出入库记录明细
      *
      * @param id Long
-     * @return WarehouseConvert
+     * @return WarehouseProductConvert
      */
     WarehouseConvert selectById(Long id);
 
@@ -53,7 +53,7 @@ public interface WarehouseConvertMapper {
      * Description:查询仓库出入库记录明细列表
      *
      * @param param WarehouseConvertParam
-     * @return  List<WarehouseConvert>
+     * @return  List<WarehouseProductConvert>
      */
     List<WarehouseConvert> pageWarehouseConverts(WarehouseConvertParam param);
 

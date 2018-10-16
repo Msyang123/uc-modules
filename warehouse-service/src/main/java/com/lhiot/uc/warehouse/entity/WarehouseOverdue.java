@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Description:仓库商品过期降价值处理实体类
@@ -54,7 +55,7 @@ public class WarehouseOverdue {
      * 商品价格
      */
     @JsonProperty("price")
-    @ApiModelProperty(value = "商品价格", dataType = "Integer")
+    @ApiModelProperty(value = "商品价值", dataType = "Integer")
     private Integer price;
 
     /**
@@ -63,7 +64,7 @@ public class WarehouseOverdue {
     @JsonProperty("buyAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "购买时间", dataType = "Date")
-    private java.util.Date buyAt;
+    private Date buyAt;
 
 
     /**

@@ -64,7 +64,7 @@ public class WarehouseProduct {
      * 商品价格
      */
     @JsonProperty("price")
-    @ApiModelProperty(value = "商品价格", dataType = "Integer")
+    @ApiModelProperty(value = "商品价值（整个productCount数量商品的价值）", dataType = "Integer")
     private Integer price;
 
     /**

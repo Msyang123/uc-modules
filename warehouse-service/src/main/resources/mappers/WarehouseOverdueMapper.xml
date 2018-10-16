@@ -172,4 +172,19 @@
         <include refid="Base_Where_Condition"/>
     </select>
 
+    <insert id="batchInsert" parameterType="list" >
+        insert into warehouse_overdue (product_id,product_name,product_count,price,buy_at,warehouse_id)
+        value
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productId},#{item.productName},#{item.productCount},#{item.price},#{item.buyAt},#{warehouseId})
+        </foreach>
+    </insert>
+
+    <select id="findConvertProduct" parameterType="map" resultType="com.lhiot.uc.warehouse.entity.WarehouseOverdue">
+        select id,warehouse_id,product_id,product_count,price,product_name,buy_at
+        from warehouse_overdue
+        where now() &gt; DATE_ADD(buy_at,interval #{day} day)
+        AND warehouse_id = #{warehouseId} and product_count > 0
+    </select>
+
 </mapper>

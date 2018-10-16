@@ -5,6 +5,7 @@ import com.leon.microx.support.swagger.ApiParamType;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
+import com.lhiot.uc.warehouse.conversion.WarehouseProductConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
@@ -65,6 +66,7 @@ public class WarehouseProductApi {
     @ApiOperation(value = "根据仓库Id查询仓库商品列表", response = CountWarehouseProductResult.class, responseContainer = "Set")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "warehouseId", value = "仓库id", required = true, dataType = "long")
     @GetMapping("/warehouse/{warehouseId}/products")
+    @WarehouseProductConvert(warehouseId = "#warehouseId")
     public ResponseEntity getWhProduct(@PathVariable("warehouseId") Long warehouseId) {
 
         if (Objects.isNull(warehouseId)) {
