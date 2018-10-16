@@ -1,6 +1,7 @@
 package com.lhiot.uc.warehouse.aspect;
 
 import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Calculator;
 import com.leon.microx.util.Maps;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
@@ -46,9 +47,19 @@ public class WarehouseConvertListener {
         this.basicUserService = basicUserService;
     }
 
-    @Async
     @EventListener
-    public void onApplicationOverdueProduct(WarehouseConvertTaskParam taskParam) {
+    public void onConverting(WarehouseConvertTaskParam event){
+        List<OverdueHandler> handlers = new ArrayList<>(2);
+        handlers.add(this::onApplicationOverdueProduct);
+        handlers.add(this::onApplicationConvertFruitCoin);
+        handlers.parallelStream().forEach(handler -> handler.handle(event));
+    }
+
+    interface OverdueHandler {
+        void handle(WarehouseConvertTaskParam param);
+    }
+
+    private void onApplicationOverdueProduct(WarehouseConvertTaskParam taskParam) {
         log.info("仓库转过期水果");
         List<WarehouseProduct> productList = warehouseProductMapper.findOverdueProduct(Maps.of("freshDay", taskParam.getFreshDay(), "warehouseId", taskParam.getWarehouseId()));
         if (!CollectionUtils.isEmpty(productList)) {
@@ -67,9 +78,7 @@ public class WarehouseConvertListener {
         }
     }
 
-    @Async
-    @EventListener
-    public void onApplicationConvertFruitCoin(WarehouseConvertTaskParam taskParam) {
+    private void onApplicationConvertFruitCoin(WarehouseConvertTaskParam taskParam) {
         log.info("仓库转鲜果币");
         List<WarehouseOverdue> systemConvertList = warehouseOverdueMapper.findConvertProduct(Maps.of("day", taskParam.getSystemConvertDay(), "warehouseId", taskParam.getWarehouseId()));
         if (!CollectionUtils.isEmpty(systemConvertList)) {
@@ -89,8 +98,9 @@ public class WarehouseConvertListener {
                 overdueIds.add(String.valueOf(convertProduct.getId()));
             });
             //添加用户鲜果币
+            Double money = Calculator.div(Calculator.mul(totalPrice[0],taskParam.getSystemDiscount()),100.0,0);
             WarehouseUser warehouseUser =  warehouseUserMapper.selectById(Long.valueOf(taskParam.getWarehouseId()));
-            ResponseEntity response = basicUserService.addBalance(warehouseUser.getBaseUserId(),totalPrice[0]);
+            ResponseEntity response = basicUserService.addBalance(warehouseUser.getBaseUserId(),money.intValue());
             if (response.getStatusCode().isError()){
                 return;
             }

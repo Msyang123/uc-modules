@@ -27,24 +27,20 @@ import java.lang.reflect.Method;
 @Component
 public class WarehouseAutoConvertAspect {
 
-    private final WarehouseProductMapper warehouseProductMapper;
-    private final WarehouseOverdueMapper warehouseOverdueMapper;
     private final BasicDataService basicDataService;
     private ExpressionParser parser = new SpelExpressionParser();
     private LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
     private ApplicationEventPublisher publisher;
 
     @Autowired
-    public WarehouseAutoConvertAspect(WarehouseProductMapper warehouseProductMapper, WarehouseOverdueMapper warehouseOverdueMapper, BasicDataService basicDataService, ApplicationEventPublisher publisher) {
-        this.warehouseProductMapper = warehouseProductMapper;
-        this.warehouseOverdueMapper = warehouseOverdueMapper;
+    public WarehouseAutoConvertAspect(BasicDataService basicDataService, ApplicationEventPublisher publisher) {
         this.basicDataService = basicDataService;
         this.publisher = publisher;
     }
 
     @Around("@annotation(warehouseProductConvert)")
     public Object around(ProceedingJoinPoint joinPoint, WarehouseProductConvert warehouseProductConvert) throws Throwable {
-        if (StringUtils.hasLength(warehouseProductConvert.warehouseId())){
+        if (StringUtils.hasLength(warehouseProductConvert.warehouseId())) {
 //            warehouseId = #param.id + #userId
 //            params[i], args[i] = #param, #userId
 //            getParamValue = 1 + 2 = 3
@@ -64,6 +60,7 @@ public class WarehouseAutoConvertAspect {
             taskParam.setWarehouseId(realId);
             taskParam.setSystemConvertDay(day);
             taskParam.setFreshDay(freshDay);
+            taskParam.setSystemDiscount(60);
             publisher.publishEvent(taskParam);
         }
         return joinPoint.proceed();

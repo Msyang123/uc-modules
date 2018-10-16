@@ -176,7 +176,7 @@
         insert into warehouse_overdue (product_id,product_name,product_count,price,buy_at,warehouse_id)
         value
         <foreach collection="list" item="item" separator=",">
-            (#{item.productId},#{item.productName},#{item.productCount},#{item.price},#{item.buyAt},#{warehouseId})
+            (#{item.productId},#{item.productName},#{item.productCount},#{item.price},#{item.buyAt},#{item.warehouseId})
         </foreach>
     </insert>
 
