@@ -1,7 +1,7 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.leon.microx.support.result.Pages;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
 import com.lhiot.uc.warehouse.model.WarehouseConvertParam;

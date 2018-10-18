@@ -1,8 +1,8 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.uc.basic.entity.BalanceLog;
 import com.lhiot.uc.basic.entity.OperationStatus;
 import com.lhiot.uc.basic.mapper.BalanceLogMapper;

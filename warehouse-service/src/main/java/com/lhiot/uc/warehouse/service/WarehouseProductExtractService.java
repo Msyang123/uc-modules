@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.leon.microx.support.result.Pages;
+import com.leon.microx.web.result.Pages;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;
 import com.lhiot.uc.warehouse.mapper.WarehouseProductExtractMapper;
 import org.springframework.beans.factory.annotation.Autowired;

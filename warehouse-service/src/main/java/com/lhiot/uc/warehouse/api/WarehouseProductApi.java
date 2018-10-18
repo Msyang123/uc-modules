@@ -1,10 +1,10 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.swagger.ApiParamType;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
+import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.uc.warehouse.aspect.WarehouseProductConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;

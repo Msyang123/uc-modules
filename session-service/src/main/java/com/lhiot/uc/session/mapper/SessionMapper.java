@@ -1,6 +1,5 @@
 package com.lhiot.uc.session.mapper;
 
-import com.leon.microx.support.session.Sessions;
 import com.lhiot.uc.session.model.LoginParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

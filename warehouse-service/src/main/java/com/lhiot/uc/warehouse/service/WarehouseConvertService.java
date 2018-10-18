@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.leon.microx.support.result.Pages;
+import com.leon.microx.web.result.Pages;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
 import com.lhiot.uc.warehouse.mapper.WarehouseConvertMapper;
 import com.lhiot.uc.warehouse.model.WarehouseConvertParam;
