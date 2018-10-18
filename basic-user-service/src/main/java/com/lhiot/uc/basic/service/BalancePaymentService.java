@@ -1,16 +1,11 @@
 package com.lhiot.uc.basic.service;
 
-import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.Maps;
-import com.leon.microx.util.Pair;
 import com.leon.microx.util.Retry;
-import com.lhiot.uc.basic.entity.BalanceLog;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.uc.basic.entity.SwitchStatus;
-import com.lhiot.uc.basic.mapper.ApplyUserMapper;
-import com.lhiot.uc.basic.mapper.BalanceLogMapper;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,17 +28,17 @@ public class BalancePaymentService {
     /**
      * 用户扣除鲜果币
      *
-     * @param userId     基础用户Id
+     * @param userId         基础用户Id
      * @param operationMoney 需要扣除的金额
      * @param map
      * @return
      */
-    public Tips subCurrency(Long balance, Long operationMoney, Long userId,String paymentPassword, Map<String,Object> map) {
-        SwitchStatus permissions = SwitchStatus.valueOf((String)map.get("paymentPermissions"));
+    public Tips subCurrency(Long balance, Long operationMoney, Long userId, String paymentPassword, Map<String, Object> map) {
+        SwitchStatus permissions = SwitchStatus.valueOf((String) map.get("paymentPermissions"));
         /**支付权限开启---->可以进行余额支付
          * 支付权限未开启---->支付密码正确可进行余额支付，支付密码错误返回错误信息
          */
-        if (!Objects.equals(SwitchStatus.OPEN,permissions) && !Objects.equals(paymentPassword,map.get("paymentPassword"))){
+        if (!Objects.equals(SwitchStatus.OPEN, permissions) && !Objects.equals(paymentPassword, map.get("paymentPassword"))) {
             return Tips.warn("支付密码错误！");
         }
         Retry<Boolean> retry = Retry.of(() -> {

@@ -1,13 +1,11 @@
 package com.lhiot.uc.basic.service;
 
-import com.leon.microx.support.result.Multiple;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
-import com.lhiot.uc.basic.model.BaseUserResult;
-import com.lhiot.uc.basic.model.SearchParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author zhangfeng created in 2018/9/7 11:23

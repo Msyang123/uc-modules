@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.basic.mapper.UserAddressMapper;
 import com.lhiot.uc.basic.model.UserAddress;
 import io.swagger.annotations.ApiImplicitParam;

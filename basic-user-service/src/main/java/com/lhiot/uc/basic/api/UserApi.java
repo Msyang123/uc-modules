@@ -1,9 +1,8 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
@@ -139,7 +138,7 @@ public class UserApi {
     @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PasswordParam", required = true)
     @PostMapping("/phone-and-password/search")
     public ResponseEntity findByPhoneAndPassword(@RequestBody PhoneAndPasswordSearchParam param) {
-       UserDetailResult userDetailResult = applyUserMapper.findByPhoneAndPassword(param);
+        UserDetailResult userDetailResult = applyUserMapper.findByPhoneAndPassword(param);
         if (Objects.isNull(userDetailResult)) {
             return ResponseEntity.badRequest().body("用户不存在或密码不正确！");
         }
