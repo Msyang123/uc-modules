@@ -1,4 +1,4 @@
-package com.lhiot.uc.warehouse.aspect;
+package com.lhiot.uc.warehouse.model;
 
 import lombok.Data;
 
