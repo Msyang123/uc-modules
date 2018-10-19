@@ -1,5 +1,7 @@
 package com.lhiot.uc.warehouse.aspect;
 
+import com.lhiot.uc.warehouse.model.RuleType;
+
 import java.lang.annotation.*;
 
 /**

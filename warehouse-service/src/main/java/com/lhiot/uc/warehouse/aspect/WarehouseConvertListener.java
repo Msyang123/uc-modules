@@ -14,10 +14,10 @@ import com.lhiot.uc.warehouse.mapper.WarehouseProductMapper;
 import com.lhiot.uc.warehouse.mapper.WarehouseUserMapper;
 import com.lhiot.uc.warehouse.model.ConvertType;
 import com.lhiot.uc.warehouse.model.InOutType;
+import com.lhiot.uc.warehouse.model.WarehouseConvertTaskParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 

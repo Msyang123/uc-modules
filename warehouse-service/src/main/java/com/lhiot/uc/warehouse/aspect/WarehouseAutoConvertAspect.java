@@ -1,8 +1,11 @@
 package com.lhiot.uc.warehouse.aspect;
 
-import com.lhiot.uc.warehouse.feign.BasicDataService;
-import com.lhiot.uc.warehouse.mapper.WarehouseOverdueMapper;
-import com.lhiot.uc.warehouse.mapper.WarehouseProductMapper;
+import com.leon.microx.util.Jackson;
+import com.lhiot.dc.dictionary.DictionaryClient;
+import com.lhiot.dc.dictionary.module.Dictionary;
+import com.lhiot.uc.warehouse.model.RuleType;
+import com.lhiot.uc.warehouse.model.WarehouseConvertRule;
+import com.lhiot.uc.warehouse.model.WarehouseConvertTaskParam;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,11 +17,13 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * @author zhangfeng create in 9:03 2018/10/15
@@ -27,15 +32,15 @@ import java.lang.reflect.Method;
 @Component
 public class WarehouseAutoConvertAspect {
 
-    private final BasicDataService basicDataService;
     private ExpressionParser parser = new SpelExpressionParser();
     private LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
     private ApplicationEventPublisher publisher;
+    private DictionaryClient dictionaryClient;
 
     @Autowired
-    public WarehouseAutoConvertAspect(BasicDataService basicDataService, ApplicationEventPublisher publisher) {
-        this.basicDataService = basicDataService;
+    public WarehouseAutoConvertAspect(ApplicationEventPublisher publisher, DictionaryClient dictionaryClient) {
         this.publisher = publisher;
+        this.dictionaryClient = dictionaryClient;
     }
 
     @Around("@annotation(warehouseProductConvert)")
@@ -46,21 +51,17 @@ public class WarehouseAutoConvertAspect {
 //            getParamValue = 1 + 2 = 3
             String realId = this.parseExpression(joinPoint, warehouseProductConvert.warehouseId());
             RuleType rule = warehouseProductConvert.rule();
-//            ResponseEntity categoryResponse =  basicDataService.findCategoryByCode(rule.getCgCode(),rule.getCode());
-//            if (categoryResponse.getStatusCode().isError()){
-//               return ResponseEntity.badRequest().body("仓库转换错误！");
-//            }
-//            CategoryItem item = (CategoryItem) categoryResponse.getBody();
-//            Map<String,Object> map = Jackson.map(item.getAttache());
-//            int freshDay = (int) map.get("freshDay");
-//            int day = (int) map.get("freshDay")+(int)map.get("convertFirst")+(int)map.get("convertSecond")+(int)map.get("convertThird");
-            int freshDay = 7;
-            int day = 10;
+            Dictionary.Entry entry = dictionaryClient.dictionary(rule.getDictCode()).entry(rule.getCode());
+            if (Objects.isNull(entry)){
+                return ResponseEntity.badRequest().body("仓库转换错误！");
+            }
+            WarehouseConvertRule convertRule = Jackson.object(entry.getAttach(),WarehouseConvertRule.class);
+            int day = convertRule.getFreshDay()+convertRule.getConvertFirst()+convertRule.getConvertSecond()+convertRule.getConvertThird();
             WarehouseConvertTaskParam taskParam = new WarehouseConvertTaskParam();
             taskParam.setWarehouseId(realId);
             taskParam.setSystemConvertDay(day);
-            taskParam.setFreshDay(freshDay);
-            taskParam.setSystemDiscount(60);
+            taskParam.setFreshDay(convertRule.getFreshDay());
+            taskParam.setSystemDiscount(convertRule.getSystemDiscount());
             publisher.publishEvent(taskParam);
         }
         return joinPoint.proceed();

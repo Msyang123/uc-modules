@@ -1,4 +1,4 @@
-package com.lhiot.uc.warehouse.aspect;
+package com.lhiot.uc.warehouse.model;
 
 /**
  * @author zhangfeng create in 11:25 2018/10/15
@@ -11,14 +11,14 @@ public enum  RuleType {
         return code;
     }
 
-    public String getCgCode() {
-        return cgCode;
+    public String getDictCode() {
+        return dictCode;
     }
 
     private String code;
-    private String cgCode;
+    private String dictCode;
     RuleType(String code,String cgCode){
         this.code = code;
-        this.cgCode = cgCode;
+        this.dictCode = cgCode;
     }
 }
