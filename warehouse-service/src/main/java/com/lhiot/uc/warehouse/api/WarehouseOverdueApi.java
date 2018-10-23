@@ -1,6 +1,5 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.lhiot.uc.warehouse.entity.WarehouseOverdue;
 import com.lhiot.uc.warehouse.service.WarehouseOverdueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -8,7 +7,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Description:仓库商品过期降价值处理接口类
@@ -30,25 +32,6 @@ public class WarehouseOverdueApi {
         this.warehouseOverdueService = warehouseOverdueService;
     }
 
-    @PostMapping({"", "/"})
-    @ApiOperation(value = "添加仓库商品过期降价值处理")
-    @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要添加的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
-    public ResponseEntity<Integer> add(@RequestBody WarehouseOverdue warehouseOverdue) {
-        log.debug("添加仓库商品过期降价值处理\t param:{}", warehouseOverdue);
-
-        return ResponseEntity.ok(warehouseOverdueService.add(warehouseOverdue));
-    }
-
-    @PutMapping("/{id}")
-    @ApiOperation(value = "根据id更新仓库商品过期降价值处理")
-    @ApiImplicitParam(paramType = "body", name = "warehouseOverdue", value = "要更新的仓库商品过期降价值处理", required = true, dataType = "WarehouseOverdue")
-    public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody WarehouseOverdue warehouseOverdue) {
-        log.debug("根据id更新仓库商品过期降价值处理\t id:{} param:{}", id, warehouseOverdue);
-        warehouseOverdue.setId(id);
-
-        return ResponseEntity.ok(warehouseOverdueService.updateById(warehouseOverdue));
-    }
-
     @DeleteMapping("/{ids}")
     @ApiOperation(value = "根据ids删除仓库商品过期降价值处理")
     @ApiImplicitParam(paramType = "path", name = "ids", value = "要删除仓库商品过期降价值处理的ids,逗号分割", required = true, dataType = "String")
@@ -57,5 +40,4 @@ public class WarehouseOverdueApi {
 
         return ResponseEntity.ok(warehouseOverdueService.deleteByIds(ids));
     }
-
 }
