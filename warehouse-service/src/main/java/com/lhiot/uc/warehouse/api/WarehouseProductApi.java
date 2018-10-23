@@ -96,21 +96,22 @@ public class WarehouseProductApi {
     /*************************用户仓库存储与提取******************************************************/
     @ApiOperation("存入用户仓库")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "baseUserId", value = "基础用户Id", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = "query", name = "warehouseId", value = "仓库Id", required = true, dataType = "Long"),
             @ApiImplicitParam(paramType = "body", name = "warehouseProductParamList", dataType = "WarehouseProductParam", dataTypeClass = WarehouseProductParam.class,
                     allowMultiple = true, value = "存入仓库商品列表", required = true),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String")
     })
     @PostMapping("/warehouse/products/in")
+    @WarehouseProductConvert(warehouseId = "#warehouseId")
     public ResponseEntity<?> inWarehouse(
-            @RequestParam @NotNull @Min(1) Long baseUserId,
+            @RequestParam @NotNull @Min(1) Long warehouseId,
             @RequestBody List<WarehouseProductParam> warehouseProductParamList,
             @RequestParam String remark) {
         if (Objects.isNull(warehouseProductParamList) || warehouseProductParamList.isEmpty()) {
             return ResponseEntity.badRequest().body("存入仓库商品列表为空");
         }
         //查找用户仓库
-        WarehouseUser warehouseUser = warehouseUserService.findByBaseUserId(baseUserId);
+        WarehouseUser warehouseUser = warehouseUserService.selectById(warehouseId);
         if (Objects.isNull(warehouseUser)) {
             return ResponseEntity.badRequest().body("未找到用户仓库");
         }
@@ -122,7 +123,7 @@ public class WarehouseProductApi {
             BeanUtils.of(warehouseProduct).populate(item);
         });
 
-        boolean result = warehouseProductService.addWarehouseProduct(warehouseProductList, baseUserId, remark);
+        boolean result = warehouseProductService.addWarehouseProduct(warehouseProductList, warehouseId, remark);
         if (result) {
             return ResponseEntity.ok("存入成功");
         } else {
@@ -132,20 +133,21 @@ public class WarehouseProductApi {
 
     @ApiOperation("直接转出用户仓库")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "baseUserId", value = "基础用户Id", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = "query", name = "warehouseId", value = "仓库Id", required = true, dataType = "Long"),
             @ApiImplicitParam(paramType = "query", name = "orderCode", value = "订单编码", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "body", name = "warehouseProductParamList", dataType = "WarehouseProductParam", dataTypeClass = WarehouseProductParam.class,
                     allowMultiple = true, value = "转出申请商品列表", required = true)
     })
     @PostMapping("/warehouse/products/out")
-    public ResponseEntity<?> direct(@RequestParam @NotNull @Min(1) Long baseUserId,
+    @WarehouseProductConvert(warehouseId = "#warehouseId")
+    public ResponseEntity<?> direct(@RequestParam @NotNull @Min(1) Long warehouseId,
                                     @RequestParam @NotNull String orderCode,
                                     @RequestParam String remark,
                                     @RequestBody List<WarehouseProductParam> warehouseProductParamList) {
         //校验用户仓库商品是否足够提取申请 如果足够将商品转入暂存表中等待提取
 
-        Pair<Integer, List<WarehouseProduct>> pair = warehouseProductService.waitExtractWarehouseProduct(baseUserId, warehouseProductParamList);
+        Pair<Integer, List<WarehouseProduct>> pair = warehouseProductService.waitExtractWarehouseProduct(warehouseId, warehouseProductParamList);
         if (Objects.isNull(pair)) {
             return ResponseEntity.badRequest().body("提取失败");
         }
@@ -156,20 +158,21 @@ public class WarehouseProductApi {
 
     @ApiOperation("转出用户仓库申请")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "baseUserId", value = "基础用户Id", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = "query", name = "warehouseId", value = "仓库Id", required = true, dataType = "Long"),
             @ApiImplicitParam(paramType = "query", name = "orderCode", value = "订单编码", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(paramType = "body", name = "warehouseProductParamList", dataType = "WarehouseProductParam", dataTypeClass = WarehouseProductParam.class,
                     allowMultiple = true, value = "转出申请商品列表", required = true)
     })
     @PostMapping("/warehouse/products/out-apply")
-    public ResponseEntity<?> apply(@RequestParam @NotNull @Min(1) Long baseUserId,
+    @WarehouseProductConvert(warehouseId = "#warehouseId")
+    public ResponseEntity<?> apply(@RequestParam @NotNull @Min(1) Long warehouseId,
                                    @RequestParam @NotNull String orderCode,
                                    @RequestParam String remark,
                                    @RequestBody List<WarehouseProductParam> warehouseProductParamList) {
         //校验用户仓库商品是否足够提取申请 如果足够将商品转入暂存表中等待提取
 
-        Pair<Integer, List<WarehouseProduct>> pair = warehouseProductService.waitExtractWarehouseProduct(baseUserId, warehouseProductParamList);
+        Pair<Integer, List<WarehouseProduct>> pair = warehouseProductService.waitExtractWarehouseProduct(warehouseId, warehouseProductParamList);
         if (Objects.isNull(pair)) {
             return ResponseEntity.badRequest().body("提取失败");
         }
