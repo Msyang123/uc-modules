@@ -66,18 +66,18 @@ public class WarehouseProductService {
      * 只有当天的水果合并在一起
      *
      * @param warehouseProductList List<WarehouseProduct>
-     * @param baseUserId           Long
+     * @param warehouseId           Long
      * @param remark               String
      */
-    public boolean addWarehouseProduct(List<WarehouseProduct> warehouseProductList, Long baseUserId, String remark) {
+    public boolean addWarehouseProduct(List<WarehouseProduct> warehouseProductList, Long warehouseId, String remark) {
 
         //查找用户仓库
-        WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
+/*        WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
         if (Objects.isNull(warehouseUser)) {
             return false;
-        }
+        }*/
         //当天的仓库水果
-        List<WarehouseProduct> todayWarehouseProductList = this.warehouseProductMapper.findWarehouseProductByWareHouseIdAndToday(warehouseUser.getId());
+        List<WarehouseProduct> todayWarehouseProductList = this.warehouseProductMapper.findWarehouseProductByWareHouseIdAndToday(warehouseId);
 
         //转换记录集合
         List<WarehouseConvert> warehouseConvert = new ArrayList<>();
@@ -90,7 +90,7 @@ public class WarehouseProductService {
         final boolean isEmpty = CollectionUtils.isEmpty(todayWarehouseProductList);
 
         warehouseProductList.forEach(product -> {
-            product.setWarehouseId(warehouseUser.getId());//设置仓库编号
+            product.setWarehouseId(warehouseId);//设置仓库编号
             //重置时间的时分秒（此处用作定时任务每天刷一次）
             product.setBuyAt(current);
             //拼接出入库记录
@@ -152,11 +152,11 @@ public class WarehouseProductService {
      * @param warehouseProductParamList 商品集合
      * @return 总价格、要提取的仓库商品
      */
-    public Pair<Integer, List<WarehouseProduct>> waitExtractWarehouseProduct(Long baseUserId,
+    public Pair<Integer, List<WarehouseProduct>> waitExtractWarehouseProduct(Long warehouseId,
                                                                              List<WarehouseProductParam> warehouseProductParamList) {
-        WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
+        WarehouseUser warehouseUser = warehouseUserMapper.selectById(warehouseId);
         if (Objects.isNull(warehouseUser)) {
-            log.error("未找到用户仓库{}", baseUserId);
+            log.error("未找到用户仓库{}", warehouseId);
             return null;
         }
         //待提取的仓库商品列表
