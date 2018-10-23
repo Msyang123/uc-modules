@@ -9,6 +9,7 @@ import com.lhiot.uc.warehouse.aspect.WarehouseProductConvert;
 import com.lhiot.uc.warehouse.entity.WarehouseProduct;
 import com.lhiot.uc.warehouse.entity.WarehouseProductExtract;
 import com.lhiot.uc.warehouse.entity.WarehouseUser;
+import com.lhiot.uc.warehouse.feign.BasicDataService;
 import com.lhiot.uc.warehouse.mapper.WarehouseProductMapper;
 import com.lhiot.uc.warehouse.model.CountWarehouseProductResult;
 import com.lhiot.uc.warehouse.model.WarehouseProductParam;
@@ -45,13 +46,15 @@ public class WarehouseProductApi {
     private final WarehouseProductService warehouseProductService;
     private final WarehouseProductExtractService warehouseProductExtractService;
     private WarehouseProductMapper warehouseProductMapper;
+    private final BasicDataService basicDataService;
 
     @Autowired
-    public WarehouseProductApi(WarehouseUserService warehouseUserService, WarehouseProductService warehouseProductService, WarehouseProductExtractService warehouseProductExtractService, WarehouseProductMapper warehouseProductMapper) {
+    public WarehouseProductApi(WarehouseUserService warehouseUserService, WarehouseProductService warehouseProductService, WarehouseProductExtractService warehouseProductExtractService, WarehouseProductMapper warehouseProductMapper, BasicDataService basicDataService) {
         this.warehouseUserService = warehouseUserService;
         this.warehouseProductService = warehouseProductService;
         this.warehouseProductExtractService = warehouseProductExtractService;
         this.warehouseProductMapper = warehouseProductMapper;
+        this.basicDataService = basicDataService;
     }
 
 
@@ -116,6 +119,7 @@ public class WarehouseProductApi {
             return ResponseEntity.badRequest().body("未找到用户仓库");
         }
         //TODO 需要查询基础商品信息构造仓库商品信息
+//        basicDataService.findProductBySpecificationId()
         List<WarehouseProduct> warehouseProductList = new ArrayList<>(warehouseProductParamList.size());
         warehouseProductParamList.forEach(item -> {
             WarehouseProduct warehouseProduct = new WarehouseProduct();
