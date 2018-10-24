@@ -1,8 +1,8 @@
 package com.lhiot.uc.warehouse.api;
 
-import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
+import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Multiple;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.uc.warehouse.aspect.WarehouseProductConvert;
@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Description:仓库商品接口类
@@ -106,6 +107,7 @@ public class WarehouseProductApi {
     })
     @PostMapping("/warehouse/products/in")
     @WarehouseProductConvert(warehouseId = "#warehouseId")
+    @SuppressWarnings(value = {"unchecked", "rawtypes"})
     public ResponseEntity<?> inWarehouse(
             @RequestParam @NotNull @Min(1) Long warehouseId,
             @RequestBody List<WarehouseProductParam> warehouseProductParamList,
@@ -118,14 +120,25 @@ public class WarehouseProductApi {
         if (Objects.isNull(warehouseUser)) {
             return ResponseEntity.badRequest().body("未找到用户仓库");
         }
-        //TODO 需要查询基础商品信息构造仓库商品信息
-//        basicDataService.findProductBySpecificationId()
-        List<WarehouseProduct> warehouseProductList = new ArrayList<>(warehouseProductParamList.size());
-        warehouseProductParamList.forEach(item -> {
-            WarehouseProduct warehouseProduct = new WarehouseProduct();
-            warehouseProduct.setWarehouseId(warehouseUser.getId());
-            BeanUtils.of(warehouseProduct).populate(item);
-        });
+        List<String> productIdList = warehouseProductParamList.parallelStream().map(WarehouseProductParam::getProductId).map(String::valueOf).collect(Collectors.toList());
+        String productIds = StringUtils.arrayToDelimitedString(StringUtils.toStringArray(productIdList), ",");
+
+        ResponseEntity productResponse = basicDataService.findProductBySpecificationIdList(productIds);
+        if (Objects.isNull(productResponse) || productResponse.getStatusCode().isError()) {
+            return ResponseEntity.badRequest().body("商品信息错误！");
+        }
+        Multiple<WarehouseProduct> productMultiple = (Multiple<WarehouseProduct>) productResponse.getBody();
+        if (Objects.isNull(productMultiple)) {
+            return ResponseEntity.badRequest().body("商品信息错误！");
+        }
+        List<WarehouseProduct> warehouseProductList = productMultiple.getArray();
+        warehouseProductList.forEach(product ->
+                warehouseProductParamList.stream()
+                        .filter(item -> Objects.equals(item.getProductId(), product.getProductId()))
+                        .forEach(item -> {
+                            product.setWarehouseId(warehouseUser.getId());
+                            product.setProductCount(item.getProductCount());
+                        }));
 
         boolean result = warehouseProductService.addWarehouseProduct(warehouseProductList, warehouseId, remark);
         if (result) {

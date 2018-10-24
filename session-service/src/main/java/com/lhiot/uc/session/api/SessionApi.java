@@ -4,11 +4,9 @@ import com.leon.microx.util.Maps;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.session.feign.BasicUserService;
 import com.lhiot.uc.session.feign.ThirdPartyService;
+import com.lhiot.uc.session.feign.WarehouseService;
 import com.lhiot.uc.session.mapper.SessionMapper;
-import com.lhiot.uc.session.model.LockStatus;
-import com.lhiot.uc.session.model.LoginParam;
-import com.lhiot.uc.session.model.LoginResult;
-import com.lhiot.uc.session.model.SearchParam;
+import com.lhiot.uc.session.model.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +23,18 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
  */
 @Slf4j
 @RestController
-//TODO 返回仓库Id
 public class SessionApi {
 
     private static final String LOGIN_SMS_TEMPLATE_NAME = "from-login";
     private BasicUserService basicUserService;
     private ThirdPartyService thirdPartyService;
+    private WarehouseService warehouseService;
     private SessionMapper sessionMapper;
 
-    public SessionApi(BasicUserService basicUserService, ThirdPartyService thirdPartyService, SessionMapper sessionMapper) {
+    public SessionApi(BasicUserService basicUserService, ThirdPartyService thirdPartyService, WarehouseService warehouseService, SessionMapper sessionMapper) {
         this.basicUserService = basicUserService;
         this.thirdPartyService = thirdPartyService;
+        this.warehouseService = warehouseService;
         this.sessionMapper = sessionMapper;
     }
 
@@ -55,6 +54,7 @@ public class SessionApi {
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
         }
+        result.setWarehouseId(this.warehouseId(result.getBaseUserId()));
         sessionMapper.insert(param);
         return ResponseEntity.ok().body(result);
     }
@@ -75,6 +75,7 @@ public class SessionApi {
         if (!thirdPartyResponse.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.badRequest().body(response.hasBody() ? response.getBody() : "验证码错误！");
         }
+        result.setWarehouseId(this.warehouseId(result.getBaseUserId()));
         sessionMapper.insert(param);
         return ResponseEntity.ok().body(result);
     }
@@ -91,7 +92,17 @@ public class SessionApi {
         if (LockStatus.LOCK.equals(result.getLocked())) {
             return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
         }
+        result.setWarehouseId(this.warehouseId(result.getBaseUserId()));
         sessionMapper.insert(param);
         return ResponseEntity.ok().body(result);
+    }
+
+    private Long warehouseId(Long baseUserId) {
+        ResponseEntity warehouseResponse = warehouseService.findWarehouse(baseUserId);
+        if (Objects.nonNull(warehouseResponse) && warehouseResponse.getStatusCode().is2xxSuccessful()) {
+            WarehouseUser warehouseUser = (WarehouseUser) warehouseResponse.getBody();
+            return warehouseUser.getId();
+        }
+        return null;
     }
 }

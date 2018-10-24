@@ -17,6 +17,7 @@
         <result column="small_image" property="smallImage"/>
         <result column="large_image" property="largeImage"/>
         <result column="buy_at" property="buyAt"/>
+        <result column="base_unit" property="baseUnit"/>
     </resultMap>
 
     <!-- base查询字段  -->
@@ -34,6 +35,7 @@
             small_image,
             large_image,
             buy_at,
+            base_unit,
         </trim>
     </sql>
 
@@ -51,7 +53,8 @@
         image,
         small_image,
         large_image,
-        buy_at
+        buy_at,
+        base_unit
         )
         value
         <foreach collection="list" item="item" separator=",">
@@ -66,7 +69,8 @@
             #{item.image},
             #{item.smallImage},
             #{item.largeImage},
-            #{item.buyAt}
+            #{item.buyAt},
+            #{item.baseUnit}
             )
         </foreach>
     </insert>
