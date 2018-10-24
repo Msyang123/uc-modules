@@ -110,6 +110,9 @@ public class WarehouseProduct {
     @ApiModelProperty(value = "购买时间", dataType = "Date")
     private Date buyAt;
 
+    @ApiModelProperty(value = "基础单位", dataType = "String")
+    private String baseUnit;
+
     /**
      * 扣减时操作类型
      */

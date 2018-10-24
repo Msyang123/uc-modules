@@ -90,7 +90,6 @@ public class WarehouseProductService {
         final boolean isEmpty = CollectionUtils.isEmpty(todayWarehouseProductList);
 
         warehouseProductList.forEach(product -> {
-            product.setWarehouseId(warehouseId);//设置仓库编号
             //重置时间的时分秒（此处用作定时任务每天刷一次）
             product.setBuyAt(current);
             //拼接出入库记录
@@ -100,9 +99,6 @@ public class WarehouseProductService {
             wareHouseConvert.setConvertAt(current);// 出入库时间
             wareHouseConvert.setInOut(InOutType.IN);// 出入库标志
             wareHouseConvert.setRemark(remark);// 出入库原因
-            wareHouseConvert.setConvertType(ConvertType.MANUAL);//手动
-            //TODO 兑换折扣需要获取系统参数
-            wareHouseConvert.setDiscount(10);//兑换折扣
             warehouseConvert.add(wareHouseConvert);
             boolean flag = false;
             //检查是否当天依据有存入水果，如果存在就合并
