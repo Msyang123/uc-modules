@@ -44,7 +44,7 @@ public class UserBindingApi {
             return ResponseEntity.badRequest().body("该用户不存在！");
         }
         if (StringUtils.isNotBlank(userDetailResult.getPhone())) {
-            return ResponseEntity.badRequest().body("该账号已绑定手机！");
+            return ResponseEntity.badRequest().body("该账号已绑定手机 ！");
         }
         ApplyUser applyUser = new ApplyUser();
         applyUser.setApplicationType(param.getApplicationType());
