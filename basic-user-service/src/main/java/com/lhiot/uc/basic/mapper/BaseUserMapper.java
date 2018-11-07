@@ -5,7 +5,6 @@ import com.lhiot.uc.basic.model.BaseUserResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Mapper
@@ -24,7 +23,7 @@ public interface BaseUserMapper {
 
     int updateCurrencyByApplyUserIdForAdd(Map<String, Object> map);
 
-    Map<String,Object> findPaymentPermissionsByApplyUserId(Long userId);
+    Map<String, Object> findPaymentPermissionsByApplyUserId(Long userId);
 
     Long findCurrencyByApplyUserId(Long userId);
 
@@ -32,7 +31,8 @@ public interface BaseUserMapper {
 
     /**
      * 根据基础用户Id添加鲜果币
+     *
      * @param map id 基础用户Id money 添加金额
      */
-    void updateBalanceByIdForAdd(Map<String,Object> map);
+    void updateBalanceByIdForAdd(Map<String, Object> map);
 }

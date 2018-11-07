@@ -28,18 +28,6 @@ public class WarehouseProductExtractService {
     }
 
     /**
-     * Description:新增仓库商品提取
-     *
-     * @param warehouseProductExtract
-     * @return
-     * @author yijun
-     * @date 2018/09/07 11:36:51
-     */
-/*    public int batchSaveExtract(List<WarehouseProductExtract> warehouseProductExtract){
-        return this.warehouseProductExtractMapper.batchSaveExtract(warehouseProductExtract);
-    }*/
-
-    /**
      * Description:根据id修改仓库商品提取
      *
      * @param warehouseProductExtract WarehouseProductExtract
@@ -48,18 +36,6 @@ public class WarehouseProductExtractService {
     public int updateById(WarehouseProductExtract warehouseProductExtract) {
         return this.warehouseProductExtractMapper.updateById(warehouseProductExtract);
     }
-
-    /**
-     * Description:根据ids删除仓库商品提取
-     *
-     * @param ids
-     * @return
-     * @author yijun
-     * @date 2018/09/07 11:36:51
-     */
-/*    public int deleteByIds(String ids){
-        return this.warehouseProductExtractMapper.deleteByIds(Arrays.asList(ids.split(",")));
-    }*/
 
     /**
      * Description:根据id查找仓库商品提取

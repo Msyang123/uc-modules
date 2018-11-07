@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author yijun
  */
-@Api(description = "用户仓库接口")
+@Api("用户仓库接口")
 @Slf4j
 @RestController
 @RequestMapping("/warehouse")

@@ -66,16 +66,11 @@ public class WarehouseProductService {
      * 只有当天的水果合并在一起
      *
      * @param warehouseProductList List<WarehouseProduct>
-     * @param warehouseId           Long
+     * @param warehouseId          Long
      * @param remark               String
      */
     public boolean addWarehouseProduct(List<WarehouseProduct> warehouseProductList, Long warehouseId, String remark) {
 
-        //查找用户仓库
-/*        WarehouseUser warehouseUser = warehouseUserMapper.findByBaseUserId(baseUserId);
-        if (Objects.isNull(warehouseUser)) {
-            return false;
-        }*/
         //当天的仓库水果
         List<WarehouseProduct> todayWarehouseProductList = this.warehouseProductMapper.findWarehouseProductByWareHouseIdAndToday(warehouseId);
 
@@ -217,7 +212,7 @@ public class WarehouseProductService {
                     //计算单个待提取商品均价 每次覆盖 相同商品此属性值相同 订单商品表中price
                     //whProduct.setPrice(price);
                     //此处为要更新的仓库商品数量 更新为 product_count=product_count-amount
-                    whProduct.setProductCount(new BigDecimal(amount));
+                    whProduct.setProductCount(BigDecimal.valueOf(amount));
                     amount = 0;
                     break;
                 }

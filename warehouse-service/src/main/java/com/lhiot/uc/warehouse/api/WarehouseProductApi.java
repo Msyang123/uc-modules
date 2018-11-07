@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  *
  * @author yijun
  */
-@Api(description = "仓库商品接口")
+@Api("仓库商品接口")
 @Slf4j
 @RestController
 public class WarehouseProductApi {
@@ -107,8 +107,7 @@ public class WarehouseProductApi {
     })
     @PostMapping("/warehouse/products/in")
     @WarehouseProductConvert(warehouseId = "#warehouseId")
-    @SuppressWarnings(value = {"unchecked", "rawtypes"})
-    public ResponseEntity<?> inWarehouse(
+    public ResponseEntity inWarehouse(
             @RequestParam @NotNull @Min(1) Long warehouseId,
             @RequestBody List<WarehouseProductParam> warehouseProductParamList,
             @RequestParam String remark) {
@@ -158,7 +157,7 @@ public class WarehouseProductApi {
     })
     @PostMapping("/warehouse/products/out")
     @WarehouseProductConvert(warehouseId = "#warehouseId")
-    public ResponseEntity<?> direct(@RequestParam @NotNull @Min(1) Long warehouseId,
+    public ResponseEntity direct(@RequestParam @NotNull @Min(1) Long warehouseId,
                                     @RequestParam @NotNull String orderCode,
                                     @RequestParam String remark,
                                     @RequestBody List<WarehouseProductParam> warehouseProductParamList) {
@@ -183,7 +182,7 @@ public class WarehouseProductApi {
     })
     @PostMapping("/warehouse/products/out-apply")
     @WarehouseProductConvert(warehouseId = "#warehouseId")
-    public ResponseEntity<?> apply(@RequestParam @NotNull @Min(1) Long warehouseId,
+    public ResponseEntity apply(@RequestParam @NotNull @Min(1) Long warehouseId,
                                    @RequestParam @NotNull String orderCode,
                                    @RequestParam String remark,
                                    @RequestBody List<WarehouseProductParam> warehouseProductParamList) {
@@ -204,7 +203,7 @@ public class WarehouseProductApi {
             @ApiImplicitParam(paramType = "query", name = "backCause", value = "取消原因", required = true, dataType = "String")
     })
     @PutMapping("/warehouse/products/out-back")
-    public ResponseEntity<?> back(@RequestParam @NotNull @Min(1) String orderCode, @RequestParam String backCause) {
+    public ResponseEntity back(@RequestParam @NotNull @Min(1) String orderCode, @RequestParam String backCause) {
 
         //查找中间表中是否存在要退回的仓库商品
         WarehouseProductExtract warehouseProductExtractSearch = new WarehouseProductExtract();
@@ -223,7 +222,7 @@ public class WarehouseProductApi {
             @ApiImplicitParam(paramType = "query", name = "orderCode", value = "订单Code", required = true, dataType = "String")
     })
     @PutMapping("/warehouse/products/out-confirm")
-    public ResponseEntity<?> confirm(@RequestParam @NotNull String orderCode) {
+    public ResponseEntity confirm(@RequestParam @NotNull String orderCode) {
         //将用户仓库商品从暂存表中删除 这样用户永久将仓库商品转移到其他用户或者提取订单
         WarehouseProductExtract warehouseProductExtractSearch = new WarehouseProductExtract();
         warehouseProductExtractSearch.setOrderCode(orderCode);

@@ -7,7 +7,6 @@ import com.lhiot.uc.basic.model.UserDetailResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +24,11 @@ public interface ApplyUserMapper {
 
     /**
      * 根据用户ID跟支付密码查询用户支付权限
+     *
      * @param map id和支付密码
      * @return
      */
-    SwitchStatus findPermissionsByIdAndPaymentPassword(Map<String,Object> map);
+    SwitchStatus findPermissionsByIdAndPaymentPassword(Map<String, Object> map);
 
     ApplyUser findPaymentPasswordById(Long userId);
 
@@ -43,6 +43,7 @@ public interface ApplyUserMapper {
     List<UserDetailResult> findByPhoneList(List<String> ids);
 
     List<UserDetailResult> findByKeyword(String keyword);
+
     UserDetailResult findByPhoneAndPassword(PhoneAndPasswordSearchParam param);
 
     int updateUserById(ApplyUser user);
