@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel
 @NoArgsConstructor
-public class WarehouseUser{
+public class WarehouseUser {
 
     /**
      * 仓库id

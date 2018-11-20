@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SessionMapper {
 
-    int insert(LoginParam login);
+    void insert(LoginParam login);
 }

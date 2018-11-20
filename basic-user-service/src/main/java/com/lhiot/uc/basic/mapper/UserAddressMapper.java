@@ -1,7 +1,6 @@
 package com.lhiot.uc.basic.mapper;
 
 import com.lhiot.uc.basic.model.UserAddress;
-import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

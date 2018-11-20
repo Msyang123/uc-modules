@@ -26,6 +26,7 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
 public class SessionApi {
 
     private static final String LOGIN_SMS_TEMPLATE_NAME = "from-login";
+    private static final String FAILURE_MESSAGE = "检测到您的账号存在数据异常，无法登录";
     private BasicUserService basicUserService;
     private ThirdPartyService thirdPartyService;
     private WarehouseService warehouseService;
@@ -52,7 +53,7 @@ public class SessionApi {
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
+            return ResponseEntity.badRequest().body(FAILURE_MESSAGE);
         }
         result.setWarehouseId(this.warehouseId(result.getBaseUserId()));
         sessionMapper.insert(param);
@@ -69,7 +70,7 @@ public class SessionApi {
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
+            return ResponseEntity.badRequest().body(FAILURE_MESSAGE);
         }
         ResponseEntity thirdPartyResponse = thirdPartyService.validate(LOGIN_SMS_TEMPLATE_NAME, param.getPhone(), Maps.of("number", param.getCaptcha()));
         if (!thirdPartyResponse.getStatusCode().is2xxSuccessful()) {
@@ -90,7 +91,7 @@ public class SessionApi {
         }
         LoginResult result = (LoginResult) response.getBody();
         if (LockStatus.LOCK.equals(result.getLocked())) {
-            return ResponseEntity.badRequest().body("检测到您的账号存在数据异常，无法登录");
+            return ResponseEntity.badRequest().body(FAILURE_MESSAGE);
         }
         result.setWarehouseId(this.warehouseId(result.getBaseUserId()));
         sessionMapper.insert(param);
@@ -101,7 +102,7 @@ public class SessionApi {
         ResponseEntity warehouseResponse = warehouseService.findWarehouse(baseUserId);
         if (Objects.nonNull(warehouseResponse) && warehouseResponse.getStatusCode().is2xxSuccessful()) {
             WarehouseUser warehouseUser = (WarehouseUser) warehouseResponse.getBody();
-            return warehouseUser.getId();
+            return Objects.isNull(warehouseUser)?null:warehouseUser.getId();
         }
         return null;
     }

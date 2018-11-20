@@ -5,7 +5,6 @@ import com.leon.microx.web.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
-import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,11 +23,9 @@ import java.util.List;
 @Transactional
 public class UserService {
     private ApplyUserMapper applyUserMapper;
-    private BaseUserMapper baseUserMapper;
 
-    public UserService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper) {
+    public UserService(ApplyUserMapper applyUserMapper) {
         this.applyUserMapper = applyUserMapper;
-        this.baseUserMapper = baseUserMapper;
     }
 
     /**
@@ -133,7 +130,7 @@ public class UserService {
         return applyUserMapper.updatePaymentPermissionsById(user) > 0;
     }
 
-    public boolean updateUnionIdByUserId(ApplyUser user){
+    public boolean updateUnionIdByUserId(ApplyUser user) {
         return applyUserMapper.updateUnionIdByUserId(user) > 0;
     }
 

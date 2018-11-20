@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RegisterApi {
 
+
+    private static final String USER_REGISTER_CACHE = ":user:register";
     private final RedissonClient redissonClient;
     private final RegisterService registerService;
     private final UserBindingService userBindingService;
@@ -38,12 +40,12 @@ public class RegisterApi {
     @ApiImplicitParam(paramType = "body", name = "param", value = "手机号码及密码，验证码", required = true, dataType = "PhoneRegisterParam")
     @PostMapping(value = "/phone/users")
     public ResponseEntity registerByPhone(@RequestBody PhoneRegisterParam param) {
-        RMapCache<String, String> cache = redissonClient.getMapCache(param.getPhone() + ":user:register");
-        String phone = cache.get(param.getApplicationType() + ":" + param.getPhone() + ":user:register");
+        RMapCache<String, String> cache = redissonClient.getMapCache(param.getPhone() + USER_REGISTER_CACHE);
+        String phone = cache.get(param.getApplicationType() + ":" + param.getPhone() + USER_REGISTER_CACHE);
         if (Objects.equals(param.getPhone(), phone)) {
             return ResponseEntity.badRequest().body("正在注册中！");
         }
-        cache.put(param.getPhone() + ":user:register", param.getPhone(), 2, TimeUnit.MINUTES);
+        cache.put(param.getPhone() + USER_REGISTER_CACHE, param.getPhone(), 2, TimeUnit.MINUTES);
         try {
             if (registerService.hasPhone(param.getPhone(), param.getApplicationType())) {
                 return ResponseEntity.badRequest().body("手机号码已注册!");
@@ -51,8 +53,8 @@ public class RegisterApi {
             UserDetailResult result = registerService.register(param);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            cache.put(param.getApplicationType() + ":" + param.getPhone() + ":user:register", param.getPhone(), 5, TimeUnit.SECONDS);
-            e.printStackTrace();
+            cache.put(param.getApplicationType() + ":" + param.getPhone() + USER_REGISTER_CACHE, param.getPhone(), 5, TimeUnit.SECONDS);
+            log.error("手机注册失败异常",e);
             return ResponseEntity.badRequest().build();
         }
     }

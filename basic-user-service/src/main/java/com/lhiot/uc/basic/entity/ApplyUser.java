@@ -19,8 +19,8 @@ public class ApplyUser {
     private String address = "";
     private String description = "";
     private Date registerAt = Date.from(Instant.now());
-    private String password = "";
-    private String paymentPassword = "";
+    private String password;
+    private String paymentPassword;
     private String openId = "";
     private String unionId = "";
     private Long baseUserId;

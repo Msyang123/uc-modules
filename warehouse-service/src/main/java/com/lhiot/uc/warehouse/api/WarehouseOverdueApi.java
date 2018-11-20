@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author yijun
  * @date 2018/09/07
  */
-@Api(description = "仓库商品过期降价值处理接口")
+@Api("仓库商品过期降价值处理接口")
 @Slf4j
 @RestController
 @RequestMapping("/warehouse/product-overdue")
-//TODO 取消定时过期，打开仓库时触发
 public class WarehouseOverdueApi {
 
     private final WarehouseOverdueService warehouseOverdueService;
