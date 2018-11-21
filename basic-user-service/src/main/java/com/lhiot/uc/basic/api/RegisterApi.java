@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.api;
 
+import com.leon.microx.web.result.Id;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.model.PhoneRegisterParam;
 import com.lhiot.uc.basic.model.UserDetailResult;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +38,7 @@ public class RegisterApi {
     }
 
 
-    @ApiOperation(value = "手机号注册", notes = "进行注册")
+    @ApiOperation(value = "手机号注册",response = Id.class)
     @ApiImplicitParam(paramType = "body", name = "param", value = "手机号码及密码，验证码", required = true, dataType = "PhoneRegisterParam")
     @PostMapping(value = "/phone/users")
     public ResponseEntity registerByPhone(@RequestBody PhoneRegisterParam param) {
@@ -51,7 +53,7 @@ public class RegisterApi {
                 return ResponseEntity.badRequest().body("手机号码已注册!");
             }
             UserDetailResult result = registerService.register(param);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.created(URI.create("/users/"+result.getId())).body(Id.of(result.getId()));
         } catch (Exception e) {
             cache.put(param.getApplicationType() + ":" + param.getPhone() + USER_REGISTER_CACHE, param.getPhone(), 5, TimeUnit.SECONDS);
             log.error("手机注册失败异常",e);
@@ -59,7 +61,7 @@ public class RegisterApi {
         }
     }
 
-    @ApiOperation("微信注册")
+    @ApiOperation(value = "微信注册",response = Id.class)
     @ApiImplicitParam(paramType = "body", name = "param", value = "微信用户信息", required = true, dataType = "WeChatRegisterParam")
     @PostMapping(value = "/we-chat/users")
     public ResponseEntity registerByWeChat(@RequestBody WeChatRegisterParam param) {
@@ -73,7 +75,7 @@ public class RegisterApi {
             return ResponseEntity.badRequest().body("手机号已绑定微信！");
         }
         UserDetailResult result = registerService.registerByOpenId(param);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.created(URI.create("/users/"+result.getId())).body(Id.of(result.getId().toString()));
     }
 
 }

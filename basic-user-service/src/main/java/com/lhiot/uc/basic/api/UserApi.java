@@ -2,6 +2,7 @@ package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Id;
 import com.leon.microx.web.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
@@ -37,7 +38,7 @@ public class UserApi {
     }
 
     @ApiOperation(value = "根据用户ID查询用户信息", response = UserDetailResult.class)
-    @ApiImplicitParam(paramType = "path", name = "userId", value = "用户ID", dataType = "Long", required = true)
+    @ApiImplicitParam(paramType = "path", name = "id", value = "用户ID", dataType = "Long", required = true)
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long userId) {
         UserDetailResult user = userService.findById(userId);
@@ -48,7 +49,7 @@ public class UserApi {
     }
 
     @ApiOperation(value = "根据用户OpenID查询用户信息", response = UserDetailResult.class)
-    @ApiImplicitParam(paramType = "path", name = "openId", value = "用户ID", dataType = "Long", required = true)
+    @ApiImplicitParam(paramType = "path", name = "openId", value = "用户ID", dataType = "String", required = true)
     @GetMapping("/open-id/{openId}")
     public ResponseEntity findByOpenId(@PathVariable String openId) {
         UserDetailResult user = userService.findByOpenId(openId);
@@ -135,7 +136,7 @@ public class UserApi {
     }
 
     @ApiOperation("根据用户账号和密码查询用户信息")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PasswordParam", required = true)
+    @ApiImplicitParam(paramType = "body", name = "param", value = "用户信息", dataType = "PhoneAndPasswordSearchParam", required = true)
     @PostMapping("/phone-and-password/search")
     public ResponseEntity findByPhoneAndPassword(@RequestBody PhoneAndPasswordSearchParam param) {
         UserDetailResult userDetailResult = applyUserMapper.findByPhoneAndPassword(param);
