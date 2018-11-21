@@ -60,7 +60,7 @@ public class UserBindingApi {
 
     @ApiOperation("用户绑定微信")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "Long",name = "userId",value = "用户Id",dataType = "Long",required = true),
+            @ApiImplicitParam(paramType = "path",name = "id",value = "用户Id",dataType = "Long",required = true),
             @ApiImplicitParam(paramType = "body", name = "param", value = "微信信息", dataType = "UserBindingWeChatParam", dataTypeClass = UserBindingWeChatParam.class, required = true)
     })
     @PutMapping("/users/{id}/binding-we-chat")
