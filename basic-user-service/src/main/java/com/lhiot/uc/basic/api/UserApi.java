@@ -2,7 +2,6 @@ package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.StringUtils;
-import com.leon.microx.web.result.Id;
 import com.leon.microx.web.result.Multiple;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
