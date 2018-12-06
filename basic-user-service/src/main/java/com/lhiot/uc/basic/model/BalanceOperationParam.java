@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.model;
 
-import com.lhiot.uc.basic.entity.ApplicationType;
+import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.OperationStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,8 +21,9 @@ public class BalanceOperationParam {
     private String sourceType;
     @ApiModelProperty(notes = "来源ID：例如：订单ID，活动ID", dataType = "String")
     private String sourceId;
-    @ApiModelProperty(notes = "来源用户", dataType = "Apply")
-    private ApplicationType applicationType;
+    @HasEntries(from = "applications")
+    @ApiModelProperty(notes = "来源用户", dataType = "String")
+    private String applicationType;
     @ApiModelProperty(notes = "支付密码",dataType = "String")
     private String paymentPassword;
 }

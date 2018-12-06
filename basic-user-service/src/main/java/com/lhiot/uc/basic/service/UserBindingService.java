@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.service;
 
+import com.leon.microx.id.Generator;
 import com.leon.microx.util.BeanUtils;
-import com.leon.microx.util.SnowflakeId;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
@@ -24,8 +24,8 @@ public class UserBindingService extends BaseUserService {
     private ApplyUserMapper applyUserMapper;
     private UserBindingMapper userBindingMapper;
 
-    public UserBindingService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, SnowflakeId snowflakeId, UserBindingMapper userBindingMapper) {
-        super(userBindingMapper, snowflakeId, baseUserMapper);
+    public UserBindingService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, Generator<Long> generator,UserBindingMapper userBindingMapper) {
+        super(userBindingMapper,generator, baseUserMapper);
         this.applyUserMapper = applyUserMapper;
         this.userBindingMapper = userBindingMapper;
     }

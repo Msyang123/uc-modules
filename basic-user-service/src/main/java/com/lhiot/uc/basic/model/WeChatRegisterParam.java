@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.model;
 
-import com.lhiot.uc.basic.entity.ApplicationType;
+import com.lhiot.dc.dictionary.HasEntries;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +24,7 @@ public class WeChatRegisterParam {
     private String description;
     @ApiModelProperty(notes = "头像", dataType = "String")
     private String avatar;
-    @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private ApplicationType applicationType;
+    @HasEntries(from = "applications")
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
+    private String applicationType;
 }

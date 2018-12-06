@@ -1,6 +1,7 @@
 package com.lhiot.uc.session.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lhiot.dc.dictionary.HasEntries;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class LoginParam {
     private Date loginAt = Date.from(Instant.now());
     @ApiModelProperty(notes = "登录类型", dataType = "LoginType")
     private LoginType loginType;
+    @HasEntries(from = "applications",message = "该字典项不存在")
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private ApplicationType applicationType;
+    private String applicationType;
 }

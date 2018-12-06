@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.result.Tuple;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.lhiot.uc.basic.mapper.UserAddressMapper;
 import com.lhiot.uc.basic.model.UserAddress;
@@ -71,8 +71,8 @@ public class UserAddressApi {
     public ResponseEntity findListByUserId(@PathVariable("id") Long userId) {
         List<UserAddress> addresses = userAddressMapper.findListByUserId(userId);
         if (CollectionUtils.isEmpty(addresses)) {
-            return ResponseEntity.ok().body(Multiple.of(new ArrayList<>()));
+            return ResponseEntity.ok().body(Tuple.of(new ArrayList<>()));
         }
-        return ResponseEntity.ok().body(addresses);
+        return ResponseEntity.ok().body(Tuple.of(addresses));
     }
 }

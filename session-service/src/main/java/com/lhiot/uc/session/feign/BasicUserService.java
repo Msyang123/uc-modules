@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public interface BasicUserService {
 
     @RequestMapping(value = "/users/phone/{phoneNumber}", method = RequestMethod.GET)
-    ResponseEntity<LoginResult> getUserByPhone(@PathVariable("phoneNumber") String phone, @RequestParam("applicationType") ApplicationType applicationType);
+    ResponseEntity<LoginResult> getUserByPhone(@PathVariable("phoneNumber") String phone, @RequestParam("applicationType") String applicationType);
 
     @RequestMapping(value = "/users/phone-and-password/search", method = RequestMethod.POST)
     ResponseEntity<LoginResult> getUserByPhoneAndPassword(@RequestBody SearchParam param);

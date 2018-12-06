@@ -1,9 +1,10 @@
 package com.lhiot.uc.basic.service;
 
-import com.leon.microx.util.SnowflakeId;
+import com.leon.microx.id.Generator;
 import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.mapper.UserBindingMapper;
+import lombok.Getter;
 
 import java.util.Objects;
 
@@ -13,12 +14,13 @@ import java.util.Objects;
 public abstract class BaseUserService {
 
     private UserBindingMapper bindingMapper;
-    private SnowflakeId snowflakeId;
+    @Getter
+    private Generator<Long> generator;
     private BaseUserMapper baseUserMapper;
 
-    protected BaseUserService(UserBindingMapper bindingMapper, SnowflakeId snowflakeId, BaseUserMapper baseUserMapper) {
+    protected BaseUserService(UserBindingMapper bindingMapper, Generator<Long> generator, BaseUserMapper baseUserMapper) {
         this.bindingMapper = bindingMapper;
-        this.snowflakeId = snowflakeId;
+        this.generator = generator;
         this.baseUserMapper = baseUserMapper;
     }
 
@@ -33,7 +35,7 @@ public abstract class BaseUserService {
         if (Objects.isNull(baseUser)) {
             baseUser = new BaseUser();
             baseUser.setPhone(phone);
-            baseUser.setId(snowflakeId.longId());
+            baseUser.setId(generator.get());
             baseUserMapper.insert(baseUser);
         }
         return baseUser;

@@ -1,8 +1,7 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.util.StringUtils;
-import com.leon.microx.web.result.Multiple;
-import com.lhiot.uc.basic.entity.ApplicationType;
+import com.leon.microx.web.result.Tuple;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.model.UserDetailResult;
@@ -55,7 +54,7 @@ public class UserService {
      * @param applicationType ApplicationType
      * @return UserDetailResult
      */
-    public UserDetailResult findByPhone(String phone, ApplicationType applicationType) {
+    public UserDetailResult findByPhone(String phone, String applicationType) {
         ApplyUser applyUser = new ApplyUser();
         applyUser.setApplicationType(applicationType);
         applyUser.setPhone(phone);
@@ -67,15 +66,15 @@ public class UserService {
      * 根据用户ID字符串集合查询用户集合
      *
      * @param ids String
-     * @return Multiple<UserDetailResult>
+     * @return Tuple<UserDetailResult>
      */
-    public Multiple<UserDetailResult> findUsersByIds(String ids) {
+    public Tuple<UserDetailResult> findUsersByIds(String ids) {
         List<String> idList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(ids));
         List<UserDetailResult> userList = applyUserMapper.findByIdList(idList);
         if (CollectionUtils.isEmpty(userList)) {
-            return Multiple.of(new ArrayList<>());
+            return Tuple.of(new ArrayList<>());
         }
-        return Multiple.of(userList);
+        return Tuple.of(userList);
     }
 
     /**
@@ -84,13 +83,13 @@ public class UserService {
      * @param phones String
      * @return Multiple<UserDetailResult>
      */
-    public Multiple<UserDetailResult> findUsersByPhones(String phones) {
+    public Tuple<UserDetailResult> findUsersByPhones(String phones) {
         List<String> phoneList = Arrays.asList(phones.split(","));
         List<UserDetailResult> userList = applyUserMapper.findByPhoneList(phoneList);
         if (CollectionUtils.isEmpty(userList)) {
-            return Multiple.of(new ArrayList<>());
+            return Tuple.of(new ArrayList<>());
         }
-        return Multiple.of(userList);
+        return Tuple.of(userList);
     }
 
     /**
@@ -99,13 +98,13 @@ public class UserService {
      * @param keyword String
      * @return Multiple
      */
-    public Multiple<UserDetailResult> findByKeyword(String keyword) {
+    public Tuple<UserDetailResult> findByKeyword(String keyword) {
         keyword = "%" + keyword + "%";
         List<UserDetailResult> userList = applyUserMapper.findByKeyword(keyword);
         if (CollectionUtils.isEmpty(userList)) {
-            return Multiple.of(new ArrayList<>());
+            return Tuple.of(new ArrayList<>());
         }
-        return Multiple.of(userList);
+        return Tuple.of(userList);
     }
 
     public boolean countById(Long id) {

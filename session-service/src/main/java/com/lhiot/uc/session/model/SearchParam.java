@@ -9,5 +9,5 @@ import lombok.Data;
 public class SearchParam {
     private String phone;
     private String password;
-    private ApplicationType applicationType;
+    private String applicationType;
 }
