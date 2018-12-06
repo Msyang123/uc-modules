@@ -1,9 +1,8 @@
 package com.lhiot.uc.basic.service;
 
+import com.leon.microx.id.Generator;
 import com.leon.microx.util.BeanUtils;
-import com.leon.microx.util.SnowflakeId;
 import com.leon.microx.util.StringUtils;
-import com.lhiot.uc.basic.entity.ApplicationType;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
 import com.lhiot.uc.basic.entity.UserBinding;
@@ -25,13 +24,11 @@ import java.util.Objects;
 public class RegisterService extends BaseUserService {
 
     private final ApplyUserMapper applyUserMapper;
-    private final SnowflakeId snowflakeId;
     private final UserBindingMapper userBindingMapper;
 
-    public RegisterService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, SnowflakeId snowflakeId, UserBindingMapper userBindingMapper) {
-        super(userBindingMapper, snowflakeId, baseUserMapper);
+    public RegisterService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, Generator<Long> generator, UserBindingMapper userBindingMapper) {
+        super(userBindingMapper, generator, baseUserMapper);
         this.applyUserMapper = applyUserMapper;
-        this.snowflakeId = snowflakeId;
         this.userBindingMapper = userBindingMapper;
     }
 
@@ -42,7 +39,7 @@ public class RegisterService extends BaseUserService {
      * @param applicationType ApplicationType
      * @return boolean
      */
-    public boolean hasPhone(String phone, ApplicationType applicationType) {
+    public boolean hasPhone(String phone, String applicationType) {
         ApplyUser user = new ApplyUser();
         user.setPhone(phone);
         user.setApplicationType(applicationType);
@@ -70,7 +67,7 @@ public class RegisterService extends BaseUserService {
         BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());
 
         ApplyUser applyUser = new ApplyUser();
-        applyUser.setId(snowflakeId.longId());
+        applyUser.setId(getGenerator().get());
         applyUser.setNickname(param.getPhone().replace(param.getPhone().substring(3, 7), "xxxx"));
         BeanUtils.of(applyUser).populate(param);
         applyUser.setBaseUserId(baseUser.getId());
@@ -99,7 +96,7 @@ public class RegisterService extends BaseUserService {
     public UserDetailResult registerByOpenId(WeChatRegisterParam param) {
 
         ApplyUser applyUser = new ApplyUser();
-        applyUser.setId(snowflakeId.longId());
+        applyUser.setId(getGenerator().get());
         BeanUtils.of(applyUser).populate(param);
 
         BaseUser baseUser;

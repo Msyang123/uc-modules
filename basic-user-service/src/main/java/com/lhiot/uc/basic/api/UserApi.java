@@ -2,8 +2,8 @@ package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.StringUtils;
-import com.leon.microx.web.result.Multiple;
-import com.lhiot.uc.basic.entity.ApplicationType;
+import com.leon.microx.web.result.Tuple;
+import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
@@ -14,8 +14,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,6 +28,7 @@ import java.util.Objects;
 @RestController
 @Slf4j
 @RequestMapping("/users")
+@Validated
 public class UserApi {
 
     private final UserService userService;
@@ -61,10 +64,10 @@ public class UserApi {
     @ApiOperation(value = "根据业务手机号码查询用户信息", response = UserDetailResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "phoneNumber", value = "用户ID", dataType = "String", required = true),
-            @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", dataTypeClass = ApplicationType.class, required = true)
+            @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", dataTypeClass = String.class, required = true)
     })
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @RequestParam("applicationType") ApplicationType applicationType) {
+    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @Valid @RequestParam("applicationType")@HasEntries(from = "applications") String applicationType) {
         UserDetailResult user = userService.findByPhone(phoneNumber, applicationType);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
@@ -85,7 +88,7 @@ public class UserApi {
         if (StringUtils.isNotBlank(param.getKeyword())) {
             return ResponseEntity.ok(userService.findByKeyword(param.getKeyword()));
         }
-        return ResponseEntity.ok(Multiple.of(new ArrayList<>()));
+        return ResponseEntity.ok(Tuple.of(new ArrayList<>()));
     }
 
     @ApiOperation(value = "根据业务用户ID修改用户信息", notes = "根据业务用户ID修改用户信息！")

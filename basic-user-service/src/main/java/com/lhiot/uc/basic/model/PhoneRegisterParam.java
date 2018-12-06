@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.model;
 
+import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,6 +25,7 @@ public class PhoneRegisterParam {
     @ApiModelProperty(notes = "密码", dataType = "String", required = false)
     private String password;
 
+    @HasEntries(from = "applications")
     @ApiModelProperty(notes = "应用类型", dataType = "String")
-    private ApplicationType applicationType;
+    private String applicationType;
 }

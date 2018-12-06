@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.model;
 
+import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +14,7 @@ import lombok.Data;
 public class UserBindingPhoneParam {
     @ApiModelProperty(notes = "手机号", dataType = "String")
     private String phone;
+    @HasEntries(from = "applications")
     @ApiModelProperty(notes = "应用类型", dataType = "Apply")
-    private ApplicationType applicationType;
+    private String applicationType;
 }
