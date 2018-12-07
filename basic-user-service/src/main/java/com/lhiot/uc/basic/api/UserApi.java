@@ -2,7 +2,10 @@ package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tuple;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -164,4 +168,26 @@ public class UserApi {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation("后台管理分页查询用户列表")
+    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "querySearch",value = "查询入参",dataTypeClass = QuerySearch.class,required = true)
+    @ApiHideBodyProperty("startRow")
+    @PostMapping("/query/search")
+    public ResponseEntity query(@RequestBody QuerySearch querySearch){
+        if (Objects.nonNull(querySearch.getRows()) && Objects.nonNull(querySearch.getPage())){
+            querySearch.setStartRow((querySearch.getPage()-1)*querySearch.getRows());
+        }
+       Pages pages =  userService.userQuery(querySearch);
+       return ResponseEntity.ok(pages);
+    }
+
+    @ApiOperation("解除用户锁定")
+    @ApiImplicitParam(paramType = ApiParamType.PATH,name = "userId",value = "业务用户Id",dataType="Long",required = true)
+    @PutMapping("/{userId}/unlocked")
+    public ResponseEntity unlock(@PathVariable("userId") Long userId){
+        int count = applyUserMapper.updateLockStatus(userId);
+        if (count ==1 ){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().body("解锁失败");
+    }
 }

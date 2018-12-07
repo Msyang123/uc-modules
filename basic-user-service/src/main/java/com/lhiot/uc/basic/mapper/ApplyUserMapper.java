@@ -3,6 +3,7 @@ package com.lhiot.uc.basic.mapper;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.PhoneAndPasswordSearchParam;
+import com.lhiot.uc.basic.model.QuerySearch;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -67,4 +68,10 @@ public interface ApplyUserMapper {
     int updateUnionIdByUserId(ApplyUser user);
 
     int countByIdAndPassword(ApplyUser user);
+
+    List<UserDetailResult> findQuery(QuerySearch param);
+
+    int countByQuery(QuerySearch param);
+
+    int updateLockStatus(Long userId);
 }

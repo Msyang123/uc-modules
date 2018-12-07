@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author zhangfeng create in 9:03 2018/10/15
@@ -51,7 +52,11 @@ public class WarehouseAutoConvertAspect {
 //            getParamValue = 1 + 2 = 3
             String realId = this.parseExpression(joinPoint, warehouseProductConvert.warehouseId());
             RuleType rule = warehouseProductConvert.rule();
-            Dictionary.Entry entry = dictionaryClient.dictionary(rule.getDictCode()).entry(rule.getCode());
+            Optional<Dictionary> dictionary = dictionaryClient.dictionary(rule.getCode());
+            Dictionary.Entry entry =null;
+            if (dictionary.isPresent()){
+                entry = dictionary.get().entry(rule.getDictCode()).orElse(null);
+            }
             if (Objects.isNull(entry)){
                 return ResponseEntity.badRequest().body("仓库转换错误！");
             }
