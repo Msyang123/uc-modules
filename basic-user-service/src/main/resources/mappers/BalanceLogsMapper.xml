@@ -1,8 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.uc.basic.mapper.BalanceLogMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.uc.basic.entity.BalanceLog">
+        <id column="id" property="id"/>
+        <result column="base_user_id" property="baseUserId"/>
+        <result column="money" property="money"/>
+        <result column="operation" property="operation"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="application_type" property="applicationType"/>
+        <result column="create_at" property="createAt"/>
+        <result column="source_id" property="sourceId"/>
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            base_user_id,
+            money,
+            operation,
+            source_type,
+            application_type,
+            create_at,
+            source_id
+        </trim>
+    </sql>
+
     <insert id="insert" parameterType="com.lhiot.uc.basic.entity.BalanceLog">
 		INSERT INTO balance_log (base_user_id,money,operation,source_type,application_type,source_id,create_at)
 		VALUE (#{baseUserId},#{money},#{operation},#{sourceType},#{applicationType},#{sourceId},#{createAt})
 	</insert>
+
+    <!-- filter查询条件 -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="baseUserId != null ">and base_user_id = #{baseUserId}</if>
+            <if test="operation != null ">and operation = #{operation}</if>
+            <if test="sourceType != null and sourceType != ''">and source_type = #{sourceType}</if>
+            <if test="sourceId != null and sourceId != ''">and source_id = #{sourceId}</if>
+            <if test="applicationType != null ">and application_type = #{applicationType}</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询鲜果币操作记录集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.uc.basic.model.BalanceLogParam">
+        select
+        <include refid="columns"/>
+        from balance_log
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询鲜果币操作记录集合总数-->
+    <select id="findCount" parameterType="com.lhiot.uc.basic.model.BalanceLogParam" resultType="int">
+        select count(1)
+        from balance_log
+        <include refid="filter"/>
+    </select>
+
 </mapper>
