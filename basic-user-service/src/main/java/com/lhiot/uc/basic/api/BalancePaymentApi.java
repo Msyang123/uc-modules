@@ -112,8 +112,7 @@ public class BalancePaymentApi {
     public ResponseEntity search(@RequestBody BalanceLogParam param) {
         log.debug("获取鲜果币操作记录列表\t param:{}", param);
         List<BalanceLog> list = balanceLogMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? balanceLogMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? balanceLogMapper.findCount(param) : list.size();
         return ResponseEntity.ok(Pages.of(total, list));
     }
 
