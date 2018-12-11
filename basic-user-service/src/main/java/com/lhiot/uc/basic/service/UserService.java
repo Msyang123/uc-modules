@@ -1,9 +1,11 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tuple;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
+import com.lhiot.uc.basic.model.QuerySearch;
 import com.lhiot.uc.basic.model.UserDetailResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -105,6 +107,12 @@ public class UserService {
             return Tuple.of(new ArrayList<>());
         }
         return Tuple.of(userList);
+    }
+
+    public Pages<UserDetailResult> userQuery(QuerySearch querySearch){
+       List<UserDetailResult> userList =  applyUserMapper.findQuery(querySearch);
+      int total =  applyUserMapper.countByQuery(querySearch);
+      return Pages.of(total,userList);
     }
 
     public boolean countById(Long id) {
