@@ -1,7 +1,6 @@
 package com.lhiot.uc.basic.model;
 
 import com.lhiot.dc.dictionary.HasEntries;
-import com.lhiot.uc.basic.entity.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

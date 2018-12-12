@@ -202,4 +202,8 @@
         update apply_user set locked = #{lockStatus}
         where id = #{userId}
     </update>
+
+    <select id="findBaseUserId" parameterType="Long" resultType="Long">
+        select base_user_id from apply_user where id = #{0}
+    </select>
 </mapper>

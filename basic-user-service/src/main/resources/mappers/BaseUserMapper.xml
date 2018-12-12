@@ -6,7 +6,7 @@
 		INSERT INTO base_user (id,phone) VALUE (#{id},#{phone})
 	</insert>
 
-    <select id="findPaymentPermissionsByApplyUserId" resultType="Long" parameterType="map">
+    <select id="findPaymentPermissionsByApplyUserId" resultType="map" parameterType="Long">
 		SELECT a.balance,b.payment_password as paymentPassword,b.payment_permissions as paymentPermissions FROM base_user a
 		LEFT JOIN apply_user b ON a.id = b.base_user_id
 		WHERE b.id = #{0}
