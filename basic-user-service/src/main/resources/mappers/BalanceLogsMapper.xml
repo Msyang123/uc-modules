@@ -7,7 +7,7 @@
         <result column="base_user_id" property="baseUserId"/>
         <result column="money" property="money"/>
         <result column="operation" property="operation"/>
-        <result column="source_type" property="sourceType"/>
+        <result column="memo" property="memo"/>
         <result column="application_type" property="applicationType"/>
         <result column="create_at" property="createAt"/>
         <result column="source_id" property="sourceId"/>
@@ -20,7 +20,7 @@
             base_user_id,
             money,
             operation,
-            source_type,
+            memo,
             application_type,
             create_at,
             source_id
@@ -28,8 +28,8 @@
     </sql>
 
     <insert id="insert" parameterType="com.lhiot.uc.basic.entity.BalanceLog">
-		INSERT INTO balance_log (base_user_id,money,operation,source_type,application_type,source_id,create_at)
-		VALUE (#{baseUserId},#{money},#{operation},#{sourceType},#{applicationType},#{sourceId},#{createAt})
+		INSERT INTO balance_log (base_user_id,money,operation,memo,application_type,source_id,create_at)
+		VALUE (#{baseUserId},#{money},#{operation},#{memo},#{applicationType},#{sourceId},#{createAt})
 	</insert>
 
     <!-- filter查询条件 -->
@@ -37,7 +37,7 @@
         <trim prefix="where" prefixOverrides="and|or">
             <if test="baseUserId != null ">and base_user_id = #{baseUserId}</if>
             <if test="operation != null ">and operation = #{operation}</if>
-            <if test="sourceType != null and sourceType != ''">and source_type = #{sourceType}</if>
+            <if test="sourceType != null and sourceType != ''">and memo = #{memo}</if>
             <if test="sourceId != null and sourceId != ''">and source_id = #{sourceId}</if>
             <if test="applicationType != null ">and application_type = #{applicationType}</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>

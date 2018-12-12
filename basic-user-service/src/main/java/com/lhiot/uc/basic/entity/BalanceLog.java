@@ -15,7 +15,7 @@ public class BalanceLog {
     private Long money;
     private OperationStatus operation;
     private ApplicationType applicationType;
-    private String sourceType;
+    private String memo;
     private String sourceId;
     private Date createAt = Date.from(Instant.now());
 }

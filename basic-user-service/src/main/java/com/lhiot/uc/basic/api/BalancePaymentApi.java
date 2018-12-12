@@ -99,7 +99,7 @@ public class BalancePaymentApi {
         balanceLog.setBaseUserId(baseUserId);
         balanceLog.setMoney(money);
         balanceLog.setOperation(OperationStatus.ADD);
-        balanceLog.setSourceType("仓库转换鲜果币");
+        balanceLog.setMemo("仓库转换鲜果币");
         balanceLogMapper.insert(balanceLog);
         return ResponseEntity.ok().build();
     }
