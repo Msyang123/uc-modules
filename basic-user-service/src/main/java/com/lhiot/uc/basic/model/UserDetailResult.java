@@ -65,10 +65,10 @@ public class UserDetailResult {
     @ApiModelProperty(notes = "t_base_user的id", dataType = "Long")
     private Long baseUserId;
 
-    @ApiModelProperty(notes = "是否锁定0未锁定1锁定", dataType = "LockStatus")
+    @ApiModelProperty(notes = "是否锁定UNLOCKED未锁定LOCK锁定", dataType = "LockStatus")
     private LockStatus locked;
 
-    @ApiModelProperty(notes = "应用类型", dataType = "Apply")
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
     private String applicationType;
 
     @ApiModelProperty(notes = "免密支付权限", dataType = "SwitchStatus")
