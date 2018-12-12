@@ -31,11 +31,7 @@
 
     <select id="findById" parameterType="Long" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-		,birthday,payment_permissions,register_at,balance,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
+		,birthday,payment_permissions,register_at,balance,member_points,a.locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
 		WHERE a.id = #{0}
@@ -48,11 +44,7 @@
 
     <select id="findByOpenId" parameterType="String" resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-		,birthday,payment_permissions,register_at,balance,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
+		,birthday,payment_permissions,register_at,balance,member_points,a.locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
 		WHERE a.open_id = #{0} ORDER BY phone DESC LIMIT 1
@@ -61,11 +53,7 @@
     <select id="findByPhone" parameterType="com.lhiot.uc.basic.entity.ApplyUser"
             resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-		,birthday,payment_permissions,register_at,balance,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
+		,birthday,payment_permissions,register_at,balance,member_points,a.locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
 		WHERE a.phone = #{phone} AND a.application_type = #{applicationType}
@@ -74,11 +62,7 @@
     <select id="findByPhoneAndPassword" parameterType="com.lhiot.uc.basic.model.PhoneAndPasswordSearchParam"
             resultType="com.lhiot.uc.basic.model.UserDetailResult">
 		SELECT a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-		,birthday,payment_permissions,register_at,balance,member_points,
-		CASE b.locked
-		WHEN 'LOCK' THEN b.locked
-		ELSE a.locked
-		END locked
+		,birthday,payment_permissions,register_at,balance,member_points,a.locked
 		FROM apply_user a
 		LEFT JOIN base_user b ON a.base_user_id = b.id
 		WHERE a.phone = #{phone} AND a.application_type = #{applicationType} and a.password = #{password}
@@ -87,11 +71,7 @@
     <select id="findByIdList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         SELECT
         a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-        ,birthday,payment_permissions,register_at,balance,member_points AS point,
-        CASE b.locked
-        WHEN 'LOCK' THEN b.locked
-        ELSE a.locked
-        END locked
+        ,birthday,payment_permissions,register_at,balance,member_points AS point,a.locked
         FROM apply_user a
         LEFT JOIN base_user b ON a.base_user_id = b.id
         WHERE a.id IN
@@ -103,11 +83,7 @@
     <select id="findByPhoneList" parameterType="list" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         SELECT
         a.id,a.phone,open_id,union_id,base_user_id,nickname,avatar,email,qq,address,description,application_type,sex
-        ,birthday,payment_permissions,register_at,balance,member_points,
-        CASE b.locked
-        WHEN 'LOCK' THEN b.locked
-        ELSE a.locked
-        END locked
+        ,birthday,payment_permissions,register_at,balance,member_points,a.locked
         FROM apply_user a
         LEFT JOIN base_user b ON a.base_user_id = b.id
         WHERE a.phone IN
@@ -118,11 +94,7 @@
 
     <select id="findQuery" parameterType="com.lhiot.uc.basic.model.QuerySearch" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         select a.id,a.phone,open_id,union_id,nickname,avatar,email,qq,address,description,application_type,sex
-        ,birthday,payment_permissions,register_at,balance,member_points,
-        CASE b.locked
-        WHEN 'LOCK' THEN b.locked
-        ELSE a.locked
-        END locked
+        ,birthday,payment_permissions,register_at,balance,member_points,a.locked
         FROM apply_user a
         LEFT JOIN base_user b ON a.base_user_id = b.id
         <trim prefix="where" prefixOverrides="and | or">
@@ -226,8 +198,8 @@
         WHERE id = #{id}
     </update>
     
-    <update id="updateLockStatus" parameterType="Long">
-        update apply_user set locked = 'UNLOCKED'
+    <update id="updateLockStatus" parameterType="map">
+        update apply_user set locked = #{lockStatus}
         where id = #{userId}
     </update>
 </mapper>
