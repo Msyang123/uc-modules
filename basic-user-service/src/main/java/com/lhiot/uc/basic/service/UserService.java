@@ -53,7 +53,7 @@ public class UserService {
      * 根据业务用户ID查询用户信息
      *
      * @param phone           String
-     * @param applicationType ApplicationType
+     * @param applicationType String
      * @return UserDetailResult
      */
     public UserDetailResult findByPhone(String phone, String applicationType) {

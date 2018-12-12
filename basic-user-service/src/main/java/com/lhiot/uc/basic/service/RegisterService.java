@@ -36,7 +36,7 @@ public class RegisterService extends BaseUserService {
      * 手机号是否已注册
      *
      * @param phone           String 手机号
-     * @param applicationType ApplicationType
+     * @param applicationType String
      * @return boolean
      */
     public boolean hasPhone(String phone, String applicationType) {

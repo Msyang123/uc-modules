@@ -7,6 +7,7 @@ import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.uc.basic.entity.BalanceLog;
 import com.lhiot.uc.basic.entity.OperationStatus;
+import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.mapper.BalanceLogMapper;
 import com.lhiot.uc.basic.mapper.BaseUserMapper;
 import com.lhiot.uc.basic.model.BalanceLogParam;
@@ -34,11 +35,13 @@ public class BalancePaymentApi {
     private BalancePaymentService balancePaymentService;
     private BaseUserMapper baseUserMapper;
     private BalanceLogMapper balanceLogMapper;
+    private ApplyUserMapper applyUserMapper;
 
-    public BalancePaymentApi(BalancePaymentService balancePaymentService, BaseUserMapper baseUserMapper, BalanceLogMapper balanceLogMapper) {
+    public BalancePaymentApi(BalancePaymentService balancePaymentService, BaseUserMapper baseUserMapper, BalanceLogMapper balanceLogMapper, ApplyUserMapper applyUserMapper) {
         this.balancePaymentService = balancePaymentService;
         this.baseUserMapper = baseUserMapper;
         this.balanceLogMapper = balanceLogMapper;
+        this.applyUserMapper = applyUserMapper;
     }
 
     @ApiOperation("用户鲜果币加减")
@@ -69,9 +72,11 @@ public class BalancePaymentApi {
                 return ResponseEntity.badRequest().body(tips.getMessage());
             }
         }
+        Long baseUserId = applyUserMapper.findBaseUserId(userId);
         BalanceLog balanceLog = new BalanceLog();
         BeanUtils.of(balanceLog).populate(param);
         balanceLog.setMoney(money);
+        balanceLog.setBaseUserId(baseUserId);
         balanceLogMapper.insert(balanceLog);
         return ResponseEntity.ok().build();
     }

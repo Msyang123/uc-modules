@@ -75,4 +75,6 @@ public interface ApplyUserMapper {
     int countByQuery(QuerySearch param);
 
     int updateLockStatus(Map<String, Object> map);
+
+    Long findBaseUserId(Long userId);
 }
