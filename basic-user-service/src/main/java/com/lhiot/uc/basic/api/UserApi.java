@@ -1,6 +1,7 @@
 package com.lhiot.uc.basic.api;
 
 import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tuple;
@@ -8,6 +9,7 @@ import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.uc.basic.entity.ApplyUser;
+import com.lhiot.uc.basic.entity.LockStatus;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.mapper.ApplyUserMapper;
 import com.lhiot.uc.basic.model.*;
@@ -24,6 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -180,11 +183,14 @@ public class UserApi {
        return ResponseEntity.ok(pages);
     }
 
-    @ApiOperation("解除用户锁定")
-    @ApiImplicitParam(paramType = ApiParamType.PATH,name = "userId",value = "业务用户Id",dataType="Long",required = true)
-    @PutMapping("/{userId}/unlocked")
-    public ResponseEntity unlock(@PathVariable("userId") Long userId){
-        int count = applyUserMapper.updateLockStatus(userId);
+    @ApiOperation("修改用户锁状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH,name = "userId",value = "业务用户Id",dataType="Long",required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY,name = "lockStatus",value = "锁状态",dataTypeClass = LockStatus.class,required = true)
+    })
+    @PutMapping("/{userId}/locked-status")
+    public ResponseEntity unlock(@PathVariable("userId") Long userId,@RequestParam("lockStatus") LockStatus lockStatus){
+        int count = applyUserMapper.updateLockStatus(Maps.of("userId",userId,"lockStatus",lockStatus));
         if (count ==1 ){
             return ResponseEntity.ok().build();
         }
