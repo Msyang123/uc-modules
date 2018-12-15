@@ -172,7 +172,7 @@ public class UserApi {
     }
 
     @ApiOperation("后台管理分页查询用户列表")
-    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "querySearch",value = "查询入参",dataTypeClass = QuerySearch.class,required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "querySearch",value = "查询入参",dataType = "QuerySearch",required = true)
     @ApiHideBodyProperty("startRow")
     @PostMapping("/query/search")
     public ResponseEntity query(@RequestBody QuerySearch querySearch){

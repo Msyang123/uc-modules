@@ -1,5 +1,6 @@
 package com.lhiot.uc.basic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,8 +16,9 @@ public class QuerySearch {
 
     private String nickname;
 
+    @JsonFormat(pattern =  "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createAtStart;
-
+    @JsonFormat(pattern =  "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createAtEnd;
 
     private Integer rows;
