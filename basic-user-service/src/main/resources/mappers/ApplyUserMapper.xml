@@ -94,7 +94,7 @@
 
     <select id="findQuery" parameterType="com.lhiot.uc.basic.model.QuerySearch" resultType="com.lhiot.uc.basic.model.UserDetailResult">
         select a.id,a.phone,open_id,union_id,nickname,avatar,email,qq,address,description,application_type,sex
-        ,birthday,payment_permissions,register_at,balance,member_points,a.locked,b.real_name
+        ,birthday,payment_permissions,register_at,balance,member_points as point,a.locked,b.real_name
         FROM apply_user a
         LEFT JOIN base_user b ON a.base_user_id = b.id
         <trim prefix="where" prefixOverrides="and | or">
