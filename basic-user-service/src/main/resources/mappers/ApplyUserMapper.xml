@@ -22,10 +22,6 @@
 		SELECT id FROM apply_user WHERE phone = #{phone} AND application_type = #{applicationType}
 	</select>
 
-    <select id="findIdsByPhone" parameterType="String" resultType="String">
-		SELECT id FROM apply_user WHERE phone = #{phone}
-	</select>
-
     <insert id="insert" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,application_type
 		,sex,birthday,register_at,payment_permissions)
@@ -96,16 +92,17 @@
         </foreach>
     </select>
 
-    <select id="findQuery" parameterType="com.lhiot.uc.basic.model.QuerySearch" resultType="com.lhiot.uc.basic.model.UserDetailResult">
+    <select id="findQuery" parameterType="com.lhiot.uc.basic.model.QuerySearch"
+            resultType="com.lhiot.uc.basic.model.UserDetailResult">
         select a.id,a.phone,open_id,union_id,nickname,avatar,email,qq,address,description,application_type,sex
         ,birthday,payment_permissions,register_at,balance,member_points as point,a.locked,b.real_name
         FROM apply_user a
         LEFT JOIN base_user b ON a.base_user_id = b.id
         <trim prefix="where" prefixOverrides="and | or">
             <if test="userId != null">a.id like concat('%',#{userId},'%')</if>
-            <if test="nickname != null and nickname != ''"> and a.nickname like concat('%',#{nickname},'%')</if>
+            <if test="nickname != null and nickname != ''">and a.nickname like concat('%',#{nickname},'%')</if>
             <if test="phone != null and phone!=''">and a.phone like concat('%',#{phone},'%')</if>
-            <if test="createAtStart != null"> and a.register_at >= #{createAtStart}</if>
+            <if test="createAtStart != null">and a.register_at >= #{createAtStart}</if>
             <if test="createAtEnd != null">and a.register_at &lt; #{createAtEnd}</if>
             <if test="applicationType != null and applicationType !=''">and application_type = #{applicationType}</if>
         </trim>
@@ -116,14 +113,14 @@
         select count(id) from apply_user
         <trim prefix="where" prefixOverrides="and | or">
             <if test="userId != null">id like concat('%',#{userId},'%')</if>
-            <if test="nickname != null and nickname != ''"> and nickname like concat('%',#{nickname},'%')</if>
+            <if test="nickname != null and nickname != ''">and nickname like concat('%',#{nickname},'%')</if>
             <if test="phone != null and phone!=''">and phone like concat('%',#{phone},'%')</if>
-            <if test="createAtStart != null"> and register_at >= #{createAtStart}</if>
+            <if test="createAtStart != null">and register_at >= #{createAtStart}</if>
             <if test="createAtEnd != null">and register_at &lt; #{createAtEnd}</if>
         </trim>
     </select>
 
-    
+
     <select id="findPermissionsByIdAndPaymentPassword" parameterType="map" resultType="String">
         select payment_permissions from apply_user where id = #{id}
         <if test="paymentPassword != null and paymentPassword != ''">and payment_password = #{paymentPassword}</if>
@@ -201,7 +198,7 @@
         SET payment_permissions = #{paymentPermissions}
         WHERE id = #{id}
     </update>
-    
+
     <update id="updateLockStatus" parameterType="map">
         update apply_user set locked = #{lockStatus}
         where id = #{userId}

@@ -1,7 +1,6 @@
 package com.lhiot.uc.basic.mapper;
 
 import com.lhiot.uc.basic.entity.ApplyUser;
-import com.lhiot.uc.basic.entity.LockStatus;
 import com.lhiot.uc.basic.entity.SwitchStatus;
 import com.lhiot.uc.basic.model.PhoneAndPasswordSearchParam;
 import com.lhiot.uc.basic.model.QuerySearch;
@@ -78,5 +77,4 @@ public interface ApplyUserMapper {
 
     Long findBaseUserId(Long userId);
 
-    List<String> findIdsByPhone(String phone);
 }

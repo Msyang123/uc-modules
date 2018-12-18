@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -194,13 +193,5 @@ public class UserApi {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().body("解锁失败");
-    }
-
-    @ApiOperation("根据手机号码查询用户Id集合")
-    @ApiImplicitParam(paramType = ApiParamType.PATH,name = "phone",value = "手机号码",dataType = "String",required = true)
-    @GetMapping("/phone/{phone}/ids")
-    public ResponseEntity findIdsByPhone(@PathVariable("phone") String phone){
-       List<String> list =  applyUserMapper.findIdsByPhone(phone);
-       return ResponseEntity.ok(Tuple.of(list));
     }
 }
