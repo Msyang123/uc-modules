@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -74,7 +72,7 @@ public class UserApi {
             @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", dataTypeClass = String.class, required = true)
     })
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @Valid @RequestParam("applicationType")@HasEntries(from = "applications") String applicationType) {
+    public ResponseEntity findByPhone(@PathVariable("phoneNumber") String phoneNumber, @Valid @RequestParam("applicationType") @HasEntries(from = "applications") String applicationType) {
         UserDetailResult user = userService.findByPhone(phoneNumber, applicationType);
         if (Objects.equals(user, null)) {
             return ResponseEntity.badRequest().body("该用户不存在！");
@@ -172,26 +170,26 @@ public class UserApi {
     }
 
     @ApiOperation("后台管理分页查询用户列表")
-    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "querySearch",value = "查询入参",dataType = "QuerySearch",required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "querySearch", value = "查询入参", dataType = "QuerySearch", required = true)
     @ApiHideBodyProperty("startRow")
     @PostMapping("/query/search")
-    public ResponseEntity query(@RequestBody QuerySearch querySearch){
-        if (Objects.nonNull(querySearch.getRows()) && Objects.nonNull(querySearch.getPage())){
-            querySearch.setStartRow((querySearch.getPage()-1)*querySearch.getRows());
+    public ResponseEntity query(@RequestBody QuerySearch querySearch) {
+        if (Objects.nonNull(querySearch.getRows()) && Objects.nonNull(querySearch.getPage())) {
+            querySearch.setStartRow((querySearch.getPage() - 1) * querySearch.getRows());
         }
-       Pages pages =  userService.userQuery(querySearch);
-       return ResponseEntity.ok(pages);
+        Pages pages = userService.userQuery(querySearch);
+        return ResponseEntity.ok(pages);
     }
 
     @ApiOperation("修改用户锁状态")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH,name = "userId",value = "业务用户Id",dataType="Long",required = true),
-            @ApiImplicitParam(paramType = ApiParamType.QUERY,name = "lockStatus",value = "锁状态",dataTypeClass = LockStatus.class,required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "userId", value = "业务用户Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "lockStatus", value = "锁状态", dataTypeClass = LockStatus.class, required = true)
     })
     @PutMapping("/{userId}/locked-status")
-    public ResponseEntity unlock(@PathVariable("userId") Long userId,@RequestParam("lockStatus") LockStatus lockStatus){
-        int count = applyUserMapper.updateLockStatus(Maps.of("userId",userId,"lockStatus",lockStatus));
-        if (count ==1 ){
+    public ResponseEntity unlock(@PathVariable("userId") Long userId, @RequestParam("lockStatus") LockStatus lockStatus) {
+        int count = applyUserMapper.updateLockStatus(Maps.of("userId", userId, "lockStatus", lockStatus));
+        if (count == 1) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().body("解锁失败");
