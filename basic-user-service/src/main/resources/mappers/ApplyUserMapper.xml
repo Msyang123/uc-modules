@@ -22,6 +22,10 @@
 		SELECT id FROM apply_user WHERE phone = #{phone} AND application_type = #{applicationType}
 	</select>
 
+    <select id="findIdsByPhone" parameterType="String" resultType="String">
+		SELECT id FROM apply_user WHERE phone = #{phone}
+	</select>
+
     <insert id="insert" parameterType="com.lhiot.uc.basic.entity.ApplyUser">
 		INSERT INTO apply_user(id,phone,open_id,union_id,base_user_id,password,payment_password,nickname,avatar,email,qq,address,description,application_type
 		,sex,birthday,register_at,payment_permissions)

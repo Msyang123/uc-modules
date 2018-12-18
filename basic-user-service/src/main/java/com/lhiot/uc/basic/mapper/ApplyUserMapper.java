@@ -77,4 +77,6 @@ public interface ApplyUserMapper {
     int updateLockStatus(Map<String, Object> map);
 
     Long findBaseUserId(Long userId);
+
+    List<String> findIdsByPhone(String phone);
 }
