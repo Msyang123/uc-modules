@@ -106,6 +106,7 @@
             <if test="createAtEnd != null">and a.register_at &lt; #{createAtEnd}</if>
             <if test="applicationType != null and applicationType !=''">and application_type = #{applicationType}</if>
         </trim>
+        ORDER BY a.register_at DESC
         <if test="startRow !=null">limit #{startRow},#{rows}</if>
     </select>
 

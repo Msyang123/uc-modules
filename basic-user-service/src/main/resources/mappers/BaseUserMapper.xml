@@ -32,7 +32,7 @@
     <update id="updateCurrencyByApplyUserIdForAdd" parameterType="map">
 		UPDATE base_user a
 		LEFT JOIN apply_user b ON a.id = b.base_user_id
-		SET a.balance = a.balance + #{moeny}
+		SET a.balance = a.balance + #{money}
 		WHERE b.id = #{id}
 	</update>
 
