@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Pages;
@@ -106,8 +106,7 @@ public class UserApi {
         if (!userService.countById(userId)) {
             return ResponseEntity.badRequest().body("用户不存在！");
         }
-        ApplyUser applyUser = new ApplyUser();
-        BeanUtils.of(applyUser).populate(param);
+        ApplyUser applyUser = Beans.from(param).populate(ApplyUser::new);
         applyUser.setId(userId);
         if (!userService.updateUserById(applyUser)) {
             return ResponseEntity.badRequest().body("更新用户信息失败！");

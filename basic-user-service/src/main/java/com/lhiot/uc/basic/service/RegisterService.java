@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.id.Generator;
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
@@ -66,10 +66,9 @@ public class RegisterService extends BaseUserService {
 
         BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());
 
-        ApplyUser applyUser = new ApplyUser();
+        ApplyUser applyUser = Beans.from(param).populate(ApplyUser::new);
         applyUser.setId(getGenerator().get());
         applyUser.setNickname(param.getPhone().replace(param.getPhone().substring(3, 7), "xxxx"));
-        BeanUtils.of(applyUser).populate(param);
         applyUser.setBaseUserId(baseUser.getId());
         applyUserMapper.insert(applyUser);
 
@@ -79,8 +78,7 @@ public class RegisterService extends BaseUserService {
         userBinding.setPhone(param.getPhone());
         userBindingMapper.insert(userBinding);
 
-        UserDetailResult result = new UserDetailResult();
-        BeanUtils.of(result).populate(applyUser);
+        UserDetailResult result = Beans.from(applyUser).populate(UserDetailResult::new);
         result.setBalance(baseUser.getBalance());
         result.setRealName(baseUser.getRealName());
 
@@ -95,9 +93,8 @@ public class RegisterService extends BaseUserService {
      */
     public UserDetailResult registerByOpenId(WeChatRegisterParam param) {
 
-        ApplyUser applyUser = new ApplyUser();
+        ApplyUser applyUser = Beans.from(param).populate(ApplyUser::new);
         applyUser.setId(getGenerator().get());
-        BeanUtils.of(applyUser).populate(param);
 
         BaseUser baseUser;
         if (StringUtils.isNotBlank(param.getPhone())) {
@@ -126,11 +123,10 @@ public class RegisterService extends BaseUserService {
             baseUser = new BaseUser();
         }
 
-        UserDetailResult result = new UserDetailResult();
+        UserDetailResult result = Beans.from(applyUser).populate(UserDetailResult::new);
         result.setBalance(baseUser.getBalance());
         result.setPoint(baseUser.getMemberPoints());
         result.setRealName(baseUser.getRealName());
-        BeanUtils.of(result).populate(applyUser);
         return result;
     }
 

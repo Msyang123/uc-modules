@@ -118,6 +118,7 @@
             <if test="phone != null and phone!=''">and phone like concat('%',#{phone},'%')</if>
             <if test="createAtStart != null">and register_at >= #{createAtStart}</if>
             <if test="createAtEnd != null">and register_at &lt; #{createAtEnd}</if>
+            <if test="applicationType != null and applicationType !=''">and application_type = #{applicationType}</if>
         </trim>
     </select>
 

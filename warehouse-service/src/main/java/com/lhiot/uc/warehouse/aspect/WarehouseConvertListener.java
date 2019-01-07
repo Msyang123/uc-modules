@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.aspect;
 
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.Calculator;
 import com.leon.microx.util.Maps;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
@@ -48,7 +48,7 @@ public class WarehouseConvertListener {
     }
 
     @EventListener
-    public void onConverting(WarehouseConvertTaskParam event){
+    public void onConverting(WarehouseConvertTaskParam event) {
         List<OverdueHandler> handlers = new ArrayList<>(2);
         handlers.add(this::onApplicationOverdueProduct);
         handlers.add(this::onApplicationConvertFruitCoin);
@@ -66,8 +66,7 @@ public class WarehouseConvertListener {
             List<Long> warehouseProductIds = new ArrayList<>();
             List<WarehouseOverdue> overdueList = new ArrayList<>();
             productList.forEach(product -> {
-                WarehouseOverdue overdue = new WarehouseOverdue();
-                BeanUtils.of(overdue).populate(product);
+                WarehouseOverdue overdue = Beans.from(product).populate(WarehouseOverdue::new);
                 overdueList.add(overdue);
                 warehouseProductIds.add(product.getId());
             });
@@ -87,8 +86,7 @@ public class WarehouseConvertListener {
             int[] totalPrice = {0};
             systemConvertList.forEach(convertProduct -> {
                 totalPrice[0] += convertProduct.getPrice();
-                WarehouseConvert convert = new WarehouseConvert();
-                BeanUtils.of(convert).ignoreField("id").populate(convertProduct);
+                WarehouseConvert convert = Beans.from(convertProduct).excludes("id").populate(WarehouseConvert::new);
                 convert.setConvertType(ConvertType.AUTO);
                 convert.setDiscount(taskParam.getSystemDiscount());
                 convert.setInOut(InOutType.OUT);
@@ -98,10 +96,10 @@ public class WarehouseConvertListener {
                 overdueIds.add(String.valueOf(convertProduct.getId()));
             });
             //添加用户鲜果币
-            Double money = Calculator.div(Calculator.mul(totalPrice[0],taskParam.getSystemDiscount()),100.0,0);
-            WarehouseUser warehouseUser =  warehouseUserMapper.selectById(Long.valueOf(taskParam.getWarehouseId()));
-            ResponseEntity response = basicUserService.addBalance(warehouseUser.getBaseUserId(),money.intValue());
-            if (response.getStatusCode().isError()){
+            Double money = Calculator.div(Calculator.mul(totalPrice[0], taskParam.getSystemDiscount()), 100.0, 0);
+            WarehouseUser warehouseUser = warehouseUserMapper.selectById(Long.valueOf(taskParam.getWarehouseId()));
+            ResponseEntity response = basicUserService.addBalance(warehouseUser.getBaseUserId(), money.intValue());
+            if (response.getStatusCode().isError()) {
                 return;
             }
             //删除过期表中的记录

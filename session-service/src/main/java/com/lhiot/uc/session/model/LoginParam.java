@@ -5,6 +5,7 @@ import com.lhiot.dc.dictionary.HasEntries;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.Date;
@@ -36,6 +37,7 @@ public class LoginParam {
     private String sessionId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(notes = "登录时间", dataType = "Date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date loginAt = Date.from(Instant.now());
     @ApiModelProperty(notes = "登录类型", dataType = "LoginType")
     private LoginType loginType;
