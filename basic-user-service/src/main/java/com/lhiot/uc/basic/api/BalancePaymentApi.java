@@ -1,6 +1,6 @@
 package com.lhiot.uc.basic.api;
 
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
@@ -73,8 +73,7 @@ public class BalancePaymentApi {
             }
         }
         Long baseUserId = applyUserMapper.findBaseUserId(userId);
-        BalanceLog balanceLog = new BalanceLog();
-        BeanUtils.of(balanceLog).populate(param);
+        BalanceLog balanceLog = Beans.from(param).populate(BalanceLog::new);
         balanceLog.setMoney(money);
         balanceLog.setBaseUserId(baseUserId);
         balanceLogMapper.insert(balanceLog);

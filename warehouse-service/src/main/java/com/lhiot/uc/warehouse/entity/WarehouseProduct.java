@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -108,6 +109,7 @@ public class WarehouseProduct {
     @JsonProperty("buyAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "购买时间", dataType = "Date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date buyAt;
 
     @ApiModelProperty(value = "基础单位", dataType = "String")

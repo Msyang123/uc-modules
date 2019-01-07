@@ -1,7 +1,7 @@
 package com.lhiot.uc.basic.service;
 
 import com.leon.microx.id.Generator;
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.uc.basic.entity.ApplyUser;
 import com.lhiot.uc.basic.entity.BaseUser;
@@ -24,8 +24,8 @@ public class UserBindingService extends BaseUserService {
     private ApplyUserMapper applyUserMapper;
     private UserBindingMapper userBindingMapper;
 
-    public UserBindingService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, Generator<Long> generator,UserBindingMapper userBindingMapper) {
-        super(userBindingMapper,generator, baseUserMapper);
+    public UserBindingService(ApplyUserMapper applyUserMapper, BaseUserMapper baseUserMapper, Generator<Long> generator, UserBindingMapper userBindingMapper) {
+        super(userBindingMapper, generator, baseUserMapper);
         this.applyUserMapper = applyUserMapper;
         this.userBindingMapper = userBindingMapper;
     }
@@ -59,7 +59,7 @@ public class UserBindingService extends BaseUserService {
      * @param param UserBindingPhoneParam
      * @return UserDetailResult
      */
-    public UserDetailResult bindingPhone(Long userId,UserBindingPhoneParam param) {
+    public UserDetailResult bindingPhone(Long userId, UserBindingPhoneParam param) {
         BaseUser baseUser = this.findBaseUserByBindingRelation(param.getPhone());
 
         UserBinding userBinding = new UserBinding();
@@ -74,15 +74,14 @@ public class UserBindingService extends BaseUserService {
         applyUser.setPhone(param.getPhone());
         applyUserMapper.updateByBindPhone(applyUser);
 
-        UserDetailResult userDetailResult = new UserDetailResult();
-        BeanUtils.of(userDetailResult).populate(applyUser);
+        UserDetailResult userDetailResult = Beans.from(applyUser).populate(UserDetailResult::new);
         userDetailResult.setRealName(baseUser.getRealName());
         userDetailResult.setBalance(baseUser.getBalance());
         userDetailResult.setPoint(baseUser.getMemberPoints());
         return userDetailResult;
     }
 
-    public boolean bindingWeChat(Long userId,UserBindingWeChatParam param) {
+    public boolean bindingWeChat(Long userId, UserBindingWeChatParam param) {
         ApplyUser user = new ApplyUser();
         user.setOpenId(param.getOpenId());
         user.setUnionId(param.getUnionId());

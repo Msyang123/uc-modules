@@ -1,6 +1,6 @@
 package com.lhiot.uc.warehouse.service;
 
-import com.leon.microx.util.BeanUtils;
+import com.leon.microx.util.Beans;
 import com.leon.microx.util.Calculator;
 import com.leon.microx.util.Pair;
 import com.lhiot.uc.warehouse.entity.WarehouseConvert;
@@ -88,9 +88,8 @@ public class WarehouseProductService {
             //重置时间的时分秒（此处用作定时任务每天刷一次）
             product.setBuyAt(current);
             //拼接出入库记录
-            WarehouseConvert wareHouseConvert = new WarehouseConvert();
             //复制属性
-            BeanUtils.of(wareHouseConvert).populate(product);
+            WarehouseConvert wareHouseConvert = Beans.from(product).populate(WarehouseConvert::new);
             wareHouseConvert.setConvertAt(current);// 出入库时间
             wareHouseConvert.setInOut(InOutType.IN);// 出入库标志
             wareHouseConvert.setRemark(remark);// 出入库原因
@@ -251,15 +250,13 @@ public class WarehouseProductService {
                 .filter(item -> Objects.equals(item.getOperationType(), OperationType.REMOVE))
                 .forEach(item -> {
                     needRemoveIds.add(item.getId());
-                    WarehouseProductExtract warehouseProductExtract = new WarehouseProductExtract();
-                    BeanUtils.of(warehouseProductExtract).populate(item);
+                    WarehouseProductExtract warehouseProductExtract = Beans.from(item).populate(WarehouseProductExtract::new);
                     warehouseProductExtract.setOrderCode(orderCode);
                     warehouseProductExtractList.add(warehouseProductExtract);
 
                     //仓库转换记录对象
-                    WarehouseConvert wareHouseConvert = new WarehouseConvert();
                     //复制属性
-                    BeanUtils.of(wareHouseConvert).populate(item);
+                    WarehouseConvert wareHouseConvert = Beans.from(item).populate(WarehouseConvert::new);
                     wareHouseConvert.setConvertAt(current);// 出入库时间
                     wareHouseConvert.setInOut(InOutType.OUT);// 出入库标志
                     wareHouseConvert.setRemark(remark);// 出入库原因
@@ -277,14 +274,12 @@ public class WarehouseProductService {
         warehouseProduct.stream()
                 .filter(item -> Objects.equals(item.getOperationType(), OperationType.UPDATE))
                 .forEach(item -> {
-                    WarehouseProductExtract warehouseProductExtract = new WarehouseProductExtract();
-                    BeanUtils.of(warehouseProductExtract).populate(item);
+                    WarehouseProductExtract warehouseProductExtract = Beans.from(item).populate(WarehouseProductExtract::new);
                     warehouseProductExtract.setOrderCode(orderCode);
                     warehouseProductExtractList.add(warehouseProductExtract);
                     //仓库转换记录对象
-                    WarehouseConvert wareHouseConvert = new WarehouseConvert();
                     //复制属性
-                    BeanUtils.of(wareHouseConvert).populate(item);
+                    WarehouseConvert wareHouseConvert = Beans.from(item).populate(WarehouseConvert::new);
                     wareHouseConvert.setConvertAt(current);// 出入库时间
                     wareHouseConvert.setInOut(InOutType.OUT);// 出入库标志
                     wareHouseConvert.setRemark(remark);// 出入库原因
@@ -315,15 +310,13 @@ public class WarehouseProductService {
         cancelWarehouseProductExtractList.forEach(item -> {
             productExtractIds.add(item.getId());
 
-            WarehouseProduct warehouseProduct = new WarehouseProduct();
             //将中间表对象拷贝到仓库商品对象里
-            BeanUtils.of(warehouseProduct).populate(item);
+            WarehouseProduct warehouseProduct = Beans.from(item).populate(WarehouseProduct::new);
             warehouseProductList.add(warehouseProduct);
 
             //仓库转换记录对象
-            WarehouseConvert wareHouseConvert = new WarehouseConvert();
             //复制属性
-            BeanUtils.of(wareHouseConvert).populate(item);
+            WarehouseConvert wareHouseConvert = Beans.from(item).populate(WarehouseConvert::new);
             wareHouseConvert.setConvertAt(current);// 出入库时间
             wareHouseConvert.setInOut(InOutType.IN);// 出入库标志
             wareHouseConvert.setRemark(backCause);// 出入库原因
